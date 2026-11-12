@@ -53,4 +53,13 @@ Setiap kali `index.html` berubah, naikkan angka versi di `sw.js` (`const V='cpns
 - "Hari-hari berikutnya": 7 hari ke depan dengan rincian tugas.
 
 ## Versi 4.3 — Sinkronisasi antar perangkat
-Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode sinkron). Progres → Data & sinkron (atau Lainnya → Sinkronisasi): ketik kode sinkron (min. 6 karakter), lalu ketik kode yang sama di perangkat lain. Data dipisahkan dari PAPs otomatis (id `cpns:<kode>`). Sinkron otomatis 2 detik setelah perubahan, saat app dibuka, dan tiap ±45 detik; bila dua perangkat sama-sama berubah, data digabung.
+Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode sinkron). Tombol "Sinkron" di pojok kanan atas (semua layar), Progres → Data & sinkron, atau Lainnya → Sinkronisasi: ketik kode sinkron (min. 6 karakter), lalu ketik kode yang sama di perangkat lain. Data dipisahkan dari PAPs otomatis (id `cpns:<kode>`). Sinkron otomatis 2 detik setelah perubahan, saat app dibuka, dan tiap ±45 detik; bila dua perangkat sama-sama berubah, data digabung.
+
+## Versi 4.4 — Perbaikan kualitas
+- Soal: dipulihkan teks bacaan/informasi yang hilang (12+ soal TWK & logika), rumus yang rusak direkonstruksi (7 soal), 10 soal yang tidak dapat dipulihkan disembunyikan (bank kini 1.591). ID soal tidak berubah, progres aman.
+- Rumus tampil seperti formula (pecahan bertumpuk, akar, pangkat) pada soal TIU, pembahasan, dan materi.
+- Pengerjaan soal: opsi di bawah soal, panel "Daftar soal dan selesai" di kanan (desktop).
+- Pembahasan: materi/cara mengingat hanya tampil bila sesuai kunci; analisis opsi lebih spesifik (kemungkinan kesalahan pada soal hitungan).
+- Riwayat: sesi dan semua soal yang pernah dikerjakan dapat dibuka kembali (jawaban + pembahasan) tanpa mengubah progres.
+- Belajar → Hafalan: teknik menghafal ditulis ulang dengan langkah dan contoh nyata.
+- Nomor sumber soal ditampilkan agar mudah dilaporkan bila ada yang janggal.
