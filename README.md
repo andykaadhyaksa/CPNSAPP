@@ -64,8 +64,28 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Belajar → Hafalan: teknik menghafal ditulis ulang dengan langkah dan contoh nyata.
 - Nomor sumber soal ditampilkan agar mudah dilaporkan bila ada yang janggal.
 
+## Versi 4.6 — Cek ulang menyeluruh (soal, opsi, kunci, rumus)
+- Seluruh TIU dan TWK dibaca satu per satu; TKP: semua soal tanpa pembahasan dibaca dan 357 soal berpembahasan dicocokkan dengan skornya.
+- 21 kunci jawaban yang salah di naskah sumber dikoreksi (mis. TWK: bom atom Hiroshima–Nagasaki, MA vs MK, Hari Kesaktian Pancasila 1 Oktober, asas ius sanguinis, Maklumat 14 November 1945; TIU: 3 soal hitungan) dan pembahasannya ditulis ulang. 23 soal TKP dinilai ulang skornya karena skor sumber bertentangan dengan logikanya atau dengan soal kembarannya.
+- Soal yang tidak dapat dipulihkan disembunyikan (soal tanpa kunci yang sahih, soal bergabung, kunci bertentangan dengan premis). Bank aktif: 1.544 soal (TWK 494 · TIU 495 · TKP 555). ID tidak berubah, jadi progres, riwayat, dan sinkron tetap aman.
+- Opsi yang rusak diperbaiki: teks soal lain yang menempel di opsi dipotong, opsi kembar diganti, ±215 salah ketik pada soal hasil PDF dibetulkan (mis. "dibwjudkan", "persenjetaan", "Postdam"). Soal buatan sendiri tidak disentuh.
+- 13 pembahasan TIU lain (silogisme, hitungan waktu, persen, pola) ditulis ulang bertahap; pecahan dengan koefisien huruf (mis. 2y/3) kini ikut ditulis atas-bawah.
+- Analisis tiap opsi pada TWK/TKP tidak lagi memakai kalimat hitungan; untuk soal "kecuali/bukan" kalimatnya disesuaikan.
+- Cache offline naik ke cpns-v10.
+- Catatan jujur: skor TKP dan beberapa kunci TWK dari PDF sumber bersifat penilaian; yang terlihat bertentangan sudah saya putuskan sendiri dan ditandai di atas, tetapi sisanya mengikuti naskah sumber.
+
 ## Versi 4.5 — Pembahasan ditulis ulang
 - 134 pembahasan yang rusak akibat ekstraksi PDF (pecahan/pangkat/tabel terurai menjadi deretan angka) ditulis ulang menjadi langkah bernomor ("Langkah 1 — … Jawaban: X") dengan pecahan atas-bawah. Semua hasil hitung diperiksa terhadap kunci jawaban.
 - Soal yang teksnya cacat diperbaiki (pecahan/pangkat hilang, soal cerita yang kontradiktif, opsi yang salah cetak) dan diberi catatan di pembahasan bila naskah asli janggal.
-- 11 soal tambahan disembunyikan karena kunci/gambar/soalnya tidak dapat dipulihkan (logika duduk melingkar 2 soal, soal dengan kunci yang bertentangan dengan soalnya, dsb.). Bank kini 1.581. ID soal tidak berubah; progres, riwayat, dan sinkron aman.
+- 11 soal tambahan disembunyikan karena kunci/gambar/soalnya tidak dapat dipulihkan (logika duduk melingkar 2 soal, soal dengan kunci yang bertentangan dengan soalnya, dsb.). Bank kini 1.580 (soal "pernyataan berikut" tanpa pernyataannya ikut disembunyikan; 8 pembahasan hitungan tambahan dirapikan). ID soal tidak berubah; progres, riwayat, dan sinkron aman.
 - Analisis tiap opsi pada soal hitungan kini menyebut hasil yang benar vs opsi itu.
+
+## Versi 4.7 — Soal figural (gambar)
+- Bank bertambah 77 soal figural bergambar (tahun 2026), sehingga bank aktif menjadi 1.621 soal (TWK 494 · TIU 572 · TKP 555). ID soal lama tidak berubah; progres, riwayat, dan sinkron aman.
+- Empat jenis: **deret gambar** (23 soal: rotasi, pergeseran, siklus, sisi/jumlah bertambah, kotak terisi, cermin bergantian, jarum jam), **ketidaksamaan** (20: putar vs cermin, sisi titik, jumlah, warna/bentuk sepusat, simetri), **analogi gambar** (18: rotasi, cermin, warna dibalik, jumlah/sisi bertambah, luar–dalam bertukar, bergeser, dua perubahan sekaligus), **matriks 3×3** (16: kotak latin, jumlah titik, operasi gabung/beda/kurang, rotasi baris-kolom).
+- Terintegrasi seperti tipe soal lain: opsi berupa gambar (A–E), pembahasan bernomor dengan atribut J-P-A-W-B, alasan tiap opsi salah, kartu "Materi yang diuji" dan "Cara mengingat", trik cepat, "Cara menghadapi soal serupa", empat materi baru (deret, ketidaksamaan, analogi, matriks) lengkap dengan langkah, trik kunci, contoh, dan "Coba sendiri" bergambar, kartu hafalan "Aturan figural", latihan per topik, statistik/akurasi per topik, rekomendasi materi, buku kesalahan, tinjauan, dan simulasi.
+- Simulasi memuat paling banyak 6 soal figural (dari 35 TIU) dan tes diagnostik 1, agar komposisinya mirip ujian.
+- Kurikulum: tugas figural ditambahkan pada rencana 4 minggu dan mode kilat 7 hari; program remedial TIU menyebut figural.
+- Perbaikan lain: teks "Trik cepat" dan "Cara menghadapi soal serupa" yang memuat huruf tebal sebelumnya tampil dengan tanda `<b>` mentah; kini tampil benar.
+- Cache offline naik ke cpns-v11.
+- Catatan jujur: semua soal figural adalah soal orisinal buatan sendiri (gambar dibangkitkan dengan kode), bukan soal resmi BKN. Kunci ditentukan oleh aturan pembangkitnya dan setiap opsi dipastikan tidak kembar secara visual; saya memeriksa tampilan contoh tiap pola, tetapi belum diuji oleh orang lain. Matriks 3×3 adalah tipe klasik yang umum di bimbel; kisi-kisi SKD terbaru terutama menyebut deret, ketidaksamaan, dan analogi.
