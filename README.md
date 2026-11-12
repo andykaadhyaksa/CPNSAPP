@@ -63,3 +63,9 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Riwayat: sesi dan semua soal yang pernah dikerjakan dapat dibuka kembali (jawaban + pembahasan) tanpa mengubah progres.
 - Belajar → Hafalan: teknik menghafal ditulis ulang dengan langkah dan contoh nyata.
 - Nomor sumber soal ditampilkan agar mudah dilaporkan bila ada yang janggal.
+
+## Versi 4.5 — Pembahasan ditulis ulang
+- 134 pembahasan yang rusak akibat ekstraksi PDF (pecahan/pangkat/tabel terurai menjadi deretan angka) ditulis ulang menjadi langkah bernomor ("Langkah 1 — … Jawaban: X") dengan pecahan atas-bawah. Semua hasil hitung diperiksa terhadap kunci jawaban.
+- Soal yang teksnya cacat diperbaiki (pecahan/pangkat hilang, soal cerita yang kontradiktif, opsi yang salah cetak) dan diberi catatan di pembahasan bila naskah asli janggal.
+- 11 soal tambahan disembunyikan karena kunci/gambar/soalnya tidak dapat dipulihkan (logika duduk melingkar 2 soal, soal dengan kunci yang bertentangan dengan soalnya, dsb.). Bank kini 1.581. ID soal tidak berubah; progres, riwayat, dan sinkron aman.
+- Analisis tiap opsi pada soal hitungan kini menyebut hasil yang benar vs opsi itu.
