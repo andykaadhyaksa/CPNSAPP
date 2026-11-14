@@ -107,3 +107,12 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Rasio dapat diubah di satu tempat: konstanta `YMIX` di `index.html` (mis. `[0.70,0.20,0.10]`). Lapisan tahun mengikuti urutan tahun di bank (sekarang 2026 / 2023 / 2019).
 - Pada topik yang soal 2026-nya masih sedikit (mis. TKP dan TWK), soal terbaru akan lebih sering berulang; makin banyak soal baru ditambahkan, makin bervariasi.
 - Tab Tes dan Latihan menampilkan catatan komposisi. Progres dan data tersimpan tidak berubah. Cache offline naik ke cpns-v13.
+
+## Versi 4.10 — Hari terlewat bisa dikerjakan + dua perbaikan tugas harian
+- **Hari "Terlewat" kini bisa dikerjakan.** Ketuk angka merah di grid Jadwal (atau tombol Kerjakan di kartu hari itu, atau kartu baru "Hari terlewat" di Tugas hari ini) untuk membuka daftar tugas hari tersebut lengkap dengan tombol Mulai: soal per subtes, topik terlemah, ulangi soal salah, kartu hafalan, baca materi, simulasi, diagnostik, dan ceklis manual. Begitu semua tugasnya selesai, hari itu otomatis berstatus **Tuntas**.
+- **Perhitungannya per hari, tidak dobel.** Soal yang dikerjakan dari daftar hari terlewat dicatat untuk hari itu, bukan untuk tugas hari ini. Aktivitas nyata tetap utuh di tempat lain: riwayat sesi (judulnya berawalan "Hari 2 ·"), statistik per soal, streak, dan grafik harian. Aktivitas yang memang terjadi pada tanggal hari terlewat itu (misalnya sudah 6 dari 10 soal) ikut dihitung.
+- Daftar tugas hari terlewat dikunci saat pertama dibuka, jadi target dan materinya tidak berubah-ubah selagi kamu mengerjakan.
+- **Perbaikan 1, tugas "Baca materi".** Sebelumnya setelah materi hari itu dibaca, tugasnya pindah ke materi berikutnya dan kembali 0/1, sehingga hari hampir mustahil tuntas (harus membaca semua materi satu per satu). Sekarang materi tiap tanggal dikunci dan tercentang begitu dibaca.
+- **Perbaikan 2, tugas "soal topik terlemah"** (fase Penguatan dan Intensif, mulai Hari 9 pada program 28 hari). Sebelumnya topik terlemah berganti setelah dilatih sehingga targetnya ikut pindah. Sekarang topiknya dikunci per tanggal.
+- Data tersimpan tidak diubah. Tiga kolom opsional baru (`cmk` ledger, `cpin` daftar tugas terkunci, `cfix` pilihan materi/topik per tanggal) dibuat kosong bila belum ada, ikut cadangan dan sinkron antar perangkat (digabung seperti `cdone`), dan dikosongkan saat program dimulai ulang atau diatur ulang.
+- Cache offline naik ke cpns-v14.
