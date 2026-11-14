@@ -89,3 +89,21 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Perbaikan lain: teks "Trik cepat" dan "Cara menghadapi soal serupa" yang memuat huruf tebal sebelumnya tampil dengan tanda `<b>` mentah; kini tampil benar.
 - Cache offline naik ke cpns-v11.
 - Catatan jujur: semua soal figural adalah soal orisinal buatan sendiri (gambar dibangkitkan dengan kode), bukan soal resmi BKN. Kunci ditentukan oleh aturan pembangkitnya dan setiap opsi dipastikan tidak kembar secara visual; saya memeriksa tampilan contoh tiap pola, tetapi belum diuji oleh orang lain. Matriks 3×3 adalah tipe klasik yang umum di bimbel; kisi-kisi SKD terbaru terutama menyebut deret, ketidaksamaan, dan analogi.
+
+## Versi 4.8 — +553 soal HOTS bergaya SKD 2026
+- Bank bertambah 553 soal tahun 2026, sehingga bank aktif menjadi **2.174 soal** (TWK 596 · TIU 933 · TKP 645). Penambahan bersifat tambah-saja: ID soal lama tidak berubah, jadi progres, riwayat, dan sinkron tetap aman (diuji dengan memuat progres dari versi 4.7).
+- **TIU +361**: numerik 193 (deret berlapis, soal cerita bertingkat, persen/rasio/umur/jarak/kerja/campuran, perbandingan kuantitatif P-Q, kalender), logika analitis 65 (silogisme, premis bersyarat, penjadwalan/penempatan dengan banyak syarat), analogi dan padanan kata 68, verbal analitis 35 (sinonim/antonim, urutan kalimat, simpulan dan asumsi bacaan).
+- **TWK +102**: pilar negara 20, nasionalisme 20, integritas 20, bela negara 20, bahasa Indonesia 22. Berpola penalaran/kasus (bukan hafalan murni) sesuai kisi-kisi 2026.
+- **TKP +90** (15 per aspek: pelayanan publik, jejaring kerja, sosial budaya, TIK, profesionalisme, anti radikalisme): skor 1–5, jawaban terbaik tersebar merata dan tidak selalu opsi terpanjang. Pembahasan menjelaskan alasan setiap opsi beserta skornya.
+- Semua soal baru memuat pembahasan bernomor, alasan tiap opsi salah, dan label sumber "Soal orisinal Siap CPNS · HOTS 2026". Soal tahun 2026 diprioritaskan dalam latihan acak dan simulasi (±44% dari soal simulasi).
+- Pemeriksaan: angka kunci pada 163 soal hitungan dicocokkan dengan langkah pembahasan dan sampel soal hitungan dihitung ulang manual; soal kalender dicocokkan dengan kalender asli; seluruh 65 soal logika (penjadwalan, tempat duduk, silogisme, premis bersyarat) dihitung ulang dengan program terpisah (penelusuran semua susunan, tabel kebenaran, model diagram Venn) dan kuncinya cocok serta unik; sampel soal TWK, verbal, dan analogi dibaca ulang satu per satu. Tampilan semua soal baru diuji di desktop dan HP tanpa galat.
+- Cache offline naik ke cpns-v12.
+- Catatan jujur: ini **bukan** soal asli atau bocoran SKD 2026 dan **bukan** salinan soal bimbel/YouTuber (mis. Al Faiz, dokter Franz); semuanya ditulis orisinal mengikuti kisi-kisi dan format resmi 2026 (110 soal, 100 menit; TWK 30, TIU 35, TKP 45). Soal TWK dan TKP ditulis manual dan belum diuji orang lain — mohon dilaporkan bila ada yang janggal. Soal dari pihak lain dapat ditambahkan bila kamu memiliki berkasnya (PDF atau foto) dan berhak memakainya.
+
+## Versi 4.9 — Campuran soal: terbaru lebih banyak, tetap bercampur
+- Latihan (per topik, paket, latihan cepat, diagnostik, drill topik) dan Tes (mini-test, simulasi 110 soal) kini memakai komposisi tahun yang pasti: **±60% soal 2026, ±28% soal 2023, ±12% soal 2019**, urutannya diacak. Sebelumnya hanya pembobotan acak yang menaikkan porsi 2026 sedikit di atas porsinya di bank (±44% di simulasi); sekarang ±60% (sekitar 66 dari 110 soal).
+- Bila satu topik tidak punya soal pada salah satu tahun, jatahnya dibagi ke tahun lain secara proporsional dan soal terbaru tetap didahulukan. Paket "Soal tahun YYYY" tetap hanya berisi tahun itu. "Ulangi yang salah" dan buku kesalahan tidak diubah.
+- Batas soal figural (maksimal 6 per simulasi) tetap berlaku tanpa mengubah komposisi tahun.
+- Rasio dapat diubah di satu tempat: konstanta `YMIX` di `index.html` (mis. `[0.70,0.20,0.10]`). Lapisan tahun mengikuti urutan tahun di bank (sekarang 2026 / 2023 / 2019).
+- Pada topik yang soal 2026-nya masih sedikit (mis. TKP dan TWK), soal terbaru akan lebih sering berulang; makin banyak soal baru ditambahkan, makin bervariasi.
+- Tab Tes dan Latihan menampilkan catatan komposisi. Progres dan data tersimpan tidak berubah. Cache offline naik ke cpns-v13.
