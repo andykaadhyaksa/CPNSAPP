@@ -116,3 +116,29 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - **Perbaikan 2, tugas "soal topik terlemah"** (fase Penguatan dan Intensif, mulai Hari 9 pada program 28 hari). Sebelumnya topik terlemah berganti setelah dilatih sehingga targetnya ikut pindah. Sekarang topiknya dikunci per tanggal.
 - Data tersimpan tidak diubah. Tiga kolom opsional baru (`cmk` ledger, `cpin` daftar tugas terkunci, `cfix` pilihan materi/topik per tanggal) dibuat kosong bila belum ada, ikut cadangan dan sinkron antar perangkat (digabung seperti `cdone`), dan dikosongkan saat program dimulai ulang atau diatur ulang.
 - Cache offline naik ke cpns-v14.
+
+## Versi 4.11 — +132 soal "pola tabel angka" (format baru TIU 2026)
+- Format baru yang dilaporkan muncul di TIU SKD 2026: tabel angka dengan satu sel bertanda tanya. Bank bertambah **132 soal** (total 2.306; TIU 1.065), kategori Numerik, tahun 2026, dengan enam ragam pola: aturan per baris 3 kolom (46 soal, termasuk yang tanda tanyanya di Kolom 1 atau 2), 4 kolom (16), tabel X–Y dan "suku ke–nilai" (26), aturan per kolom 3×3 (16), dua kolom dengan pola masing-masing (12), dan deret yang mengalir di dalam tabel 3×3 (16).
+- Soal-soal ini **orisinal** (bukan salinan soal bimbel atau soal resmi). Ragam polanya mengikuti contoh yang beredar di internet; jumlah contoh terbuka yang lengkap dengan tabelnya masih sedikit.
+- Tiap soal punya pembahasan per baris, trik cepat, dan alasan untuk setiap opsi salah. Kunci diperiksa ulang secara terpisah langsung dari tabel yang tampil, dan soal yang aturannya bisa ditafsirkan ganda dibuang saat pembuatan.
+- Tabel tampil di atas teks soal (kolom `svg` berisi `<table class="qtb">`, penanda `tp:'tabel'`). Chip baru di Latihan: "Pola tabel angka · 15". Soal tabel juga ikut tercampur di latihan Numerik, paket TIU, dan simulasi (rata-rata 3–4 soal per simulasi).
+- Soal lama dan ID-nya tidak berubah; progres aman. Cache offline naik ke cpns-v15.
+
+## Versi 4.12 — +154 soal pola tabel lagi (total 286) dan tata letak baru
+- Soal pola tabel angka kini **286** (bank total 2.460; TIU 1.219). Tambahan 154 soal memuat tiga tata letak baru: **tabel X–Y–Z** (26), **tabel mendatar** baris X dan baris Y (11), dan **matriks dengan sifat baris** (26): jumlah tiap baris tetap, hasil kali tiap baris tetap, bilangan tengah = jumlah, hasil kali, atau rata-rata dua sisinya, kolom terakhir = rata-rata. Sisanya ragam lama dengan angka dan aturan baru, lebih banyak yang tanda tanyanya di Kolom 1 atau 2.
+- Daftar tata letak mengikuti yang disebut sumber bimbel untuk format 2026: matriks, baris, kolom, tabel X–Y, tabel X–Y–Z, dan suku ke–nilai. Semua soal tetap orisinal dan kuncinya diverifikasi terpisah dari tabel yang tampil.
+- Simulasi: soal tabel dibatasi **maksimal 6 per simulasi** (seperti soal figural) supaya TIU tidak didominasi satu jenis soal.
+- Soal lama dan ID tidak berubah. Cache offline naik ke cpns-v16.
+
+## Versi 4.13 — Pembahasan visual untuk semua soal
+- Setiap pembahasan (di latihan, tinjauan, dan buku kesalahan) kini tersusun sama: **kotak jawaban hijau → diagram → kotak Trik Cepat / Jebakan Umum → langkah bernomor**. Analisis tiap opsi tetap ada di bawahnya.
+- Diagram dipilih otomatis menurut jenis soal (2.460 soal, semuanya mendapat kotak jawaban, kotak trik atau jebakan, dan langkah; 5 soal lama tanpa teks pembahasan hanya mendapat diagram):
+  - Pola tabel (286): tabel terisi dengan kolom **Hitungan** per baris, sel jawaban hijau.
+  - Deret angka dan huruf (133): **busur operasi** antarsuku (+6, ×2 +3, ...); deret selang-seling memakai busur atas dan bawah; deret 3–4 pola dipisah per baris.
+  - Analogi (126): kotak pasangan kiri dan kanan dengan label hubungannya. Sinonim dan antonim (68): kata soal = / ✕ kata jawaban.
+  - Logika (113): premis → kesimpulan (implikasi ditulis P → Q), rantai urutan, dan denah susunan duduk.
+  - Hitungan dan soal cerita (254): **rantai hitung** dari data sampai jawaban.
+  - TKP (645): **peringkat skor** kelima opsi berupa batang 5 sampai 1.
+  - TWK (596) dan sisa TIU (162): kartu "yang ditanya → kunci". Soal figural (77) memakai kartu gambar yang sudah ada.
+- Diagram dibangun saat tampil dari data soal dan teks pembahasan yang ada; bank soal, ID, dan progres tidak berubah. Kode: blok "VISUAL PEMBAHASAN (v4.13)" (`vzBlock` dipanggil dari `detail()`).
+- Perbaikan tampilan: soal lama yang katanya menempel tidak lagi melebar keluar layar. Cache offline naik ke cpns-v17.
