@@ -130,6 +130,10 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Simulasi: soal tabel dibatasi **maksimal 6 per simulasi** (seperti soal figural) supaya TIU tidak didominasi satu jenis soal.
 - Soal lama dan ID tidak berubah. Cache offline naik ke cpns-v16.
 
+## Versi 4.18b — Pola tabel di materi Deret Angka dan Huruf
+
+- Tambahan di Pendalaman: tabel jenis aturan, contoh berlangkah (soal tabel tiga kolom), cara mencari aturan cepat, satu trik, dan satu salah kaprah.
+
 ## Versi 4.18 — Cetak modul belajar jadi PDF
 
 - Tombol **Cetak PDF** di halaman tiap materi dan di daftar Belajar. Dialog: pilih materi (satu atau banyak), ukuran kertas (A4, A5, B5, F4, Letter, Legal, A3, B4), tegak atau mendatar, subbab yang dicetak, berwarna atau hemat tinta, ukuran huruf, dan kotak Catatanku bergaris.
