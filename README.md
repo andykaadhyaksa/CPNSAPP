@@ -130,6 +130,12 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Simulasi: soal tabel dibatasi **maksimal 6 per simulasi** (seperti soal figural) supaya TIU tidak didominasi satu jenis soal.
 - Soal lama dan ID tidak berubah. Cache offline naik ke cpns-v16.
 
+## Versi 4.17 — Ringkasan jawaban di Beranda + materi lebih mendalam
+
+- **Beranda:** kartu *Ringkasan semua jawabanmu* berisi diagram lingkaran benar dan salah (jumlah soal dan persentase), plus rincian benar dan salah per subtes (TWK, TIU, TKP). Dihitung dari semua jawaban yang pernah dikirim; TKP dihitung dari skornya.
+- **Belajar:** ke-24 materi mendapat tiga bagian baru: **Pendalaman** (penjelasan lebih detail dengan tabel dan rumus), **Trik lanjutan** (trik bernomor dengan contoh) dan **Salah kaprah** (kekeliruan umum dan yang benar). Kartu materi ditandai "Pendalaman". Isi lama tidak dihapus.
+- Tidak ada perubahan pada save progres, bank soal, atau ID soal.
+
 ## Versi 4.16 — Bahan belajar menyatu dengan Baca materi
 
 - Kartu *Bahan belajar hari ini* kini tampil di dalam halaman materi dari tugas "Baca materi", di atas isi materi baru. Tidak ada lagi kartu atau tombol terpisah di daftar tugas. Hari tanpa tugas materi tetap menampilkan kartunya di daftar tugas.

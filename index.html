@@ -244,6 +244,8 @@ input[type=file]{display:none}
 .chk.on .cb,.ctask.on .cb{background:var(--good);border-color:var(--good)}.chk.on>span:last-child{color:var(--ink2);text-decoration:line-through}
 .ctask{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.ctask:last-child{border-bottom:0}
 .ctask .mid{flex:1;min-width:0}.ctask.on b{color:var(--ink2);text-decoration:line-through}
+.acc-top{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.acc-donut{flex:none}.acc-mid{flex:1;min-width:200px}.acc-leg{display:flex;flex-direction:column;gap:10px}.acc-li{display:flex;align-items:center;gap:10px}.acc-li>i{width:12px;height:12px;border-radius:4px;flex:none}.acc-li .mid{display:flex;flex-direction:column}.acc-pc{font-size:24px}.acc-per{flex:1.2;min-width:230px;display:flex;flex-direction:column;gap:12px}.acc-bar{height:8px;border-radius:99px;background:var(--bad);opacity:.9;overflow:hidden;margin-top:6px}.acc-bar i{display:block;height:100%;background:var(--good)}
+.tk2{border-left:3px solid var(--accent);padding:2px 0 2px 12px}.tk2h{display:flex;gap:8px;align-items:center}.tk2h .sn{width:22px;height:22px;font-size:12px;flex:none}.tk2 p{margin:6px 0 6px;line-height:1.65}.tk2c{background:var(--accent-soft);border-radius:10px;padding:8px 10px;font-size:14px;line-height:1.55}.tk2c span{font-weight:700;color:var(--accent);margin-right:6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}.sk{display:flex;flex-direction:column;gap:10px;margin-top:6px}.sk-r{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sk-x,.sk-o{border-radius:10px;padding:9px 11px;font-size:14px;line-height:1.55}.sk-x{background:color-mix(in srgb,var(--bad) 10%,transparent);border:1px solid color-mix(in srgb,var(--bad) 30%,transparent)}.sk-o{background:color-mix(in srgb,var(--good) 10%,transparent);border:1px solid color-mix(in srgb,var(--good) 30%,transparent)}.sk-x span,.sk-o span{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}.sk-x span{color:var(--bad)}.sk-o span{color:var(--good)}@media (max-width:620px){.sk-r{grid-template-columns:1fr}}
 .btb{padding:4px 2px 8px}.bt{border-bottom:1px solid var(--line)}.bt:last-of-type{border-bottom:0}.bt>summary{display:flex;gap:10px;align-items:center;padding:10px 0;cursor:pointer;list-style:none}.bt>summary::-webkit-details-marker{display:none}.bt>summary .mid{flex:1;min-width:0;display:flex;flex-direction:column}.bt-bar{flex:none;width:54px;height:6px;border-radius:99px;background:var(--line);overflow:hidden;display:block}.bt-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
 .ctask>.row .btn svg{vertical-align:-3px}
 @media (max-width:520px){.ctask{flex-wrap:wrap}.ctask .mid{flex-basis:calc(100% - 40px)}.ctask>.row{margin-left:36px}}
@@ -2392,6 +2394,19 @@ function recCard(r){return `<button class="card rec ${r.c}" data-act="${r.a}" da
 const lessonsDone=()=>LESSONS.filter(l=>S.read[l.id]).length;
 
 /* ===================== BERANDA ===================== */
+function accData(){
+ const a={TWK:[0,0],TIU:[0,0],TKP:[0,0]};
+ Object.keys(S.stat||{}).forEach(id=>{const q=byId[id],r=S.stat[id];if(!q||!r||!r.n)return;const x=a[q.sub];if(!x)return;x[0]+=r.n;x[1]+=r.p});
+ const rows=SUBS.map(s=>{const n=a[s][0],b=Math.round(a[s][1]);return {s,n,b,w:n-b}});
+ const N=rows.reduce((t,r)=>t+r.n,0),B=rows.reduce((t,r)=>t+r.b,0);
+ return {rows,N,B,W:N-B}}
+function accCard(){
+ const d=accData();if(!d.N)return '';
+ const pb=Math.round(d.B/d.N*100),pw=100-pb,R=54,C=2*Math.PI*R,lb=C*d.B/d.N,lw=C-lb;
+ const dn=`<svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Benar ${d.B} dari ${d.N} jawaban"><circle cx="70" cy="70" r="${R}" fill="none" stroke="var(--bad)" stroke-width="18" opacity=".85"/><circle cx="70" cy="70" r="${R}" fill="none" stroke="var(--good)" stroke-width="18" stroke-dasharray="${lb.toFixed(2)} ${C.toFixed(2)}" transform="rotate(-90 70 70)"/><text x="70" y="66" text-anchor="middle" style="font:800 26px Inter,system-ui,sans-serif;fill:var(--ink)">${d.N}</text><text x="70" y="86" text-anchor="middle" style="font:600 11px Inter,system-ui,sans-serif;fill:var(--muted)">soal dijawab</text></svg>`;
+ const leg=`<div class="acc-leg"><div class="acc-li"><i style="background:var(--good)"></i><span class="mid"><b>Benar</b><span class="xs muted">${d.B} soal</span></span><b class="acc-pc" style="color:var(--good)">${pb}%</b></div><div class="acc-li"><i style="background:var(--bad)"></i><span class="mid"><b>Salah</b><span class="xs muted">${d.W} soal</span></span><b class="acc-pc" style="color:var(--bad)">${pw}%</b></div></div>`;
+ const per=d.rows.filter(r=>r.n).map(r=>{const p=Math.round(r.b/r.n*100);return `<div class="acc-sub"><div class="row between"><span><span class="pill ${SUB[r.s].cls}">${r.s}</span> <span class="xs muted">${r.b} benar · ${r.w} salah</span></span><b class="small">${p}% benar</b></div><div class="acc-bar"><i style="width:${p}%"></i></div></div>`}).join('');
+ return `<div class="card acc-card"><div class="acc-top"><div class="acc-donut">${dn}</div><div class="acc-mid"><h3 style="margin-bottom:8px">Ringkasan semua jawabanmu</h3>${leg}</div><div class="acc-per">${per}</div></div><p class="xs muted" style="margin-top:10px">Dihitung dari semua jawaban yang sudah kamu kirim, termasuk soal yang diulang. Untuk TKP, tiap jawaban dihitung dari skornya (skor 4 dari 5 dianggap 80% benar).</p></div>`}
 function vHome(){
  const e=est(),total=Object.keys(S.stat).length,td=today(),st=streak(),dt=daysTo(S.exam),tip=TIPS[Math.floor(Date.now()/864e5)%TIPS.length];
  const gauge=e.tot!=null?ring(e.tot/550,132,e.tot>=PG_TOTAL&&SUBS.every(s=>e.per[s]>=SUB[s].pg)?'var(--good)':'var(--accent)',`<b class="gnum">${e.tot}</b><span class="xs muted">dari 550</span>`,12):ring(0,132,'var(--accent)',`<b class="gnum">–</b><span class="xs muted">estimasi</span>`,12);
@@ -2851,7 +2866,7 @@ function vHome(){
  const skd=`<div class="split"><div class="card"><h3 style="margin-bottom:10px">Komposisi SKD</h3><div class="tw"><table><tr><th>Subtes</th><th>Soal</th><th>Nilai maks</th><th>Batas lolos</th></tr>${SUBS.map(s=>`<tr><td><span class="pill ${SUB[s].cls}">${s}</span> <span class="muted small">${SUB[s].n}</span></td><td>${SUB[s].q}</td><td>${SUB[s].max}</td><td><b>${SUB[s].pg}</b></td></tr>`).join('')}<tr><td><b>Total</b></td><td>110</td><td>550</td><td><b>${PG_TOTAL}</b></td></tr></table></div><p class="xs muted" style="margin-top:10px">Waktu 100 menit. TWK dan TIU: benar 5, salah 0. TKP: tiap opsi 1 sampai 5. Tidak ada nilai minus. Lolos berarti memenuhi batas ketiga subtes.</p></div>
  <button class="card mcard" data-act="gotab" data-v="guide|info" style="background:var(--accent-soft);border-color:transparent"><span class="mt"><span class="mi">${ic('info',20)}</span><b>Kabar CPNS 2026</b></span><p style="color:var(--ink)">Pemberitaan menyebut pendaftaran lewat SSCASN ditargetkan akhir November 2026 dengan perkiraan ±150 ribu formasi. Jadwal pasti belum diumumkan resmi, jadi selalu cek pengumuman BKN.</p><span class="go">Baca ringkasan ${ic('arrow',15)}</span></button></div>`;
  return `<div class="page">${hero}${IS_SAMPLE?`<div class="banner">${ic('alert')}<span>Bank soal masih berisi soal contoh.</span></div>`:''}
- ${n?`${lbl('STATUSMU HARI INI')}${status}${missionCard()}${rc.length?`<div class="gridauto">${rc.map(recCard).join('')}</div>`:''}`:''}
+ ${n?`${lbl('STATUSMU HARI INI')}${status}${accCard()}${missionCard()}${rc.length?`<div class="gridauto">${rc.map(recCard).join('')}</div>`:''}`:''}
  ${lbl('MULAI DARI SINI')}${road}${lbl('MENU UTAMA')}${menu}${lbl('SKD DALAM SINGKAT')}${skd}</div>`}
 
 /* ===================== BELAJAR ===================== */
@@ -2863,7 +2878,7 @@ function vStudy(){
   const ls=LESSONS.filter(l=>f==='ALL'||l.sub===f);
   body=`<div class="row between wrapx"><div class="chips">${['ALL',...SUBS].map(s=>`<button class="chip" data-act="sf" data-v="${s}" aria-pressed="${f===s}">${s==='ALL'?'Semua':s}</button>`).join('')}</div><span class="small muted">${lessonsDone()} dari ${LESSONS.length} materi dibaca</span></div>
   <div class="bar good"><i style="width:${pct(lessonsDone(),LESSONS.length)}%"></i></div>
-  <div class="gridauto">${ls.map(l=>{const c=cs.find(x=>l.cats.includes(x.cat)&&x.n>0),X=LX[l.id]||{};return `<button class="card lcard" data-act="lesson" data-v="${l.id}"><span class="dot ${S.read[l.id]?'read':SUB[l.sub].cls}">${S.read[l.id]?ic('check',20):l.sub}</span><span class="mid"><b>${esc(l.t)}</b><p>${esc(l.d)}</p><span class="tags"><span class="pill">±${l.min} menit</span>${X.hafal?'<span class="pill warn">Trik menghafal</span>':''}${(l.ex||[]).length?'<span class="pill acc">'+l.ex.length+' contoh</span>':''}${c?`<span class="pill ${c.acc>=.75?'good':c.acc<.5?'bad':'warn'}">akurasi ${Math.round(c.acc*100)}%</span>`:''}</span></span></button>`}).join('')}</div>`}
+  <div class="gridauto">${ls.map(l=>{const c=cs.find(x=>l.cats.includes(x.cat)&&x.n>0),X=LX[l.id]||{};return `<button class="card lcard" data-act="lesson" data-v="${l.id}"><span class="dot ${S.read[l.id]?'read':SUB[l.sub].cls}">${S.read[l.id]?ic('check',20):l.sub}</span><span class="mid"><b>${esc(l.t)}</b><p>${esc(l.d)}</p><span class="tags"><span class="pill">±${l.min} menit</span>${X.hafal?'<span class="pill warn">Trik menghafal</span>':''}${LDEEP[l.id]?'<span class="pill good">Pendalaman</span>':''}${(l.ex||[]).length?'<span class="pill acc">'+l.ex.length+' contoh</span>':''}${c?`<span class="pill ${c.acc>=.75?'good':c.acc<.5?'bad':'warn'}">akurasi ${Math.round(c.acc*100)}%</span>`:''}</span></span></button>`}).join('')}</div>`}
  else if(ST.tab==='hafalan'){
   body=`${FCT?cuFcBanner():''}<div class="banner info">${ic('bulb')}<span>Tiap set kartu dilengkapi cara mengingat (jembatan keledai). Kartu yang kamu tandai hafal naik tingkat dan muncul lebih jarang (metode Leitner). 5–10 menit per hari cukup.</span></div>
   <div class="gridauto">${DECKS.map(d=>{const m=d.cards.filter((_,i)=>(S.fc[d.id+'|'+i]||0)>=3).length;return `<button class="card lcard" data-act="deck" data-v="${d.id}"><span class="dot ${d.sub==='ALL'?'':SUB[d.sub]?SUB[d.sub].cls:''}" ${d.sub==='ALL'?'style="background:var(--accent-soft);color:var(--accent)"':''}>${ic('cards',20)}</span><span class="mid"><b>${esc(d.t)}</b><p>${d.cards.length} kartu · ${m} dikuasai</p><div class="bar good" style="margin-top:9px"><i style="width:${pct(m,d.cards.length)}%"></i></div></span></button>`}).join('')}</div>
@@ -2873,7 +2888,383 @@ function vStudy(){
  else body=`<div class="cols">${studyTips()}</div>`;
  return `<div class="page">${pageHead('Belajar','Pahami dulu, hafalkan dengan trik, baru latihan. Mulai dari materi yang akurasimu paling rendah.')}${tabsBar(tabs,ST.tab,'stab')}${body}</div>`}
 
-var LS_SECS=[['ring','Ringkasan'],['materi','Materi'],['cara','Cara menjawab'],['kunci','Trik kunci'],['hafal','Cara menghafal'],['contoh','Contoh berlangkah'],['jbk','Jebakan'],['coba','Coba sendiri']];
+var LS_SECS=[['ring','Ringkasan'],['materi','Materi'],['dalam','Pendalaman'],['cara','Cara menjawab'],['kunci','Trik kunci'],['trik2','Trik lanjutan'],['hafal','Cara menghafal'],['contoh','Contoh berlangkah'],['salah','Salah kaprah'],['jbk','Jebakan'],['coba','Coba sendiri']];
+/* v4.17: pendalaman materi (Pendalaman, Trik lanjutan, Salah kaprah) */
+var LDEEP={};
+LDEEP['twk-pilar']={
+dalam:[
+{h:'Pancasila: lima kedudukan yang sering ditanyakan',ul:['<b>Dasar negara</b>: sumber dari segala sumber hukum. Semua peraturan tidak boleh bertentangan dengannya.','<b>Pandangan hidup</b>: arah dan pedoman bangsa dalam bermasyarakat.','<b>Ideologi negara</b>: cita-cita yang dipakai bersama. Pancasila disebut <b>ideologi terbuka</b>: nilai dasarnya tetap, tetapi penjabarannya boleh menyesuaikan zaman.','<b>Kepribadian bangsa</b> dan <b>perjanjian luhur</b> bangsa Indonesia.','<b>Tiga tingkat nilai</b>: nilai dasar (lima sila, tidak berubah) → nilai instrumental (UUD, UU, peraturan) → nilai praksis (perilaku sehari-hari).']},
+{h:'Membedah soal "perilaku mana yang sesuai sila ke-…"',p:'Soal kasus tidak menanyakan hafalan, tetapi <b>inti perbuatan</b>. Ubah tiap pilihan menjadi satu kata kerja inti, lalu cocokkan ke sila.',tb:[['Inti perbuatan','Sila','Contoh kata kunci di soal'],['Beribadah, saling menghormati agama','1','toleransi umat beragama, tidak memaksakan keyakinan'],['Menolong, tidak diskriminatif, menghargai martabat','2','adil, beradab, tidak semena-mena, empati'],['Menjaga persatuan, mendahulukan kepentingan bangsa','3','gotong royong, bhinneka, cinta tanah air'],['Musyawarah, menerima hasil keputusan bersama','4','mufakat, rapat warga, pemilu, tidak memaksakan kehendak'],['Berbagi, pemerataan, bekerja keras, tidak boros','5','keadilan ekonomi, koperasi, bantuan sosial, hidup sederhana']]},
+{h:'Pasal-pasal yang sering dibelokkan',ul:['<b>Pasal 7</b>: Presiden dan Wakil Presiden menjabat lima tahun dan dapat dipilih kembali hanya untuk satu kali masa jabatan.','<b>Pasal 24 dan 24C</b>: kekuasaan kehakiman. MK berwenang menguji UU terhadap UUD, memutus sengketa kewenangan lembaga negara, membubarkan partai politik, dan memutus perselisihan hasil pemilu.','<b>Pasal 28I (1)</b>: hak yang tidak dapat dikurangi dalam keadaan apa pun, yaitu hak hidup, tidak disiksa, kemerdekaan pikiran dan hati nurani, beragama, tidak diperbudak, diakui sebagai pribadi di hadapan hukum, dan tidak dituntut atas hukum yang berlaku surut.','<b>Pasal 33</b>: ayat 1 asas kekeluargaan, ayat 2 cabang produksi penting yang menguasai hajat hidup orang banyak dikuasai negara, ayat 3 bumi, air, dan kekayaan alam dikuasai negara untuk kemakmuran rakyat.','<b>Amandemen</b> dilakukan empat kali: 1999, 2000, 2001, dan 2002.']},
+{h:'Wawasan Nusantara dan batas wilayah',ul:['Wawasan Nusantara memandang Indonesia sebagai satu kesatuan politik, ekonomi, sosial budaya, serta pertahanan dan keamanan.','<b>Deklarasi Djuanda</b> (13 Desember 1957): laut di antara pulau menjadi bagian wilayah Indonesia. Sebelumnya wilayah laut hanya 3 mil dari garis pantai (Ordonansi 1939).','<b>ZEE</b> 200 mil laut dari garis pangkal: Indonesia punya hak berdaulat atas sumber daya, bukan kedaulatan penuh. <b>Laut teritorial</b> 12 mil: kedaulatan penuh.','Hukum laut internasional (UNCLOS 1982) diratifikasi dengan UU No. 17 Tahun 1985.']}],
+trik:[
+{t:'Ubah kasus menjadi satu kata kerja',s:'Baca pilihan, hapus nama tokoh dan latar, sisakan kata kerjanya: "menolong", "bermusyawarah", "beribadah". Kata kerja itu langsung menunjuk sila.',c:'Warga menggelar rapat untuk memutuskan jadwal ronda → "bermusyawarah" → sila 4.'},
+{t:'Dua sila yang sering tertukar',s:'Sila 2 berbicara tentang <b>manusia sebagai individu</b> (martabat, belas kasih). Sila 3 tentang <b>bangsa sebagai satu kesatuan</b> (persatuan, cinta tanah air). Sila 5 tentang <b>pemerataan dan keadilan hasil</b>, sedangkan sila 4 tentang <b>proses mengambil keputusan</b>.',c:'Membantu korban bencana dengan tulus → sila 2. Mengikuti upacara bendera → sila 3.'},
+{t:'Urutan sejarah: pasangkan dengan angka',s:'29 Mei–1 Juni (sidang I BPUPKI), 22 Juni (Piagam Jakarta), 10–17 Juli (sidang II BPUPKI), 17 Agustus (Proklamasi), 18 Agustus (UUD dan Presiden). Bila soal menanyakan "setelah/sebelum", tulis garis waktu singkat di coretan.',c:'Dasar negara dirumuskan lebih dulu di BPUPKI, baru disahkan PPKI pada 18 Agustus 1945.'},
+{t:'Soal "yang BUKAN"',s:'Coret satu per satu opsi yang jelas benar. Opsi yang tersisa adalah jawaban. Jangan memilih opsi yang terdengar paling benar.',c:'"Bukan tujuan negara pada alinea keempat": tujuan negara ada empat (melindungi, memajukan kesejahteraan, mencerdaskan, ikut ketertiban dunia). Menghapus penjajahan ada di alinea pertama.'}],
+salah:[
+['MPR lembaga tertinggi negara.','Setelah amandemen MPR setara dengan lembaga negara lain, tidak lagi tertinggi.'],
+['Pembukaan UUD bisa diamandemen sama seperti pasal.','Yang diamandemen adalah batang tubuh (pasal). Pembukaan memuat dasar negara dan tidak diubah.'],
+['MA yang menguji UU terhadap UUD.','MK menguji UU terhadap UUD. MA menguji peraturan di bawah UU terhadap UU.'],
+['Hari lahir Pancasila 18 Agustus.','Hari Lahir Pancasila 1 Juni (pidato Soekarno). 18 Agustus adalah pengesahan UUD 1945 oleh PPKI.']]};
+
+LDEEP['twk-nas']={
+dalam:[
+{h:'Lima unsur bela negara',ul:['Cinta tanah air · sadar berbangsa dan bernegara · yakin Pancasila sebagai ideologi negara · rela berkorban untuk bangsa dan negara · memiliki kemampuan awal bela negara (fisik dan psikis).','Dasar hukum: <b>Pasal 27 (3)</b> (hak dan kewajiban ikut bela negara) dan <b>Pasal 30</b> (pertahanan dan keamanan rakyat semesta). Bela negara bukan tugas TNI saja, tetapi hak dan kewajiban <b>setiap warga negara</b>.','Bentuknya luas: warga biasa menjaga lingkungan, ASN melayani dengan jujur, pelajar belajar sungguh-sungguh, pekerja menjaga produktivitas, relawan membantu bencana.']},
+{h:'Jenis ancaman dan contohnya',tb:[['Jenis','Ciri','Contoh'],['Militer','Kekuatan bersenjata','Agresi, pemberontakan bersenjata, spionase'],['Nirmiliter','Tanpa senjata, menyasar berbagai bidang','Ideologi (paham yang bertentangan dengan Pancasila), politik, ekonomi, sosial budaya, teknologi, keselamatan umum'],['Hibrida','Gabungan militer dan nirmiliter','Disinformasi disertai serangan siber dan tekanan ekonomi']]},
+{h:'Tonggak pergerakan nasional (hafal tahun dan tokoh)',tb:[['Tahun','Peristiwa','Catatan'],['1908','Budi Utomo (20 Mei)','Hari Kebangkitan Nasional; dr. Sutomo'],['1912','Sarekat Islam, Indische Partij, Muhammadiyah','SI (H.O.S. Tjokroaminoto), IP (Tiga Serangkai), Muhammadiyah (K.H. Ahmad Dahlan)'],['1925','Manifesto Politik Perhimpunan Indonesia','Mahasiswa Indonesia di Belanda menyatakan kemerdekaan, persatuan, dan non-kooperasi'],['1926','Nahdlatul Ulama',''],['1927','PNI','Soekarno'],['1928','Sumpah Pemuda','Kongres Pemuda II, 27 sampai 28 Oktober']]},
+{h:'Hari Bela Negara 19 Desember',p:'Diperingati karena pada 19 Desember 1948 Belanda melancarkan Agresi Militer II dan menduduki Yogyakarta. Syafruddin Prawiranegara membentuk <b>PDRI</b> di Sumatra Barat sehingga pemerintahan Republik tetap ada. Penetapannya lewat Keppres No. 28 Tahun 2006.'}],
+trik:[
+{t:'Jawaban bela negara hampir selalu aktif dan konstruktif',s:'Pilihan yang memberi sumbangsih nyata sesuai peran (belajar, bekerja jujur, menjaga lingkungan, menangkal hoaks) lebih kuat daripada pilihan pasif atau menyalahkan pihak lain.',c:'Menghadapi hoaks pemecah belah: memverifikasi lalu membagikan klarifikasi, bukan membalas dengan ujaran kebencian.'},
+{t:'Bedakan nasionalisme dan chauvinisme',s:'Nasionalisme: cinta tanah air sambil menghargai bangsa lain. Chauvinisme: merasa bangsa sendiri paling unggul. Bila opsi memuat kata "paling", "mutlak", atau merendahkan bangsa lain, curigai itu chauvinisme.',c:'Memakai produk dalam negeri sambil tetap terbuka pada produk asing yang bermutu = nasionalisme.'},
+{t:'Kunci urutan pergerakan',s:'Awal (1908-1927): organisasi kedaerahan dan sosial-budaya. Tengah (1927-1942): tujuan politik tegas, Indonesia sebagai satu bangsa. Gunakan "1908 budaya, 1928 bersatu, 1945 merdeka".',c:'Budi Utomo bersifat sosial-budaya-pendidikan; PNI bertujuan kemerdekaan.'}],
+salah:[
+['Bela negara hanya dengan angkat senjata.','Bela negara bisa nonfisik: pendidikan, kerja jujur, menjaga lingkungan, menangkal hoaks.'],
+['Sumpah Pemuda 1908.','Sumpah Pemuda 1928. Kebangkitan Nasional 1908.'],
+['Budi Utomo organisasi politik.','Budi Utomo bergerak di bidang sosial, budaya, dan pendidikan.'],
+['Nasionalisme berarti menolak semua hal asing.','Nasionalisme tidak anti-asing; yang ditolak adalah yang merugikan kepentingan bangsa.']]};
+
+LDEEP['twk-int']={
+dalam:[
+{h:'Mengenali korupsi: tujuh kelompok',ul:['<b>Merugikan keuangan negara</b> (memperkaya diri secara melawan hukum).','<b>Suap-menyuap</b>: memberi atau menerima sesuatu agar pejabat berbuat atau tidak berbuat sesuatu terkait jabatannya.','<b>Penggelapan dalam jabatan</b>: menggelapkan uang atau barang yang dikuasai karena jabatan.','<b>Pemerasan</b>: pejabat memaksa orang memberi sesuatu.','<b>Perbuatan curang</b>: misalnya mengurangi spesifikasi proyek.','<b>Benturan kepentingan dalam pengadaan</b>: pejabat ikut serta atau punya kepentingan pribadi pada pengadaan.','<b>Gratifikasi</b>: pemberian dalam arti luas kepada pegawai negeri atau penyelenggara negara yang berhubungan dengan jabatan dan berlawanan dengan kewajiban atau tugasnya.']},
+{h:'Gratifikasi: kapan dilaporkan',ul:['Wajib dilaporkan ke <b>KPK paling lambat 30 hari kerja</b> sejak diterima (UU No. 20 Tahun 2001, Pasal 12C).','Contoh yang wajib dilaporkan: uang atau barang dari rekanan, hadiah dari pihak yang memiliki kepentingan atas keputusanmu.','Contoh yang umumnya tidak perlu dilaporkan: pemberian dalam keluarga inti, hadiah dari teman tanpa kaitan jabatan, sumbangan dalam batas kewajaran pada acara pribadi. Namun soal CPNS lebih menekankan <b>menolak</b> pemberian yang berkaitan dengan jabatan.']},
+{h:'Sembilan nilai antikorupsi KPK dan sikap yang diwakilinya',tb:[['Nilai','Sikap contoh'],['Jujur','Melaporkan apa adanya, tidak memanipulasi data'],['Peduli','Peka terhadap lingkungan dan kepentingan publik'],['Mandiri','Tidak bergantung pada pihak lain secara tidak wajar'],['Disiplin','Taat aturan dan jam kerja'],['Tanggung jawab','Menuntaskan tugas dan menanggung akibat keputusan'],['Kerja keras','Bekerja bersungguh-sungguh, bukan jalan pintas'],['Sederhana','Tidak bergaya hidup berlebihan'],['Berani','Menolak dan melaporkan penyimpangan'],['Adil','Memperlakukan semua pihak setara']]},
+{h:'Core values ASN: BerAKHLAK',ul:['<b>Ber</b>orientasi pelayanan · <b>A</b>kuntabel · <b>K</b>ompeten · <b>H</b>armonis · <b>L</b>oyal · <b>A</b>daptif · <b>K</b>olaboratif.','Slogan employer branding ASN: "Bangga Melayani, Bangga Berbangsa".','Dalam soal situasional, pilih tindakan yang jujur, sesuai aturan, dan tetap menjaga hubungan baik.']}],
+trik:[
+{t:'Uji tiga pertanyaan',s:'Untuk setiap pilihan tanya: (1) apakah melanggar aturan? (2) apakah menguntungkan diri atau kelompok? (3) apakah ada yang dirugikan? Bila ada satu jawaban "ya", opsi itu hampir pasti salah.',c:'Menerima "uang terima kasih" dari warga yang urusannya selesai: berkaitan dengan jabatan, jadi gratifikasi.'},
+{t:'Urutan sikap terbaik saat menemukan penyimpangan',s:'Tolak atau hentikan secara sopan → dokumentasikan → laporkan lewat jalur resmi (atasan, inspektorat, KPK, saluran whistleblower). Jangan membongkarnya lewat media sosial dahulu, dan jangan ikut menutupi.',c:'Rekan menggelembungkan biaya perjalanan dinas: ingatkan, dan bila berlanjut laporkan ke atasan atau inspektorat.'},
+{t:'Hafal lembaga dan tugasnya',s:'KPK: mencegah dan memberantas korupsi, menerima LHKPN dan laporan gratifikasi. BPK: memeriksa keuangan negara. Kejaksaan dan Polri juga menyidik. Ombudsman: pengawas pelayanan publik.',c:'LHKPN (harta kekayaan penyelenggara negara) dilaporkan ke KPK.'}],
+salah:[
+['Gratifikasi selalu dalam bentuk uang.','Dalam arti luas: uang, barang, diskon, tiket, fasilitas penginapan, pengobatan, dan lainnya.'],
+['Korupsi hanya merugikan negara.','Korupsi juga merusak kepercayaan publik dan keadilan layanan.'],
+['Boleh menerima pemberian asal tidak diminta.','Diminta atau tidak, pemberian yang berkaitan dengan jabatan tetap harus ditolak atau dilaporkan.'],
+['Nilai "mandiri" berarti bekerja sendirian.','Mandiri berarti tidak bergantung secara tidak wajar, tetap boleh bekerja sama.']]};
+
+LDEEP['twk-bi']={
+dalam:[
+{h:'Ejaan: pegangan terbaru',p:'Pedoman yang berlaku sekarang adalah <b>Ejaan Bahasa Indonesia (EBI/EYD) Edisi V</b> tahun 2022 yang menggantikan PUEBI. Soal SKD sering masih memakai istilah EYD atau PUEBI, tetapi aturan inti yang diuji relatif sama.',ul:['<b>Huruf kapital</b>: awal kalimat, nama orang, nama geografi, nama bulan dan hari, gelar yang diikuti nama, unsur nama lembaga resmi. Tidak dipakai pada kata umum seperti "tahun" atau arah mata angin yang bukan nama tempat ("menuju timur").','<b>di- sebagai awalan</b> ditulis serangkai dengan kata kerja (dibaca, dimakan). <b>di sebagai kata depan</b> dipisah dan menunjukkan tempat (di rumah, di sini).','<b>Partikel</b> -lah, -kah, -tah ditulis serangkai (bacalah, apakah). Partikel <b>pun</b> dipisah (apa pun, siapa pun) kecuali pada kata hubung yang serangkai: walaupun, meskipun, sekalipun, maupun, ataupun.','<b>Tanda baca</b>: koma sebelum kata hubung "tetapi" dan "melainkan", dan setelah anak kalimat yang mendahului induk kalimat.']},
+{h:'Kalimat efektif: tujuh ciri',tb:[['Ciri','Arti','Contoh salah → benar'],['Kesejajaran','Bentuk kata dalam rincian sama','Dia suka membaca dan menulis (benar); "membaca dan tulisan" (salah)'],['Kehematan','Tanpa kata berlebih','"para peserta-peserta" → "para peserta"'],['Kecermatan','Tidak menimbulkan tafsir ganda','Pilih kata yang jelas rujukannya'],['Kepaduan','Unsur tidak berpisah-pisah','Hindari "tentang" yang tidak perlu'],['Kelogisan','Masuk akal','"Waktu dan tempat dipersilakan" → "Bapak dipersilakan"'],['Ketegasan','Penekanan pada gagasan penting','Pindahkan gagasan utama ke awal'],['Kevariasian','Struktur kalimat tidak monoton','Awali kalimat dengan unsur yang berbeda']]},
+{h:'Kata baku vs tidak baku: pola yang berulang',tb:[['Baku','Tidak baku'],['apotek, analisis, aktivitas','apotik, analisa, aktifitas'],['izin, ijazah, jadwal','ijin, ijasah, jadual'],['kualitas, kuantitas','kwalitas, kwantitas'],['praktik, risiko, silakan','praktek, resiko, silahkan'],['nasihat, objek, subjek','nasehat, obyek, subyek'],['mengubah, memengaruhi','merubah, mempengaruhi'],['sistem, standar, teknik','sistim, standard, tehnik']]},
+{h:'Paragraf: cara cepat menemukan ide pokok',ul:['<b>Deduktif</b>: kalimat utama di awal. <b>Induktif</b>: di akhir. <b>Campuran</b>: di awal dan di akhir.','Kalimat utama berisi gagasan umum, kalimat penjelas berisi contoh, data, atau alasan.','Pada soal menyusun kalimat acak, cari kalimat yang memperkenalkan topik (tanpa kata penghubung) sebagai kalimat pertama, lalu urutkan dengan kata penghubung (selain itu, namun, akibatnya).']}],
+trik:[
+{t:'Periksa per kata, bukan per kalimat',s:'Baca opsi sambil mencoret satu kata yang mencurigakan: di- dipisah, huruf kapital, kata tidak baku. Satu kesalahan sudah cukup menyingkirkan opsi.',c:'"Dia diberikan buku di rumah." Dua di- dipakai benar; periksa kata lain.'},
+{t:'Soal gabungan kalimat',s:'Cari subjek yang sama. Subjek yang sama dilebur dengan "yang" atau dihilangkan, bukan diulang.',c:'"Kota Padang berada di dekat pantai. Kota Padang berhawa panas." → "Kota Padang yang berada di dekat pantai berhawa panas."'},
+{t:'Soal "kalimat efektif"',s:'Buang pilihan yang memuat pemborosan (para...-nya jamak ganda, "agar supaya", "naik ke atas", "demi untuk", "adalah merupakan") dan subjek yang hilang.',c:'"Naik ke atas" salah karena "naik" sudah bermakna ke atas.'},
+{t:'Kata serapan',s:'Cocokkan akhiran: -isme, -asi, -itas lazim; "z" dan "f" mengikuti bentuk asal untuk huruf serapan baku (zakat, fakta). Bila ragu, ingat daftar baku di atas.',c:'"kualitas" bukan "kwalitas".'}],
+salah:[
+['"di rumah" ditulis serangkai.','Kata depan dipisah: di rumah.'],
+['"merubah" lebih lazim dipakai sehingga baku.','Bentuk baku: mengubah (dari kata dasar ubah).'],
+['"antar" selalu dipisah.','Antar- sebagai awalan serangkai: antarkota, antarbangsa. Dipisah bila diikuti nama diri atau kata bukan prefiks.'],
+['Ejaan terbaru adalah PUEBI.','Edisi terbaru adalah EBI Edisi V tahun 2022.']]};
+
+LDEEP['twk-sej']={
+dalam:[
+{h:'Tiga babak pergerakan nasional',tb:[['Babak','Periode','Ciri'],['Perintis','1908-1920','Organisasi sosial-budaya-pendidikan; Budi Utomo, Sarekat Dagang Islam'],['Radikal','1920-1930','Tujuan kemerdekaan jelas; PNI, PKI, Perhimpunan Indonesia; Sumpah Pemuda 1928'],['Bertahan','1930-1942','Pemerintah kolonial menekan; tokoh diasingkan; strategi kooperasi dan pendidikan']]},
+{h:'Detik-detik proklamasi (urut)',ul:['<b>14 Agustus 1945</b>: Jepang menyerah kepada Sekutu.','<b>16 Agustus</b>: Soekarno dan Hatta dibawa golongan pemuda ke <b>Rengasdengklok</b> agar segera memproklamasikan.','Malam 16 Agustus: perumusan teks di rumah Laksamana Maeda. Teks diketik oleh <b>Sayuti Melik</b>.','<b>17 Agustus 1945 pukul 10.00</b>: proklamasi di Jalan Pegangsaan Timur 56; bendera dijahit <b>Fatmawati</b>.','<b>18 Agustus</b>: PPKI mengesahkan UUD 1945, memilih Presiden dan Wakil Presiden. <b>19 Agustus</b>: pembagian delapan provinsi.']},
+{h:'Perjuangan mempertahankan kemerdekaan: peta perjanjian',tb:[['Tahun','Peristiwa','Inti'],['Nov 1946','Linggarjati','Belanda mengakui kekuasaan de facto Jawa, Madura, Sumatra'],['Juli 1947','Agresi Militer I','Belanda menyerang; dibalas dengan seruan Dewan Keamanan PBB'],['Jan 1948','Renville','Wilayah RI makin sempit (garis van Mook)'],['Des 1948','Agresi Militer II','Yogyakarta diduduki; PDRI dibentuk'],['1 Mar 1949','Serangan Umum','Menunjukkan pada dunia bahwa TNI masih ada'],['Mei 1949','Roem-Royen','Persiapan perundingan penyerahan kedaulatan'],['Ags-Nov 1949','KMB','Belanda menyerahkan kedaulatan, kecuali Irian Barat'],['27 Des 1949','Pengakuan kedaulatan','Lahir Republik Indonesia Serikat']]},
+{h:'Politik Etis (1901): tiga program',p:'<b>Irigasi</b> (pengairan), <b>edukasi</b> (pendidikan), dan <b>emigrasi</b> (perpindahan penduduk). Dikenal sebagai Trilogi Van Deventer. Dampak tidak langsung: lahirnya kaum terpelajar yang memimpin pergerakan nasional.'}],
+trik:[
+{t:'Hafal dengan kisah, bukan daftar',s:'Susun cerita pendek: "Menyerah (14) → pemuda menculik (16) → proklamasi (17) → konstitusi (18) → provinsi (19)". Urutan yang berurutan lebih mudah diingat daripada tanggal terpisah.',c:'Soal "peristiwa sebelum proklamasi": Rengasdengklok (16 Agustus).'},
+{t:'Pasangkan perjanjian dengan kata kunci',s:'Linggarjati = pengakuan de facto; Renville = di kapal; Roem-Royen = pendahuluan KMB; KMB = penyerahan kedaulatan (RIS). Bila opsi memuat "penyerahan kedaulatan" pilih KMB.',c:'Pengakuan kedaulatan terjadi 27 Desember 1949.'},
+{t:'Organisasi dan sifatnya',s:'Cari tiga hal: tahun, pendiri, sifat. Sarekat Islam 1912 (Tjokroaminoto, perdagangan dan agama, massa terbesar); Indische Partij 1912 (Tiga Serangkai, politik pertama yang tegas "Indonesia untuk orang Indonesia").',c:'Soal "organisasi politik pertama": Indische Partij.'}],
+salah:[
+['Proklamasi dibacakan di Rengasdengklok.','Dibacakan di Pegangsaan Timur 56, Jakarta; Rengasdengklok hanya tempat "pengamanan" Soekarno-Hatta.'],
+['Sumpah Pemuda diikrarkan 20 Mei 1908.','Sumpah Pemuda 28 Oktober 1928; 20 Mei 1908 adalah Kebangkitan Nasional.'],
+['UUD 1945 disahkan saat proklamasi.','UUD 1945 disahkan PPKI pada 18 Agustus 1945.'],
+['KMB menyerahkan seluruh wilayah termasuk Irian Barat.','Irian Barat ditunda, baru kembali ke RI tahun 1963.']]};
+
+LDEEP['twk-lem']={
+dalam:[
+{h:'Trias politika dan check and balance',ul:['<b>Legislatif</b> (membuat UU): MPR, DPR, DPD. <b>Eksekutif</b> (melaksanakan): Presiden dan kementerian. <b>Yudikatif</b> (mengadili): MA, MK, KY (KY mendukung peradilan).','<b>Check and balance</b>: tiap lembaga saling mengawasi agar tidak ada penyalahgunaan kekuasaan. Contoh: Presiden mengajukan RUU dan memberi persetujuan; DPR mengawasi anggaran; MK menguji UU.','Indonesia menganut sistem pemerintahan <b>presidensial</b>: Presiden kepala negara dan kepala pemerintahan, dipilih langsung, tidak dapat dijatuhkan DPR dalam masa jabatan kecuali karena pelanggaran hukum tertentu lewat prosedur MK dan MPR.']},
+{h:'Siapa menguji apa',tb:[['Lembaga','Kewenangan inti'],['MPR','Mengubah dan menetapkan UUD; melantik Presiden dan Wakil Presiden; memberhentikan Presiden atas usul DPR setelah putusan MK'],['DPR','Legislasi, anggaran, pengawasan; hak interpelasi, angket, menyatakan pendapat'],['DPD','Mengajukan RUU dan memberi pertimbangan terkait daerah'],['MA','Mengadili tingkat kasasi; menguji peraturan di bawah UU terhadap UU'],['MK','Menguji UU terhadap UUD; sengketa kewenangan lembaga; membubarkan parpol; sengketa hasil pemilu'],['KY','Mengusulkan pengangkatan hakim agung; menjaga kehormatan hakim'],['BPK','Memeriksa pengelolaan dan tanggung jawab keuangan negara']]},
+{h:'Otonomi daerah: asas dan urusan',ul:['<b>Desentralisasi</b>: penyerahan urusan dari pusat ke daerah. <b>Dekonsentrasi</b>: pelimpahan wewenang ke instansi vertikal di daerah. <b>Tugas pembantuan</b>: penugasan dari pusat ke daerah untuk urusan tertentu.','<b>Urusan absolut</b> (tetap di pusat): politik luar negeri, pertahanan, keamanan, yustisi, moneter dan fiskal nasional, agama.','Dasar utama: UU No. 23 Tahun 2014 tentang Pemerintahan Daerah.']},
+{h:'Pemilu: asas dan penyelenggara',ul:['<b>LUBER JURDIL</b>: langsung, umum, bebas, rahasia, jujur, adil.','Penyelenggara: <b>KPU</b> (menyelenggarakan), <b>Bawaslu</b> (mengawasi), <b>DKPP</b> (kode etik penyelenggara). Ketiganya satu kesatuan fungsi penyelenggaraan pemilu.','Presiden dan Wakil Presiden dipilih langsung sejak 2004.']}],
+trik:[
+{t:'Kata kunci MA vs MK',s:'MK = Konstitusi: menguji UU terhadap UUD, hasil pemilu, parpol. MA = "bawah UU": menguji peraturan di bawah UU, mengadili kasasi.',c:'"Menguji UU terhadap UUD" → MK, bukan MA.'},
+{t:'Hak DPR dengan singkatan I-A-P',s:'<b>I</b>nterpelasi (meminta keterangan kebijakan), <b>A</b>ngket (menyelidiki), <b>P</b>endapat (menyatakan pendapat). Hak anggota: mengajukan usul RUU, mengajukan pertanyaan, menyampaikan usul dan pendapat, imunitas.',c:'DPR menyelidiki kebijakan yang diduga melanggar UU → hak angket.'},
+{t:'Soal "siapa berwenang"',s:'Tulis kata kerja pada soal (mengangkat, memberhentikan, menguji, melantik), lalu cocokkan dengan tabel kewenangan di atas. Banyak soal sengaja menukar kata kerja.',c:'"Melantik Presiden dan Wakil Presiden" → MPR.'}],
+salah:[
+['MPR lembaga tertinggi negara.','Setelah amandemen, MPR setara dengan lembaga lain.'],
+['Presiden dipilih oleh MPR.','Presiden dipilih langsung oleh rakyat sejak 2004; MPR hanya melantik.'],
+['DPD ikut memutus UU.','DPD hanya mengajukan RUU dan memberi pertimbangan di bidang tertentu.'],
+['Urusan agama diserahkan penuh kepada daerah.','Agama termasuk urusan pemerintahan absolut pusat.']]};
+
+LDEEP['twk-ham']={
+dalam:[
+{h:'Dasar hukum HAM Indonesia',ul:['<b>UUD 1945 Pasal 28A sampai 28J</b>: hak hidup, berkeluarga, mengembangkan diri, keadilan hukum, kebebasan beragama, berpendapat, informasi, perlindungan diri, dan kewajiban menghormati HAM orang lain (28J).','<b>UU No. 39 Tahun 1999 tentang HAM</b> dan <b>UU No. 26 Tahun 2000 tentang Pengadilan HAM</b> (mengadili pelanggaran HAM berat).','<b>DUHAM</b> (Deklarasi Universal HAM) disahkan PBB 10 Desember 1948 (Hari HAM Sedunia).','Lembaga: <b>Komnas HAM</b> (penyelidikan pelanggaran HAM), Pengadilan HAM, Komnas Perempuan, KPAI.']},
+{h:'Pelanggaran HAM berat dan hak yang tak bisa dikurangi',ul:['Pelanggaran HAM berat menurut UU 26/2000: <b>genosida</b> dan <b>kejahatan terhadap kemanusiaan</b>.','Hak yang tidak dapat dikurangi dalam keadaan apa pun (non-derogable, Pasal 28I ayat 1): hak hidup, tidak disiksa, kemerdekaan pikiran dan hati nurani, beragama, tidak diperbudak, diakui sebagai pribadi di hadapan hukum, tidak dituntut atas hukum yang berlaku surut.','Pembatasan HAM boleh dilakukan hanya dengan <b>undang-undang</b> dan demi menghormati hak orang lain, moral, nilai agama, keamanan, dan ketertiban umum (Pasal 28J ayat 2).']},
+{h:'Kewarganegaraan menurut UU No. 12 Tahun 2006',tb:[['Konsep','Arti'],['Ius sanguinis','Kewarganegaraan menurut keturunan (utama di Indonesia)'],['Ius soli','Menurut tempat kelahiran (dipakai terbatas)'],['Apatride','Tidak berkewarganegaraan'],['Bipatride','Berkewarganegaraan ganda'],['Stelsel aktif','Harus mengajukan permohonan'],['Stelsel pasif','Otomatis tanpa permohonan']]},
+{h:'Cara memperoleh dan kehilangan kewarganegaraan',ul:['Memperoleh: kelahiran, pengangkatan anak (oleh WNI), pewarganegaraan (naturalisasi), pernyataan, dan lainnya sesuai UU.','Kewarganegaraan ganda terbatas diberikan pada anak hingga usia 18 tahun (paling lambat 21 tahun) untuk memilih.','Kehilangan antara lain karena memperoleh kewarganegaraan lain atas kemauan sendiri, masuk dinas tentara asing tanpa izin presiden, atau tidak menyatakan keinginan tetap WNI bagi anak berkewarganegaraan ganda.']}],
+trik:[
+{t:'Pilih jawaban yang melindungi martabat',s:'Pada kasus HAM pilih opsi yang menghormati hak semua pihak, termasuk pelaku (praduga tak bersalah, hak pembelaan). Hindari opsi yang main hakim sendiri.',c:'Menemukan pencuri: serahkan kepada aparat, jangan menghakimi massa.'},
+{t:'Bedakan hak dan kewajiban',s:'Pasal 28J menegaskan setiap orang wajib menghormati HAM orang lain. Hak tidak berarti bebas tanpa batas.',c:'Berpendapat dilindungi, tetapi menyebarkan fitnah melanggar hak orang lain.'},
+{t:'Kenali kata kunci kewarganegaraan',s:'"Keturunan" = ius sanguinis; "tempat lahir" = ius soli; "tanpa kewarganegaraan" = apatride; "dua kewarganegaraan" = bipatride.',c:'Anak lahir dari orang tua WNI dimana pun: WNI (ius sanguinis).'}],
+salah:[
+['Semua HAM boleh dibatasi.','Hak yang non-derogable tidak dapat dibatasi dalam keadaan apa pun.'],
+['Pelanggaran HAM berat mencakup semua penganiayaan.','Hanya genosida dan kejahatan terhadap kemanusiaan.'],
+['Indonesia menganut ius soli penuh.','Utama ius sanguinis, ius soli terbatas.'],
+['Komnas HAM mengadili pelaku pelanggaran.','Komnas HAM menyelidiki; yang mengadili adalah Pengadilan HAM.']]};
+
+LDEEP['tiu-verbal']={
+dalam:[
+{h:'Sepuluh jenis hubungan analogi dan contohnya',tb:[['Hubungan','Contoh','Cara menguji'],['Sinonim','cepat : kilat','Bisa saling menggantikan dalam kalimat'],['Antonim','tinggi : rendah','Berlawanan makna'],['Bagian-keseluruhan','roda : mobil','"X adalah bagian dari Y"'],['Alat-fungsi','pisau : memotong','"X dipakai untuk Y"'],['Pelaku-hasil','penulis : buku','"X menghasilkan Y"'],['Tempat-kegiatan','sekolah : belajar','"Di X orang melakukan Y"'],['Sebab-akibat','hujan : banjir','"X menyebabkan Y"'],['Tingkatan/intensitas','hangat : panas','Sama jenis, beda derajat'],['Jenis-kategori','apel : buah','"X termasuk Y"'],['Ahli-objek','kardiologi : jantung','"Ilmu/ahli X mempelajari Y"']]},
+{h:'Sinonim dan antonim: cara mendapat makna tanpa kamus',ul:['<b>Pecah kata</b>: akar kata dan imbuhan. "Eksplisit" (ek- keluar + plic lipat) = terbuka, jelas; lawannya implisit (tersirat).','<b>Kalimatkan</b>: coba kata itu dalam kalimat sendiri, lalu uji tiap opsi dengan menggantikan kata tersebut.','<b>Tanda arah</b>: bila soal berbunyi "= ..." cari sinonim; bila "><" cari antonim. Banyak pengecoh adalah sinonim saat yang diminta antonim, atau sebaliknya.','<b>Nuansa</b>: sinonim jarang identik. Pilih yang paling dekat makna dan tingkat formalitasnya.']},
+{h:'Soal padanan hubungan ber-"::"',p:'Bentuk "A : B = C : ...". Jangan menebak dari kedekatan topik. Susun <b>kalimat hubungan</b> dari pasangan pertama, lalu masukkan pasangan kedua dan uji tiap opsi.',ul:['Contoh: "dokter : stetoskop = petani : ..." → kalimat: "pekerja menggunakan alat khasnya" → cangkul.','Perhatikan <b>urutan</b>. "api : panas" dan "panas : api" menghasilkan hubungan berbeda (sumber-sifat vs sifat-sumber).','Bila dua opsi cocok, cari hubungan yang lebih spesifik pada pasangan pertama.']}],
+trik:[
+{t:'Metode kalimat hubungan',s:'Ubah pasangan pertama menjadi satu kalimat pendek, ganti pasangan kedua ke kalimat yang sama, uji satu per satu.',c:'"mata : melihat = telinga : ..." Kalimat: "X adalah alat untuk Y" → mendengar.'},
+{t:'Pecah morfologi',s:'Awalan anti-, kontra-, a- umumnya menandakan lawan; ekstra-, hiper- menandakan lebih; sub-, infra- menandakan di bawah.',c:'Aseptik = tanpa kuman; antiseptik = pencegah kuman.'},
+{t:'Hindari "kata yang tampak pintar"',s:'Pilihan yang paling panjang atau paling asing bukan berarti benar. Bandingkan dengan arti yang kamu yakini.',c:'Soal sinonim "sporadis": kadang-kadang, tidak teratur (bukan "periodik").'}],
+salah:[
+['Padanan hanya soal topik yang sama.','Harus <b>hubungan</b> yang sama, bukan sekadar topik.'],
+['Antonim selalu kata berlawanan mutlak.','Antonim bisa berlawanan bertingkat (panas-dingin) atau mutlak (hidup-mati).'],
+['Sinonim berarti bisa dipertukarkan di semua kalimat.','Cocokkan dengan konteks dan tingkat formalitas.'],
+['Urutan pasangan tidak penting.','Urutan memengaruhi hubungan: bagian-keseluruhan tidak sama dengan keseluruhan-bagian.']]};
+
+LDEEP['tiu-logika']={
+dalam:[
+{h:'Silogisme kategorik: empat kalimat dan negasinya',tb:[['Bentuk','Contoh','Negasi'],['Semua P adalah Q','Semua guru adalah ASN','Ada P yang bukan Q (Sebagian guru bukan ASN)'],['Tidak ada P yang Q','Tidak ada guru yang malas','Ada P yang Q (Sebagian guru malas)'],['Sebagian P adalah Q','Sebagian guru adalah ASN','Tidak ada P yang Q'],['Sebagian P bukan Q','Sebagian guru bukan ASN','Semua P adalah Q']]},
+{h:'Kesimpulan yang sah dari dua premis',tb:[['Premis 1','Premis 2','Kesimpulan pasti'],['Semua A adalah B','Semua B adalah C','Semua A adalah C'],['Semua A adalah B','Tidak ada B yang C','Tidak ada A yang C'],['Sebagian A adalah B','Semua B adalah C','Sebagian A adalah C'],['Semua A adalah B','Sebagian B adalah C','Tidak ada kesimpulan pasti'],['Tidak ada A yang B','Semua C adalah A','Tidak ada C yang B']]},
+{h:'Logika proposisi: empat pola dan satu penjebak',ul:['<b>Modus ponens</b>: p → q, p ∴ q. <b>Modus tollens</b>: p → q, ~q ∴ ~p. <b>Silogisme hipotetis</b>: p → q, q → r ∴ p → r.','<b>Ekuivalen</b> dengan p → q: kontraposisi (~q → ~p) dan (~p ∨ q). <b>Tidak ekuivalen</b>: konvers (q → p) dan invers (~p → ~q).','<b>Negasi</b>: ~(p ∧ q) = ~p ∨ ~q; ~(p ∨ q) = ~p ∧ ~q; ~(p → q) = p ∧ ~q.','Penjebak: "q benar maka p benar" (mengesahkan akibat) dan "p salah maka q salah" (menyangkal sebab) <b>tidak sah</b>.']},
+{h:'Penalaran dengan diagram Venn',p:'Gambarkan himpunan sebagai lingkaran. "Semua A adalah B" = lingkaran A di dalam B. "Sebagian A adalah B" = kedua lingkaran beririsan. "Tidak ada A yang B" = terpisah. Kesimpulan benar bila berlaku untuk <b>semua kemungkinan gambar</b>, bukan hanya gambar favoritmu.'}],
+trik:[
+{t:'Ubah jika-maka menjadi garis',s:'Tulis p → q → r berderet. Dari ujung kiri ke kanan boleh disimpulkan; dari kanan ke kiri tidak. Pakai kontraposisi untuk balik arah (~r → ~q → ~p).',c:'Jika lulus SMA maka kuliah; jika kuliah maka di luar kota. Bila tidak di luar kota maka tidak kuliah, dan tidak lulus SMA.'},
+{t:'Kata "pasti", "mungkin", "tidak mungkin"',s:'Kesimpulan "pasti" harus berlaku di semua kemungkinan. Bila ada satu kemungkinan yang membuatnya salah, jawaban itu salah. Kesimpulan "mungkin" cukup berlaku di satu kemungkinan.',c:'Semua A B, sebagian B C: "Sebagian A adalah C" hanya mungkin, bukan pasti.'},
+{t:'Soal ingkaran',s:'Negasi "semua" selalu memuat "ada/sebagian yang tidak". Negasi "jika p maka q" adalah "p dan bukan q", bukan "jika p maka bukan q".',c:'Ingkaran "Semua pegawai disiplin" = "Ada pegawai yang tidak disiplin".'}],
+salah:[
+['Semua A B dan Semua C B maka Semua A adalah C.','Tidak sah. Dua himpunan dalam B tidak harus berhubungan.'],
+['Ingkaran "semua" adalah "tidak ada".','Ingkaran "semua" adalah "ada yang tidak".'],
+['Jika p→q dan q benar maka p benar.','Tidak sah (mengesahkan akibat).'],
+['Konvers sama dengan kontraposisi.','Yang ekuivalen adalah kontraposisi, bukan konvers.']]};
+
+LDEEP['tiu-num']={
+dalam:[
+{h:'Persen dan perubahan beruntun',ul:['Naik <b>x%</b> = dikali (1 + x/100). Turun x% = dikali (1 − x/100).','Naik 20% lalu turun 20% hasilnya 1,2 × 0,8 = 0,96, jadi turun 4%, <b>bukan</b> kembali ke semula.','Diskon beruntun 20% lalu 10% = 1 − (0,8 × 0,9) = 28% (bukan 30%).','Untung/rugi dihitung terhadap <b>harga beli</b>, kecuali soal menyatakan lain.','Persen poin vs persen: dari 40% ke 50% naik 10 persen poin, atau naik 25%.']},
+{h:'Perbandingan senilai dan berbalik nilai',ul:['<b>Senilai</b>: bertambah bersamaan (barang dan harga). Rumus: a/b = c/d.','<b>Berbalik nilai</b>: bertambah satu, berkurang satu lagi (pekerja dan waktu). Hasil kali tetap.','Contoh: 6 pekerja selesai 10 hari → 6 × 10 = 60 hari-orang → 4 pekerja butuh 15 hari.','Pembagian dengan perbandingan a:b:c dengan total T: bagian pertama = a/(a+b+c) × T.']},
+{h:'Kecepatan, jarak, waktu, dan kerja bersama',ul:['Jarak = kecepatan × waktu. Ubah satuan dulu: menit ke jam, km/jam ke m/detik (× 5/18).','Kecepatan rata-rata <b>bukan rata-rata kecepatan</b>: pergi 60 dan pulang 40 km/jam (jarak sama) menghasilkan 2 × 60 × 40 / (60 + 40) = 48 km/jam.','Kerja bersama: laju dijumlahkan. A selesai 6 jam, B 3 jam: bersama 1/(1/6 + 1/3) = 2 jam.','Pipa pengisi dan pembuang: laju pembuang bernilai negatif.']},
+{h:'Rata-rata gabungan, usia, dan campuran',ul:['Rata-rata gabungan = jumlah total ÷ banyak total. 20 siswa rata-rata 70 dan 30 siswa rata-rata 80 menghasilkan (1.400 + 2.400) / 50 = 76 (bukan 75).','Usia: selisih umur tetap sepanjang waktu; jumlah umur bertambah sebanyak orang × tahun.','Campuran (alligation): kadar 20% dicampur 50% menjadi 30% → perbandingan (50 − 30) : (30 − 20) = 2 : 1.']}],
+trik:[
+{t:'Ujung angka dulu',s:'Pada pilihan ganda, hitung digit terakhir saja bila lima opsi berbeda digit terakhirnya.',c:'47 × 83: 7 × 3 = 21 → berakhir 1. Hanya opsi berakhir 1 yang layak.'},
+{t:'Perkalian cepat',s:'×11: pisahkan digit lalu jumlahkan yang bersebelahan (43 × 11 = 4 (4+3) 3 = 473). Kuadrat bilangan berakhir 5: n5² = n(n+1) lalu 25 (35² = 3×4 | 25 = 1.225). ×5 = ÷2 lalu ×10. ×25 = ÷4 lalu ×100.',c:'65² = 6×7 | 25 = 4.225.'},
+{t:'Uji habis dibagi',s:'Oleh 3 dan 9: jumlah digit. Oleh 4: dua digit terakhir. Oleh 8: tiga digit terakhir. Oleh 11: selisih jumlah digit posisi ganjil dan genap.',c:'2.376: 2+3+7+6 = 18 → habis dibagi 3 dan 9.'},
+{t:'Soal cerita: tulis yang diketahui dan ditanya',s:'Beri simbol dan satuan pada tiap besaran di margin. Setelah hitung, cek apakah jawaban menjawab yang ditanya (misal selisih, bukan total).',c:'"Berapa sisa" berbeda dari "berapa yang dipakai".'}],
+salah:[
+['Naik 20% lalu turun 20% kembali ke harga awal.','Hasilnya 96% dari harga awal.'],
+['Rata-rata kecepatan pergi-pulang adalah rata-rata aritmetika.','Gunakan 2ab/(a+b) untuk jarak sama.'],
+['Diskon 20% dan 10% sama dengan diskon 30%.','Total diskon 28%.'],
+['KPK dan FPB sama-sama dipakai untuk "berulang bersamaan".','KPK untuk kejadian berulang bersamaan; FPB untuk membagi sama banyak.']]};
+
+LDEEP['tiu-deret']={
+dalam:[
+{h:'Daftar pola yang harus dikenali',tb:[['Pola','Contoh','Cara mengenali'],['Aritmatika','3, 7, 11, 15','Selisih tetap (+4)'],['Geometri','2, 6, 18, 54','Rasio tetap (×3)'],['Selisih bertingkat','2, 5, 10, 17, 26','Selisih 3, 5, 7, 9 (naik tetap 2)'],['Kuadrat/kubik','1, 4, 9, 16 / 1, 8, 27','Bilangan kuadrat atau kubik'],['Fibonacci','1, 1, 2, 3, 5, 8','Un = Un−1 + Un−2'],['Kalikan lalu tambah','3, 7, 15, 31','×2 + 1'],['Selang-seling','2, 5, 4, 8, 6, 11','Dua deret terpisah: (2,4,6) dan (5,8,11)'],['Bilangan prima','2, 3, 5, 7, 11, 13','Hanya habis dibagi 1 dan dirinya'],['Segitiga','1, 3, 6, 10, 15','Selisih 2, 3, 4, 5']]},
+{h:'Deret huruf dan campuran',ul:['Ubah huruf menjadi nomor alfabet: A=1, B=2, ..., Z=26. Lalu perlakukan sebagai deret angka.','Huruf melingkar: setelah Z kembali ke A. Pada deret "A, D, G, J, ..." selisih +3.','Deret campuran angka-huruf biasanya dua deret terpisah; kerjakan satu per satu.','Pola loncat: "B, D, G, K, ..." selisihnya 2, 3, 4, ... (bertingkat).']},
+{h:'Urutan memeriksa pola (ritual 5 langkah)',ul:['1) Hitung selisih antarsuku. Tetap? aritmatika.','2) Selisihnya tidak tetap? hitung selisih dari selisih (bertingkat).','3) Cek rasio antarsuku (geometri) atau kali-tambah.','4) Cek suku ganjil dan genap terpisah (selang-seling).','5) Cek bilangan khusus: kuadrat, kubik, prima, Fibonacci.']}],
+trik:[
+{t:'Tulis selisihnya di bawah deret',s:'Tulis baris selisih langsung di bawah angka. Pola langsung terlihat, termasuk selisih kedua.',c:'3, 6, 11, 18, 27: selisih 3, 5, 7, 9 → selisih kedua 2. Suku berikutnya 27 + 11 = 38.'},
+{t:'Jangan berhenti pada satu pola yang cocok',s:'Uji pola ke semua suku yang diberikan. Satu kebetulan bisa menipu.',c:'2, 4, 8, ... bisa ×2 (16) atau +2, +4, +6 (14). Lihat suku berikutnya.'},
+{t:'Titik kosong di tengah',s:'Soal mengosongkan suku di tengah. Gunakan suku sesudahnya untuk membalik aturan, bukan hanya suku sebelumnya.',c:'2, 5, ..., 17, 26: selisih 3, ?, ?, 9 sehingga selisih 3, 5, 7, 9; suku hilang 10.'}],
+salah:[
+['Selisih tidak tetap berarti tidak berpola.','Cek selisih bertingkat atau pola selang-seling.'],
+['Huruf berhenti di Z.','Pola melingkar: setelah Z kembali ke A.'],
+['Satu pola cocok pada tiga suku pasti benar.','Uji ke semua suku.'],
+['Bilangan prima punya selisih tetap.','Prima tidak berpola selisih tetap; hafalkan 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.']]};
+
+LDEEP['tiu-geo']={
+dalam:[
+{h:'Rumus bangun datar yang paling sering keluar',tb:[['Bangun','Luas','Keliling'],['Persegi panjang','p × l','2(p + l)'],['Segitiga','½ × a × t','jumlah tiga sisi'],['Segitiga sama sisi','(s²√3)/4','3s'],['Trapesium','½(a + b) × t','jumlah semua sisi'],['Jajar genjang','a × t','2(a + b)'],['Belah ketupat/layang-layang','½ × d₁ × d₂','4s / jumlah sisi'],['Lingkaran','πr²','2πr']]},
+{h:'Bangun ruang: volume dan luas permukaan',tb:[['Bangun','Volume','Luas permukaan'],['Kubus','s³','6s²'],['Balok','p × l × t','2(pl + pt + lt)'],['Prisma','luas alas × tinggi','2 × luas alas + keliling alas × tinggi'],['Tabung','πr²t','2πr(r + t)'],['Kerucut','⅓πr²t','πr(r + s), s = √(r² + t²)'],['Bola','4/3 πr³','4πr²'],['Limas','⅓ × luas alas × t','jumlah luas alas dan sisi tegak']]},
+{h:'Pythagoras dan segitiga istimewa',ul:['Tripel yang harus dihafal: <b>3-4-5, 5-12-13, 8-15-17, 7-24-25</b> dan kelipatannya (6-8-10, 9-12-15, ...).','Segitiga 45-45-90: sisi 1 : 1 : √2. Segitiga 30-60-90: sisi 1 : √3 : 2.','Diagonal sisi kubus = s√2; diagonal ruang kubus = s√3; diagonal ruang balok = √(p² + l² + t²).','Tinggi segitiga sama sisi = (s√3)/2.']}],
+trik:[
+{t:'Pilih π yang tepat',s:'Bila jari-jari kelipatan 7, pakai 22/7. Bila kelipatan 10 atau bilangan "bulat", pakai 3,14. Bila opsi memuat π, biarkan sebagai simbol.',c:'r = 14 → luas = 22/7 × 14 × 14 = 616.'},
+{t:'Jari-jari vs diameter',s:'Garis bawahi kata "diameter" pada soal dan segera tulis r = d/2 sebelum menghitung.',c:'Diameter 20 → r = 10.'},
+{t:'Gambar dan beri label',s:'Sketsa kasar, tandai sisi sejajar, tinggi tegak lurus, dan sudut siku. Banyak soal terselesaikan setelah tinggi digambar.',c:'Trapesium sama kaki: potong dua segitiga siku di sisi untuk mencari tinggi.'},
+{t:'Perbesaran',s:'Bila semua sisi diperbesar k kali, keliling k kali, luas k² kali, volume k³ kali.',c:'Sisi kubus dua kali lipat → volume 8 kali.'}],
+salah:[
+['Luas segitiga = alas × tinggi.','Luas segitiga = ½ × alas × tinggi.'],
+['Tinggi trapesium sama dengan sisi miring.','Tinggi adalah jarak tegak lurus antara dua sisi sejajar.'],
+['Keliling dan luas lingkaran memakai diameter langsung.','Gunakan r = d/2 dalam πr²; keliling bisa πd.'],
+['Volume kerucut sama dengan tabung.','Volume kerucut sepertiga volume tabung dengan alas dan tinggi sama.']]};
+
+LDEEP['tiu-himp']={
+dalam:[
+{h:'Himpunan: irisan dan gabungan',ul:['n(A ∪ B) = n(A) + n(B) − n(A ∩ B).','Tiga himpunan: n(A∪B∪C) = n(A)+n(B)+n(C) − n(A∩B) − n(A∩C) − n(B∩C) + n(A∩B∩C).','Dalam soal cerita, gambar diagram Venn dan isi dari <b>bagian paling dalam</b> (irisan terkecil) lebih dulu, baru keluar.','Yang tidak masuk himpunan mana pun = total − n(A ∪ B ∪ ...).']},
+{h:'Permutasi dan kombinasi',tb:[['Situasi','Rumus','Contoh'],['Urutan penting, memilih r dari n','P(n,r) = n!/(n−r)!','Juara 1, 2, 3 dari 8 orang: 8×7×6 = 336'],['Urutan tidak penting','C(n,r) = n!/(r!(n−r)!)','Memilih 3 dari 5 orang: 10'],['Permutasi unsur sama','n!/(k₁! k₂! ...)','MALANG: 6!/2! = 360'],['Melingkar','(n−1)!','5 orang di meja bulat: 24']]},
+{h:'Peluang: aturan dasar',ul:['P(A) = n(A)/n(S). Peluang kejadian mustahil 0, pasti 1.','Komplemen: P(tidak A) = 1 − P(A).','<b>Saling lepas</b>: P(A atau B) = P(A) + P(B). <b>Bebas</b>: P(A dan B) = P(A) × P(B).','Dua dadu jumlah 7: 6 kemungkinan dari 36 = 1/6.']}],
+trik:[
+{t:'Kata kunci urutan',s:'Bila soal meminta "susunan", "urutan", "juara", "ketua dan wakil" → permutasi. Bila "memilih", "kelompok", "tim", "panitia" tanpa jabatan berbeda → kombinasi.',c:'Memilih 2 orang dari 5 untuk menjadi ketua dan sekretaris = 5×4 = 20; hanya memilih dua wakil = C(5,2) = 10.'},
+{t:'Pecah "paling sedikit"',s:'Hitung komplemen: peluang "paling sedikit satu" = 1 − peluang "tidak sama sekali".',c:'Peluang minimal satu angka dari 3 lambungan koin = 1 − 1/8 = 7/8.'},
+{t:'Soal "paling sedikit" pada pemilihan tim',s:'Pisahkan kasus per jumlah, hitung per kasus, lalu jumlahkan. Jangan memakai "pilih dulu yang wajib, sisanya bebas" karena menghitung ganda.',c:'Tim 5 orang dari 7 pria dan 5 wanita dengan paling sedikit 2 wanita: hitung 2W3P, 3W2P, 4W1P, 5W lalu jumlahkan.'}],
+salah:[
+['Kombinasi dan permutasi dapat saling menggantikan.','Bedakan: urutan penting atau tidak.'],
+['n(A ∪ B) = n(A) + n(B).','Kurangi irisan agar tidak terhitung dua kali.'],
+['Peluang A atau B selalu dijumlahkan.','Hanya bila saling lepas; jika tidak, kurangi irisan.'],
+['5 orang duduk melingkar 5! cara.','Melingkar (n−1)! = 24 cara.']]};
+
+LDEEP['tiu-analitis']={
+dalam:[
+{h:'Empat jenis soal penalaran analitis',ul:['<b>Urutan/peringkat</b>: A di atas B, B di atas C. Tulis sebagai garis vertikal atau horizontal.','<b>Posisi duduk</b>: berderet atau melingkar; "berdampingan", "berhadapan", "di antara".','<b>Jadwal</b>: tiap orang atau kegiatan ditempatkan pada hari atau jam dengan syarat.','<b>Pengelompokan</b>: membagi orang ke grup dengan syarat boleh/tidak boleh satu grup.']},
+{h:'Peralatan: tabel, garis, dan blok',ul:['<b>Tabel</b>: baris = orang, kolom = atribut (hari, warna, posisi). Beri tanda ✓ dan ✗ untuk setiap petunjuk.','<b>Garis</b>: untuk urutan. Tulis A &lt; B &lt; C dan gabungkan petunjuk yang saling menyambung.','<b>Blok</b>: bila dua orang harus bersebelahan, anggap mereka satu blok lalu hitung pertukaran dalam blok (×2).','<b>Cabang</b>: bila ada dua kemungkinan, kerjakan keduanya secara singkat dan lihat mana yang bertabrakan dengan petunjuk lain.']},
+{h:'Aturan pegangan untuk posisi duduk',ul:['Berderet n orang: n! susunan. Dua orang harus berdampingan: (n−1)! × 2.','Melingkar n orang: (n−1)!. Berhadapan hanya bermakna bila jumlah kursi genap; lawan kursi k ada di k + n/2.','"A di sebelah B" tidak menentukan kiri atau kanan. Jangan menetapkannya sepihak.','Petunjuk yang pasti (A duduk di ujung) dikerjakan lebih dulu daripada petunjuk bersyarat.']}],
+trik:[
+{t:'Urutan mengerjakan petunjuk',s:'Kerjakan (1) petunjuk pasti, (2) petunjuk negatif ("tidak di..."), (3) petunjuk relatif, (4) petunjuk bersyarat. Mulai dari yang paling membatasi.',c:'"A duduk di ujung kiri" dipasang dulu sebelum "B duduk di sebelah C".'},
+{t:'Gambar ulang tiap kasus',s:'Bila ada dua kemungkinan, buat dua gambar kecil, bukan satu gambar yang dicoret berulang.',c:'Kemungkinan I: A kiri B. Kemungkinan II: A kanan B. Gabungkan hanya yang tidak bertabrakan.'},
+{t:'Uji opsi pada akhir',s:'Setelah sketsa selesai, masukkan tiap opsi ke sketsa dan lihat apakah <b>harus</b> benar, mungkin benar, atau mustahil. Pertanyaan "pasti benar" menuntut harus benar.',c:'Jika B mungkin di posisi 2 atau 3, pernyataan "B di posisi 2" bukan pasti.'}],
+salah:[
+['"Di sebelah" berarti sisi kiri.','Sisi tidak tertentu kecuali dinyatakan.'],
+['Melingkar sama dengan berderet.','Melingkar tidak punya awal dan akhir sehingga (n−1)!.'],
+['Menetapkan satu kemungkinan karena tampak paling masuk akal.','Uji semua kemungkinan yang tidak dilarang petunjuk.'],
+['"Pasti benar" sama dengan "bisa benar".','Pasti = berlaku di semua kemungkinan.']]};
+
+LDEEP['tiu-fig']={
+dalam:[
+{h:'Lima sifat yang berubah pada deret gambar',tb:[['Sifat','Pertanyaan pemeriksa','Contoh perubahan'],['Jumlah','Berapa banyak objek/garis/titik di tiap gambar?','+1 tiap langkah, bergantian +2 dan −1'],['Posisi','Objek berpindah ke mana?','Bergeser satu kotak searah jarum jam'],['Rotasi','Berputar berapa derajat dan ke arah mana?','90° searah jarum jam tiap langkah'],['Warna/isi','Hitam, putih, arsir bergantian?','Hitam → putih → hitam'],['Bentuk','Sisi bertambah atau berkurang?','Segitiga → persegi → segilima']]},
+{h:'Pola gabungan dan selang-seling',ul:['Satu gambar bisa berubah pada <b>dua sifat sekaligus</b> (berputar sambil berganti warna). Periksa tiap sifat terpisah.','Pola <b>selang-seling</b>: gambar ke-1, 3, 5 membentuk satu pola dan ke-2, 4, 6 pola lain. Bila langkah-langkah berurutan tidak masuk akal, bandingkan gambar ganjil dan genap.','Perputaran 45° berulang: 0° → 45° → 90° → ... Hitung <b>sudut per langkah</b> dengan membandingkan satu elemen tertentu.','Siklus: bila pola berulang tiap n gambar, gambar berikutnya sama dengan gambar n langkah sebelumnya.']},
+{h:'Ritual 4 langkah untuk setiap soal',ul:['1) Ambil <b>satu penanda</b> (misal panah atau titik hitam) dan lacak geraknya dari gambar ke gambar.','2) Hitung jumlah unsur tiap gambar.','3) Cek warna/arsir bergantian.','4) Coret opsi yang gagal pada satu sifat; sisakan yang lolos semuanya.']}],
+trik:[
+{t:'Lacak penanda satu per satu',s:'Pilih unsur yang paling mudah dikenali (bentuk unik atau titik hitam) dan catat posisinya di setiap gambar. Gerak penanda hampir selalu menunjukkan aturan putar atau geser.',c:'Titik hitam di sudut kiri atas → kanan atas → kanan bawah: pergeseran searah jarum jam.'},
+{t:'Eliminasi per sifat',s:'Periksa satu sifat pada kelima opsi. Setiap sifat yang tidak cocok memangkas opsi. Biasanya dua sifat sudah cukup.',c:'Jumlah segitiga harus 4: opsi dengan 3 atau 5 segitiga langsung dicoret.'},
+{t:'Bandingkan gambar berselang',s:'Bila deret tampak acak, bandingkan gambar ke-1 dan ke-3, ke-2 dan ke-4.',c:'Gambar ganjil memutar 90°, gambar genap bertambah satu garis.'}],
+salah:[
+['Rotasi selalu 90°.','Bisa 45°, 135°, atau arah berubah bergantian. Hitung dari penanda.'],
+['Perubahan warna dan posisi tidak mungkin terjadi bersamaan.','Sering terjadi bersamaan; periksa tiap sifat.'],
+['Mengambil opsi yang "mirip" gambar terakhir.','Opsi pengecoh biasanya mirip. Terapkan aturan, jangan kemiripan.'],
+['Mengabaikan perubahan kecil seperti ketebalan garis.','Kadang aturan ada pada detail kecil. Periksa bila dua opsi tampak sama.']]};
+
+LDEEP['tiu-fig-beda']={
+dalam:[
+{h:'Mengenali "empat sama, satu beda"',ul:['Empat gambar memiliki satu sifat yang sama; satu gambar menyimpang. Tugasmu menemukan <b>sifat bersama</b>, bukan membandingkan semua pasangan.','Daftar sifat yang diuji: jumlah elemen, simetri, putaran vs pencerminan, warna/arsir, bentuk, arah panah, posisi relatif antar elemen.','Pengecoh klasik: gambar "beda" tampak serupa dengan sisanya, tetapi berupa <b>cermin</b> (bukan putaran). Putaran bisa dikembalikan dengan memutar kertas; cermin tidak.']},
+{h:'Putaran vs pencerminan',ul:['<b>Putaran</b>: gambar bisa diputar di bidang yang sama sehingga cocok dengan gambar lain. Urutan unsur searah jarum jam tetap sama.','<b>Cermin</b>: urutan unsur terbalik (searah jadi berlawanan jarum jam). Tidak ada putaran yang bisa mencocokkan.','Cara uji: ambil dua unsur yang berdekatan dan catat urutan putaran (kiri→kanan atau atas→bawah). Bandingkan di tiap gambar.']},
+{h:'Simetri dan hitungan',ul:['Hitung <b>sumbu simetri</b> tiap gambar. Empat memiliki sumbu, satu tidak (atau sebaliknya).','Hitung titik, garis, atau sudut. Sering kali empat gambar bernilai genap dan satu ganjil.','Perhatikan perbedaan <b>kontur luar</b> vs isi: empat sama pada kontur, satu beda di isi, atau sebaliknya.']}],
+trik:[
+{t:'Mulai dari sifat paling mudah dihitung',s:'Hitung jumlah unsur. Bila empat sama dan satu beda, selesai. Bila tidak, lanjut ke warna, kemudian simetri, terakhir putaran/cermin.',c:'Empat gambar memuat 5 titik, satu gambar 6 titik → gambar itu.'},
+{t:'Tes kertas imajiner',s:'Bayangkan memutar kertas. Bila dua gambar tidak pernah cocok meski diputar, salah satunya cermin.',c:'Huruf "R" dan "Я" tidak bisa disamakan lewat putaran.'},
+{t:'Kerjakan dua sifat sekaligus saat dua opsi bersaing',s:'Jika dua gambar tampak beda, uji sifat kedua. Yang beda sungguhan adalah yang gagal pada sifat yang dimiliki empat lainnya.',c:'Dua gambar bergaris tebal, tiga lainnya garis tipis: sifat "tebal" bukan penentu bila jumlah garisnya berbeda.'}],
+salah:[
+['Gambar yang paling berbeda secara visual selalu jawabannya.','Yang dicari adalah gambar yang melanggar satu aturan, bukan yang paling mencolok.'],
+['Cermin dan putaran sama saja.','Cermin membalik urutan; putaran tidak.'],
+['Cukup melihat jumlah unsur.','Bila jumlah sama di semua gambar, lanjut ke sifat lain.'],
+['Ada aturan rumit; padahal biasanya satu sifat sederhana.','Cari satu sifat paling sederhana yang dimiliki empat gambar.']]};
+
+LDEEP['tiu-fig-analogi']={
+dalam:[
+{h:'Struktur soal: "gambar 1 : gambar 2 = gambar 3 : ?"',ul:['Temukan <b>transformasi</b> dari gambar 1 ke gambar 2, lalu terapkan transformasi yang sama ke gambar 3.','Transformasi yang umum: rotasi, pencerminan (horizontal/vertikal), pergeseran, penambahan atau pengurangan unsur, pertukaran warna, penyusutan atau pembesaran, penggabungan dan pemisahan.','Bila tiap sisi gambar berisi beberapa unsur, kerjakan <b>unsur demi unsur</b>.']},
+{h:'Tabel transformasi',tb:[['Transformasi','Tanda','Cara menguji'],['Rotasi 90°','Posisi unsur bergeser ke sisi berikutnya','Putar kertas 90°'],['Cermin horizontal','Atas-bawah tertukar','Lipat sepanjang garis horizontal'],['Cermin vertikal','Kiri-kanan tertukar','Lipat sepanjang garis vertikal'],['Inversi warna','Hitam ↔ putih','Bandingkan area'],['Penambahan','Unsur baru muncul','Hitung jumlah'],['Pengurangan','Unsur hilang','Hitung jumlah']]},
+{h:'Analogi bertingkat',p:'Kadang dua transformasi bekerja berurutan: misal diputar 90° lalu warnanya dibalik. Terapkan keduanya <b>dalam urutan yang sama</b> pada gambar 3. Urutan berbeda bisa menghasilkan gambar berbeda.'}],
+trik:[
+{t:'Terapkan pada satu unsur dulu',s:'Pilih unsur paling mudah dilacak, terapkan transformasi, lalu cocokkan dengan opsi yang memiliki unsur tersebut pada posisi yang benar. Lanjutkan ke unsur lain.',c:'Panah menghadap atas pada gambar 1 dan kanan pada gambar 2 → putar 90° searah jarum jam. Pada gambar 3 panah kiri → menjadi atas.'},
+{t:'Eliminasi dengan hitungan',s:'Jumlah unsur pada hasil harus mengikuti perubahan jumlah dari gambar 1 ke 2. Coret opsi berjumlah salah.',c:'Gambar 1 ke 2 menambah satu garis → hasil gambar 3 harus memiliki garis satu lebih banyak.'},
+{t:'Dua arah analogi',s:'Soal ini boleh dibaca vertikal (1 ke 3, 2 ke ?) atau horizontal (1 ke 2, 3 ke ?). Bila satu arah ambigu, coba arah lain.',c:'Gambar 1 ke 3 menunjukkan perubahan warna; gambar 2 ke ? harus berubah warna pula.'}],
+salah:[
+['Rotasi dan cermin dapat saling dipertukarkan.','Keduanya berbeda hasilnya; uji dengan penanda asimetris.'],
+['Hanya satu transformasi per soal.','Bisa ada dua; periksa jumlah, posisi, dan warna terpisah.'],
+['Menerapkan transformasi pada seluruh gambar sekaligus.','Terapkan unsur demi unsur agar tidak keliru.'],
+['Memilih opsi yang mirip gambar 3.','Hasil seharusnya berubah dari gambar 3 sesuai aturan.']]};
+
+LDEEP['tiu-fig-matriks']={
+dalam:[
+{h:'Cara membaca matriks 3×3',ul:['Sembilan sel dibaca per <b>baris</b>, per <b>kolom</b>, dan kadang per <b>diagonal</b>. Satu sel kosong (biasanya kanan bawah) dicari berdasarkan aturan yang konsisten pada baris atau kolom lain.','Periksa dulu apakah <b>baris pertama</b> dan <b>kedua</b> memiliki aturan yang sama. Bila ya, terapkan pada baris ketiga.','Bila baris tidak konsisten, coba kolom. Aturan yang benar harus berlaku pada <b>dua baris lengkap</b> sebelum dipakai untuk baris ketiga.']},
+{h:'Jenis aturan yang sering muncul',tb:[['Aturan','Contoh','Cara memeriksa'],['Penjumlahan gambar','Sel 3 = sel 1 + sel 2 (garis digabung)','Gabungkan dua gambar pertama'],['Pengurangan','Sel 3 = sel 1 − sel 2','Hapus unsur yang sama'],['XOR','Unsur yang ada di salah satu saja yang tampil','Tandai unsur yang muncul di kedua sel dan hapus'],['Rotasi per kolom','Tiap kolom rotasi lebih besar','Bandingkan sudut'],['Latin square','Tiap baris dan kolom memuat tiga objek tepat satu kali','Periksa objek yang belum ada di baris dan kolom'],['Hitungan','Jumlah garis 1, 2, 3 per baris','Hitung unsur tiap sel']]},
+{h:'Pola Latin dan pola hitung',ul:['<b>Latin square</b>: tiga bentuk atau tiga warna muncul satu kali per baris dan per kolom. Cari bentuk yang belum ada di baris 3 dan kolom 3.','<b>Pola hitung</b>: tiap baris jumlah unsur 1, 2, 3 atau tiap kolom jumlah garis bertambah satu. Hitung terlebih dulu sebelum melihat bentuk.','<b>Diagonal</b>: bila baris dan kolom tidak memberi pola, cek diagonal utama dan diagonal sekunder.']}],
+trik:[
+{t:'Tutup sel kosong, periksa baris lengkap',s:'Tulis aturan dari baris 1 dan 2. Bila sama, tebak sel baris 3 sebelum melihat opsi. Cocokkan dengan opsi.',c:'Baris 1 dan 2: sel 3 = gabungan sel 1 dan 2. Maka sel kosong = gabungan sel 7 dan 8.'},
+{t:'Hitung sebelum membandingkan bentuk',s:'Hitung jumlah unsur per sel, tuliskan di bawah sel. Pola angka sering membuka aturan yang tidak terlihat dari bentuk.',c:'1, 2, 3 / 2, 3, 4 / 3, 4, ? → 5 unsur.'},
+{t:'Uji dengan dua baris',s:'Sebelum mengunci aturan, uji pada dua baris. Aturan yang hanya cocok untuk satu baris adalah kebetulan.',c:'Baris 1 cocok dengan XOR, tetapi baris 2 tidak; berarti bukan XOR.'}],
+salah:[
+['Cukup melihat baris pertama.','Uji pada dua baris sebelum menerapkan ke baris ketiga.'],
+['Aturan selalu horizontal.','Bisa vertikal atau diagonal.'],
+['Semua sel selalu berbeda.','Beberapa pola (Latin square) justru mengulang objek secara teratur.'],
+['Rotasi dan pergeseran diperlakukan sama.','Rotasi memutar objek; pergeseran memindahkan posisi.']]};
+
+LDEEP['tkp-skor']={
+dalam:[
+{h:'Mengapa TKP tidak punya jawaban "benar-salah"',ul:['Tiap opsi bernilai <b>1 sampai 5</b>; tidak ada nilai minus dan tidak ada yang kosong. Opsi terbaik 5, opsi terburuk 1. Jawaban tertinggi tetap menghasilkan nilai tertinggi.','Penilaian mengukur <b>karakter kerja</b>: inisiatif, tanggung jawab, kerja sama, kepatuhan aturan, pelayanan, dan integritas.','Batas lolos TKP umum <b>166 dari 225</b> (45 soal). Rata-rata skor per soal minimal sekitar 3,7.']},
+{h:'Tangga skor: ciri tiap tingkat',tb:[['Skor','Ciri jawaban','Contoh perilaku'],['5','Tuntas, proaktif, sesuai aturan, menjaga hubungan','Menyelesaikan masalah sendiri sesuai kewenangan, lalu melapor dan menindaklanjuti'],['4','Benar tetapi kurang menyeluruh atau kurang proaktif','Menyelesaikan tetapi tidak berkoordinasi atau tidak melapor'],['3','Netral/pasif; membantu setengah jalan','Meneruskan masalah ke atasan tanpa mencoba menyelesaikan bagian sendiri'],['2','Menghindar atau menunda; sedikit merugikan','Menunggu orang lain bertindak'],['1','Melanggar aturan, emosional, merugikan orang lain, atau tidak peduli','Pura-pura tidak tahu, membalas dengan marah, menyalahkan orang lain']]},
+{h:'Lima nilai yang dicari dalam tiap soal',ul:['<b>Solutif</b>: mengambil langkah nyata yang menyelesaikan masalah.','<b>Sesuai aturan/prosedur</b>: tidak menerabas SOP atau etika.','<b>Komunikatif</b>: berkoordinasi, melapor, meminta masukan.','<b>Mengutamakan kepentingan umum/organisasi</b>: bukan pribadi atau kelompok.','<b>Bertanggung jawab hingga tuntas</b>: menindaklanjuti, bukan lepas tangan.']}],
+trik:[
+{t:'Urutkan lima opsi dulu',s:'Beri peringkat kasar 5-4-3-2-1 sebelum memilih. Seringkali dua opsi paling atas bersaing; yang lebih lengkap (tindakan + komunikasi + aturan) menang.',c:'"Memperbaiki kesalahan lalu melapor dan mencegah" lebih tinggi daripada "memperbaiki saja".'},
+{t:'Hindari opsi ekstrem',s:'Opsi yang memuat "langsung memarahi", "melapor tanpa mencoba bicara", "mengabaikan", atau "melanggar aturan demi cepat" hampir selalu rendah. Opsi paling pasif atau paling agresif jarang bernilai tertinggi.',c:'Rekan bermasalah: bicara dulu secara baik, lalu eskalasi bila perlu.'},
+{t:'Urutan eskalasi',s:'Selesaikan sendiri sesuai kewenangan → koordinasi dengan rekan → laporkan ke atasan → jalur resmi lain. Melompat langsung ke jalur terakhir tanpa mencoba bernilai lebih rendah, kecuali soal menyangkut pelanggaran berat.',c:'Kesalahan administrasi kecil: perbaiki, bukan langsung melapor ke inspektorat.'},
+{t:'Jangan memilih jawaban "terdengar sopan" saja',s:'Kata-kata halus tidak menjamin skor tinggi. Cek apakah ada tindakan nyata.',c:'"Mengucapkan terima kasih dan menunggu" kalah dari "membantu menyelesaikan masalah".'}],
+salah:[
+['Skor 5 selalu opsi yang paling cepat.','Yang paling tepat dan sesuai prosedur, bukan sekadar cepat.'],
+['Lapor ke atasan adalah solusi terbaik di semua soal.','Bila bisa diselesaikan sendiri sesuai kewenangan, mencoba dulu lebih bernilai.'],
+['Menolak permintaan atasan pasti salah.','Menolak yang melanggar aturan dengan sopan dan menawarkan solusi justru bernilai tinggi.'],
+['Soal TKP bisa dikerjakan dengan perasaan.','Pakai kriteria: solutif, aturan, komunikasi, kepentingan umum, tanggung jawab.']]};
+
+LDEEP['tkp-pel']={
+dalam:[
+{h:'Dasar pelayanan publik',ul:['UU No. 25 Tahun 2009 tentang Pelayanan Publik: pelayanan harus <b>sesuai standar pelayanan</b> yang diumumkan (waktu, biaya, persyaratan, prosedur).','Asas penting: kepentingan umum, kepastian hukum, kesamaan hak, keseimbangan hak dan kewajiban, keprofesionalan, partisipatif, persamaan perlakuan/tidak diskriminatif, keterbukaan, akuntabilitas, fasilitas dan perlakuan khusus bagi kelompok rentan, ketepatan waktu, kecepatan-kemudahan-keterjangkauan.','Pengawas eksternal: <b>Ombudsman RI</b>. Sarana pengaduan, SP4N-LAPOR!, wajib disediakan.']},
+{h:'Menghadapi pengguna layanan yang sulit',ul:['<b>Marah/emosional</b>: dengarkan sampai selesai, ucapkan empati, minta maaf atas ketidaknyamanan, lalu jelaskan solusi.','<b>Meminta jalan pintas</b>: tolak dengan sopan, jelaskan prosedur, bantu mempercepat <b>dalam batas aturan</b>.','<b>Tidak paham prosedur</b>: arahkan langkah demi langkah, siapkan contoh, bila perlu bantu mengisi.','<b>Kelompok rentan</b> (lansia, disabilitas, ibu hamil): prioritaskan sesuai standar layanan.']},
+{h:'Bila bukan bagianmu',ul:['Jangan menjawab "bukan tugas saya".','Jelaskan <b>siapa dan di mana</b> yang berwenang, antar bila perlu, dan pastikan pengguna tidak berputar-putar.','Catat dan tindak lanjuti bila masalah tidak selesai sendiri.']}],
+trik:[
+{t:'Formula pelayanan: Dengar-Empati-Solusi-Tindak lanjut',s:'Pilihan yang memuat keempat unsur lebih bernilai daripada yang memuat satu atau dua unsur.',c:'Menerima keluhan, meminta maaf, menjelaskan solusi, menghubungi lagi setelah selesai.'},
+{t:'Uang pelicin, jalur khusus, titip',s:'Jawaban yang menerima atau menawarkan imbalan, jalur khusus untuk kerabat, atau melanggar antrean adalah skor rendah. Tolak sopan dan tawarkan jalur resmi.',c:'Teman meminta didahulukan: layani sesuai antrean dan jelaskan alasannya.'},
+{t:'Prioritas urgensi',s:'Bila ada dua pengguna dengan kebutuhan berbeda, utamakan yang mendesak sesuai aturan (misal kondisi darurat), tetap jelaskan kepada yang menunggu.',c:'Pasien gawat dilayani lebih dulu; jelaskan pada yang lain.'}],
+salah:[
+['Melayani cepat berarti melanggar prosedur boleh.','Cepat tetapi tetap sesuai prosedur.'],
+['Pengguna selalu benar.','Layani dengan ramah, tetapi tidak melanggar aturan.'],
+['Mengalihkan ke petugas lain tanpa penjelasan sudah cukup.','Beri petunjuk jelas, bahkan antar bila perlu.'],
+['Menanggapi keluhan dengan membela diri.','Dengarkan, akui, lalu cari solusi.']]};
+
+LDEEP['tkp-jar']={
+dalam:[
+{h:'Tiga kemampuan jejaring kerja',ul:['<b>Komunikasi</b>: jelas, sopan, tepat waktu, dua arah.','<b>Kolaborasi</b>: berbagi informasi dan sumber daya, mengakui kontribusi rekan, mencari solusi bersama.','<b>Pengelolaan konflik</b>: menjaga fokus pada masalah, bukan orang, dan mencari kesepakatan.']},
+{h:'Menghadapi konflik di tempat kerja',tb:[['Situasi','Langkah terbaik','Hindari'],['Beda pendapat dengan rekan','Dengar dulu, cari titik temu, gunakan data','Menyerang pribadi, memaksakan kehendak'],['Rekan tidak berkontribusi','Ajak bicara pribadi, tawarkan bantuan, atur pembagian tugas jelas','Langsung mengadu, mengerjakan semuanya sendiri diam-diam'],['Atasan memberi instruksi berbeda','Klarifikasi prioritas sambil menjelaskan beban kerja','Memilih salah satu diam-diam'],['Rekan lintas unit tidak merespons','Tindak lanjuti sopan, jelaskan kepentingan, libatkan atasan bila perlu','Berhenti menghubungi']]},
+{h:'Kerja tim yang efektif',ul:['Pembagian peran yang jelas dan tenggat bersama.','Informasi dibagikan merata; tidak ada yang "menyimpan" data.','Pujian pada kerja kolektif; kritik disampaikan konstruktif dan pribadi.','Ketika ada rekan baru, bantu orientasi.']}],
+trik:[
+{t:'Pendekatan pribadi sebelum formal',s:'Dalam konflik antarrekan, bicara langsung dan baik-baik lebih bernilai dibandingkan mengadu atau menyindir. Eskalasi ke atasan hanya bila langkah pertama gagal.',c:'Rekan terlambat menyerahkan bagiannya: tanyakan kendala, bantu bila mampu, sepakati tenggat baru.'},
+{t:'Fokus tujuan bersama',s:'Pilihan yang mengaitkan penyelesaian dengan tujuan tim atau organisasi lebih tinggi daripada yang membela kepentingan pribadi.',c:'"Demi proyek selesai tepat waktu, mari bagi ulang tugas."'},
+{t:'Menghargai ide orang lain',s:'Jawaban yang menampung ide rekan, menggabungkan, atau memberi alasan atas penolakan bernilai tinggi. Menolak mentah-mentah atau mengklaim ide orang lain bernilai rendah.',c:'Ide rekan kurang tepat: tanyakan alasan, tawarkan perbaikan.'}],
+salah:[
+['Menghindari konflik berarti menjaga kerukunan.','Konflik perlu dikelola, bukan dihindari.'],
+['Mengambil alih pekerjaan rekan dengan diam adalah kerja sama.','Kolaborasi berarti berbagi, bukan menggantikan tanpa komunikasi.'],
+['Selalu melapor ke atasan bila ada masalah antarrekan.','Coba dialog langsung dulu, lalu eskalasi.'],
+['Mendahulukan pendapat sendiri karena lebih benar.','Dengarkan, uji dengan data, putuskan bersama.']]};
+
+LDEEP['tkp-sos']={
+dalam:[
+{h:'Sosial budaya: prinsip kerja di masyarakat majemuk',ul:['<b>Toleransi</b>: menghormati perbedaan agama, suku, budaya, dan pandangan tanpa memaksakan.','<b>Inklusif</b>: melayani dan melibatkan semua pihak tanpa diskriminasi.','<b>Adaptif terhadap kearifan lokal</b>: memahami adat setempat selama tidak melanggar hukum dan HAM.','<b>Gotong royong</b> dan musyawarah sebagai cara menyelesaikan masalah bersama.']},
+{h:'Radikalisme dan intoleransi: sikap ASN',ul:['Radikalisme: paham yang menghendaki perubahan sosial-politik secara drastis, sering memakai kekerasan atau memaksakan kehendak, serta menolak Pancasila dan keberagaman.','Sikap ASN: <b>menolak</b> paham radikal, <b>tidak menyebarkan</b> ujaran kebencian, <b>edukasi</b> dengan dialog, dan <b>melapor</b> ke pihak berwenang bila ada ancaman nyata.','<b>Moderasi beragama</b>: cara pandang yang tidak ekstrem kanan atau kiri, menjaga keseimbangan, menjunjung toleransi dan kebangsaan.','ASN wajib <b>netral</b> dalam politik dan tidak menyebarkan konten bermuatan SARA di media sosial.']},
+{h:'Menghadapi hoaks dan ujaran kebencian',ul:['Verifikasi sebelum bagikan (cek sumber, tanggal, bukti lain).','Klarifikasi dengan data dan bahasa santun; jangan membalas dengan kebencian.','Laporkan konten ke platform atau pihak berwenang.']}],
+trik:[
+{t:'Pilih dialog dan edukasi, bukan konfrontasi',s:'Menghadapi sikap intoleran rekan: ajak berdiskusi dan jelaskan nilai kebangsaan. Langsung memarahi atau memviralkan nilainya rendah; membiarkan tanpa tindakan juga rendah.',c:'Rekan menjelek-jelekkan agama lain: tegur sopan, ingatkan toleransi, laporkan bila berulang.'},
+{t:'Menghargai budaya tanpa melanggar aturan',s:'Dalam konflik jadwal kerja dan adat, cari solusi yang menghormati adat dan tetap memenuhi tugas: bicara dengan tokoh setempat, atur ulang jadwal, libatkan atasan.',c:'Tradisi desa bertabrakan dengan jam kerja: koordinasi, bukan mengabaikan atau meninggalkan tugas.'},
+{t:'Anti-kekerasan',s:'Jawaban yang membalas kekerasan dengan kekerasan atau menghakimi sendiri selalu rendah. Pilih jalur hukum atau pihak berwenang.',c:'Menemukan indikasi aksi radikal: laporkan ke aparat, bukan menghadapi sendiri.'}],
+salah:[
+['Toleransi berarti menerima semua perilaku.','Toleransi menghormati perbedaan, tetapi tidak membenarkan pelanggaran hukum.'],
+['Radikalisme hanya berkaitan dengan satu agama.','Dapat muncul dalam berbagai ideologi dan kelompok.'],
+['Netralitas ASN berarti tidak punya pendapat.','ASN boleh punya pendapat pribadi, tetapi tidak berpihak dalam tugas dan tidak berkampanye.'],
+['Membalas hoaks dengan hoaks untuk meluruskan.','Klarifikasi harus berdasar data dan sumber terpercaya.']]};
+
+LDEEP['tkp-tik']={
+dalam:[
+{h:'Transformasi digital pemerintahan',ul:['<b>SPBE</b> (Sistem Pemerintahan Berbasis Elektronik, Perpres No. 95 Tahun 2018) mendorong layanan pemerintah yang terpadu, efisien, dan transparan.','<b>Satu data Indonesia</b> dan interoperabilitas: data dipakai bersama antarinstansi agar pelayanan tidak berulang-ulang meminta dokumen yang sama.','ASN perlu <b>literasi digital</b>: etika, keamanan, kecakapan, dan budaya bermedia.','Teknologi baru (AI, otomasi) dipandang sebagai alat peningkat kualitas layanan, bukan pengganti tanggung jawab ASN.']},
+{h:'Keamanan informasi dan etika digital',ul:['Jaga <b>kerahasiaan</b> data. UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi mewajibkan pengamanan data pribadi.','Gunakan sandi kuat, autentikasi dua langkah, dan jangan membagikan kata sandi atau OTP.','Hindari klik tautan mencurigakan (phishing) dan perangkat lunak ilegal.','UU ITE mengatur larangan penyebaran informasi yang melanggar kesusilaan, pencemaran nama baik, berita bohong, dan ujaran kebencian.']},
+{h:'Menghadapi tuntutan teknologi baru',ul:['Bila belum menguasai: belajar mandiri, ikut pelatihan, bertanya kepada rekan, dan mencoba bertahap.','Bila ada sistem baru: pelajari panduan, uji coba, beri masukan konstruktif.','Bila ada insiden keamanan: hentikan akses, laporkan ke unit TI, jangan menutupi.']}],
+trik:[
+{t:'Utamakan keamanan data',s:'Pada soal yang memuat pilihan "membagikan data demi cepat" vs "mengikuti prosedur keamanan", pilih prosedur. Jangan membagikan data pribadi lewat aplikasi pribadi.',c:'Data warga dikirim lewat grup WhatsApp: pilih saluran resmi.'},
+{t:'Adaptif dan mau belajar',s:'Opsi yang menggabungkan belajar mandiri, bertanya, dan mencoba bernilai lebih tinggi dibanding menolak teknologi atau menyerahkan semuanya ke orang lain.',c:'Guru yang kurang paham teknologi mengikuti pelatihan dan berlatih dengan murid.'},
+{t:'Verifikasi sebelum membagikan',s:'Jawaban yang memeriksa kebenaran dan sumber sebelum membagikan lebih tinggi. Membagikan karena "banyak yang membagikan" rendah.',c:'Cek situs resmi lembaga sebelum menyebarkan pengumuman.'}],
+salah:[
+['Digitalisasi berarti menghapus prosedur.','Prosedur tetap ada, hanya diubah bentuk dan dipermudah.'],
+['Menolak teknologi baru menjaga cara yang sudah teruji.','ASN diharapkan adaptif dan terus belajar.'],
+['Kata sandi boleh dibagikan ke rekan kepercayaan.','Kata sandi bersifat pribadi; gunakan akses resmi.'],
+['Semua informasi di media sosial dapat dipercaya bila viral.','Viral bukan bukti kebenaran; verifikasi.']]};
+
+LDEEP['tkp-prof']={
+dalam:[
+{h:'Profesionalisme ASN: pilar utama',ul:['<b>Kompetensi</b>: terus meningkatkan pengetahuan dan keterampilan.','<b>Integritas</b>: jujur, konsisten, mematuhi kode etik.','<b>Akuntabilitas</b>: bertanggung jawab atas keputusan dan hasil kerja.','<b>Disiplin dan etos kerja</b>: tepat waktu, menuntaskan tugas, memenuhi target.','<b>Berorientasi pelayanan</b>: pengguna dan organisasi lebih diutamakan dibanding kepentingan pribadi.','Core values ASN <b>BerAKHLAK</b> (Surat Edaran Menteri PANRB No. 20 Tahun 2021): Berorientasi pelayanan, Akuntabel, Kompeten, Harmonis, Loyal, Adaptif, Kolaboratif. Dasar hukum kepegawaian: UU No. 20 Tahun 2023 tentang ASN.']},
+{h:'Situasi khas dan sikap yang tepat',tb:[['Situasi','Sikap bernilai tinggi','Sikap bernilai rendah'],['Menemukan kesalahan sendiri','Mengaku, memperbaiki, mencegah ulang','Menyembunyikan atau menyalahkan orang lain'],['Beban kerja berlebih','Menyusun prioritas, komunikasikan ke atasan, minta bantuan','Mengabaikan sebagian tugas tanpa kabar'],['Diminta tugas di luar kewenangan','Klarifikasi aturan, tawarkan alternatif','Menolak ketus atau melaksanakan melanggar aturan'],['Melihat rekan melanggar aturan','Ingatkan, lalu laporkan bila berulang','Ikut-ikutan atau diam']]},
+{h:'Kerja keras dan inovasi',ul:['Etos kerja: menyelesaikan tugas sebelum tenggat, tidak menunda.','Inovasi bermakna perbaikan nyata dalam prosedur atau layanan, bukan sekadar perubahan.','Belajar dari kegagalan dan membagikan pengetahuan kepada tim.']}],
+trik:[
+{t:'Tanggung jawab sampai tuntas',s:'Jawaban yang memuat kata kunci memperbaiki, menyelesaikan, melaporkan, dan mencegah ulang bernilai tertinggi. Melaporkan tanpa memperbaiki bernilai sedang.',c:'Kesalahan hitung pada laporan: perbaiki, kabari pimpinan, buat pengecekan ganda.'},
+{t:'Kepentingan organisasi di atas pribadi',s:'Bila ada pilihan membantu keluarga/teman dengan melanggar aturan versus mengutamakan tugas, pilih tugas.',c:'Jangan menggunakan fasilitas kantor untuk kepentingan pribadi.'},
+{t:'Komunikasikan batas kemampuan',s:'Menolak tugas tanpa penjelasan atau menerima semuanya tanpa kejelasan sama-sama rendah. Sampaikan beban dan usulkan solusi.',c:'"Saya bisa menyelesaikan A hari ini; untuk B bolehkah diprioritaskan setelahnya?"'}],
+salah:[
+['Profesional berarti tidak pernah salah.','Profesional mengakui dan memperbaiki kesalahan.'],
+['Loyal berarti menuruti semua instruksi.','Loyal pada organisasi dan aturan; instruksi yang melanggar aturan dikoreksi dengan sopan.'],
+['Lembur terus adalah bukti kerja keras.','Prioritas dan manajemen waktu sama pentingnya.'],
+['Inovasi berarti mengganti semua prosedur.','Inovasi memperbaiki bagian yang perlu, tetap dalam aturan.']]};
+
 function lessonSections(l){
  const X=LX[l.id]||{};const out={};
  out.ring=`<div class="card flat"><p style="line-height:1.7">${X.ring||esc(l.d)}</p><div class="row wrapx" style="margin-top:10px;gap:8px"><span class="pill ${SUB[l.sub].cls}">${l.sub}</span><span class="pill">±${l.min} menit baca</span>${l.cats.length?`<span class="pill acc">${BANK.filter(q=>l.cats.includes(q.cat)).length} soal latihan</span>`:''}</div></div>`;
@@ -2887,7 +3278,12 @@ function lessonSections(l){
  if((l.jebakan||[]).length)out.jbk=`<div class="jbk"><h3>${ic('alert',18)} Jebakan umum</h3><ul>${l.jebakan.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
  if((l.ex||[]).length)out.coba=(l.ex||[]).map((x,k)=>{const key=l.id+':'+k,a=MC[key],rev=a!==undefined,tk=!!x.s;
   return `<div class="card stack"><b class="small">Soal ${k+1} dari ${l.ex.length}</b><div class="qtext" style="font-size:16px;white-space:normal">${x.q}</div>${x.svg?`<div class="qfig">${x.svg}</div>`:''}<div class="opts${x.oi?' figo':''}">${x.o.map((o,i)=>{let cl='opt',ex2='';if(rev){cl+=' lock';if(tk){if(i===a)cl+=' sel';ex2=`<span class="pill ${x.s[i]>=4?'good':x.s[i]<=2?'bad':'warn'}">${x.s[i]}</span>`}else if(i===x.a)cl+=' ok';else if(i===a)cl+=' no'}return `<button class="${cl}" data-act="lex" data-v="${key}|${i}"><span class="l">${'ABCDE'[i]}</span><span style="font-size:14.5px">${x.oi?`<span class="ofig">${x.oi[i]}</span>`:o}</span>${ex2}</button>`}).join('')}</div>${rev?`<div class="explain">${x.e}</div>`:''}</div>`}).join('<div style="height:12px"></div>');
- if(l.sub==='TIU')Object.keys(out).forEach(k=>{if(typeof out[k]==='string')out[k]=fmH(out[k])});
+if(l.sub==='TIU') Object.keys(out).forEach(k=>{if(typeof out[k]==='string')out[k]=fmH(out[k])});
+ const D=typeof LDEEP!=='undefined'&&LDEEP[l.id];
+ if(D){
+  out.dalam=D.dalam.map(b=>`<div class="card lb"><h3>${b.h}</h3>${b.p?`<p>${b.p}</p>`:''}${b.ul?`<ul>${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}${b.tb?`<div class="tw"><table><tr>${b.tb[0].map(h=>`<th>${h}</th>`).join('')}</tr>${b.tb.slice(1).map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`:''}</div>`).join('');
+  out.trik2=`<div class="card lb"><h3>${ic('bulb',18)} Trik lanjutan</h3><div class="stack" style="gap:12px;margin-top:6px">${D.trik.map((t,i)=>`<div class="tk2"><div class="tk2h"><span class="sn">${i+1}</span><b>${t.t}</b></div><p>${t.s}</p><div class="tk2c"><span>Contoh</span>${t.c}</div></div>`).join('')}</div></div>`;
+  out.salah=`<div class="card lb"><h3>${ic('alert',18)} Salah kaprah dan yang benar</h3><div class="sk">${D.salah.map(x=>`<div class="sk-r"><div class="sk-x"><span>Keliru</span>${x[0]}</div><div class="sk-o"><span>Benar</span>${x[1]}</div></div>`).join('')}</div></div>`}
  return out}
 function vLesson(){
  const l=LBY[V.id];if(!l)return '<div class="page"><div class="empty">Materi tidak ditemukan.</div></div>';
