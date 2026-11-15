@@ -244,6 +244,8 @@ input[type=file]{display:none}
 .chk.on .cb,.ctask.on .cb{background:var(--good);border-color:var(--good)}.chk.on>span:last-child{color:var(--ink2);text-decoration:line-through}
 .ctask{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.ctask:last-child{border-bottom:0}
 .ctask .mid{flex:1;min-width:0}.ctask.on b{color:var(--ink2);text-decoration:line-through}
+.btb{padding:4px 2px 8px}.bt{border-bottom:1px solid var(--line)}.bt:last-of-type{border-bottom:0}.bt>summary{display:flex;gap:10px;align-items:center;padding:10px 0;cursor:pointer;list-style:none}.bt>summary::-webkit-details-marker{display:none}.bt>summary .mid{flex:1;min-width:0;display:flex;flex-direction:column}.bt-bar{flex:none;width:54px;height:6px;border-radius:99px;background:var(--line);overflow:hidden;display:block}.bt-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.ctask>.row .btn svg{vertical-align:-3px}
 @media (max-width:520px){.ctask{flex-wrap:wrap}.ctask .mid{flex-basis:calc(100% - 40px)}.ctask>.row{margin-left:36px}}
 .tline{position:relative;display:flex;gap:4px;margin-top:12px;padding-top:12px}
 .ph{background:var(--soft);border-radius:9px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;font-size:11px;color:var(--ink2);min-width:0;text-align:center}.ph b{font-size:12px;color:var(--ink)}
@@ -631,7 +633,7 @@ const PLAYS=[
  ex:['Dua kota berjarak 300 km. Dua mobil berangkat bersamaan dari kedua kota, melaju 50 dan 70 km/jam. Kapan bertemu?','t = 300 ÷ (50 + 70) = 300 ÷ 120 = 2,5 jam.'],trap:['Lupa mengubah menit ke jam.','Memakai rata-rata aritmetika untuk kecepatan rata-rata.']},
 {k:'usia',sub:'TIU',cat:'Numerik',re:/\busia\b|umur|tahun lalu|tahun lagi|tahun yang (lalu|akan datang)/i,t:'Soal usia',
  steps:['Beri variabel: usia sekarang = x, y.','Terjemahkan setiap kalimat menjadi satu persamaan. "n tahun lagi" berarti tambah n, "n tahun lalu" berarti kurangi n.','Ingat: selisih usia dua orang selalu tetap sepanjang waktu.','Selesaikan persamaan, lalu uji hasil dengan membaca ulang soal.'],
- ex:['Usia ayah 4 kali usia anak. 5 tahun lagi jumlah usia mereka 55. Berapa usia anak sekarang?','Anak = x, ayah = 4x. (x + 5) + (4x + 5) = 55 → 5x = 45 → x = 9. Ayah 36. Cek: 14 + 41 = 55 ✓.'],trap:['Menambah 5 hanya pada satu orang.','Lupa bahwa selisih usia konstan.']},
+ ex:['Usia ayah 4 kali usia anak. 5 tahun lagi jumlah usia mereka 55. Berapa usia anak sekarang?','Anak = x, ayah = 4x. (x + 5) + (4x + 5) = 55 → 5x = 45 → x = 9. Ayah 36. Cek: 14 + 41 = 55 ✓.'],trap:['Menambah atau mengurangi tahun hanya pada satu orang.','Lupa bahwa selisih usia konstan.']},
 {k:'kerja',sub:'TIU',cat:'Numerik',re:/menyelesaikan|pekerja|keran|pompa|bak|proyek|bekerja/i,t:'Soal pekerjaan',
  steps:['Ubah waktu menjadi laju: selesai dalam a hari berarti laju 1/a pekerjaan per hari.','Kerja bersama: jumlahkan laju. Waktu bersama = 1 ÷ (1/a + 1/b) = (a·b) ÷ (a + b).','Keran pengisi bernilai positif, keran pembuang bernilai negatif.','Bila sebagian pekerjaan sudah selesai, hitung sisa pekerjaan (1 − bagian selesai).'],
  ex:['A selesai 6 hari, B selesai 3 hari. Jika bekerja bersama?','Laju gabungan = 1/6 + 1/3 = 1/2 per hari → selesai 2 hari.'],trap:['Menjumlahkan waktu, bukan laju.','Lupa tanda negatif untuk pembuang.']},
@@ -1550,8 +1552,75 @@ function taskRow(t){
   else if(t.type==='manual')btn=`<button class="btn sm" data-act="cman" data-v="m${dkey()}">Sudah</button>`;
   else if(t.type==='manual2')btn=`<button class="btn sm" data-act="gotab" data-v="guide|harih">Buka</button><button class="btn sm" data-act="cman" data-v="h${dkey()}">Selesai</button>`}
  const prog=t.goal>1?`<div class="bar ${dn?'good':''}" style="margin-top:6px;height:6px"><i style="width:${Math.min(100,c/t.goal*100)}%"></i></div>`:'';
- return `<div class="ctask ${dn?'on':''}"><span class="cb">${dn?ic('check',16):''}</span><div class="mid"><b class="small">${esc(t.t)}</b><div class="xs muted">${t.goal>1?Math.min(c,t.goal)+' / '+t.goal:''}${t.acc?`${t.goal>1?' · ':''}target akurasi ≥ ${Math.round(t.acc*100)}%${accNow!=null?` (hari ini ${Math.round(accNow*100)}% ${accNow>=t.acc?'✓':''})`:''}`:''}</div>${prog}</div><div class="row" style="gap:6px">${btn}</div></div>`}
+ return `<div class="ctask ${dn?'on':''}"><span class="cb">${dn?ic('check',16):''}</span><div class="mid"><b class="small">${esc(t.t)}</b><div class="xs muted">${t.goal>1?Math.min(c,t.goal)+' / '+t.goal:''}${t.acc?`${t.goal>1?' · ':''}target akurasi ≥ ${Math.round(t.acc*100)}%${accNow!=null?` (hari ini ${Math.round(accNow*100)}% ${accNow>=t.acc?'✓':''})`:''}`:''}</div>${prog}</div><div class="row" style="gap:6px">${btn}${revBtn(t,dkey(),dn,c)}</div></div>`}
 function dayAt(ci,i){const c2=Object.assign({},ci,{ix:i});const k=c2.ends.findIndex(e=>i<=e);c2.pi=k<0?3:k;c2.today=(i===ci.ix&&!ci.over&&!ci.wait);return dayPlan(c2,true)}
+/* ===================== v4.14: TINJAU TUGAS + BAHAN TEMPUR =====================
+   Hanya menambah tampilan dan membaca data lama. Satu-satunya data baru: S.cfix[tanggal].sp (fokus topik) dan .br (tanda dibaca),
+   di dalam kunci cfix yang sudah ada dan sudah ikut sinkron. */
+function revBtn(t,k,dn,c){
+ if(!(dn||c>0))return '';
+ const TY=['sub','drill','redo','sim','diag'];
+ if(t.type==='lesson')return dn?`<button class="btn sm" data-act="lesson" data-v="${t.lid}">Baca ulang</button>`:'';
+ if(!dn&&!TY.includes(t.type))return '';
+ if(t.type==='fc')return `<button class="btn sm" data-act="gotab" data-v="study|hafalan">Buka</button>`;
+ if(t.type==='manual2')return `<button class="btn sm" data-act="gotab" data-v="guide|harih">Buka</button>`;
+ if(t.type==='manual')return '';
+ return `<button class="btn sm" data-act="trev" data-day="${k}" data-k="${t.type}" data-sub="${t.sub||''}" data-cat="${esc(t.cat||'')}">Tinjau</button>`}
+function dayRev(k,kd,sub,cat){
+ const sim=kd==='sim';
+ const hs=S.hist.filter(h=>h.ids&&(h.cday?h.cday===k:dkey(new Date(h.t))===k)&&((h.mode==='sim')===sim));
+ const seen={},items=[],ans={};
+ hs.slice().reverse().forEach(h=>h.ids.forEach((id,j)=>{if(seen[id])return;const q=byId[id];if(!q)return;
+  if((kd==='sub'||kd==='drill')&&sub&&q.sub!==sub)return;if(kd==='drill'&&cat&&q.cat!==cat)return;
+  seen[id]=1;const n=items.length;items.push(q);const l=h.ans[j];if(l&&l!=='-')ans[n]=l}));
+ if(!items.length){toast('Daftar soal tugas ini tidak tersimpan. Aplikasi hanya menyimpan daftar soal dari 80 sesi terakhir.');return}
+ Q={mode:'hist',hist:true,back:'program',items,ans,tq:{},mark:{},rev:{},f:{},title:'Tinjau · '+fmtDay(new Date(k+'T00:00:00')),more:0};RV='all';V={view:'review',tab:V.tab};render();scrollTo(0,0)}
+function spFix(k,tasks){
+ S.cfix=S.cfix||{};const f=S.cfix[k]||(S.cfix[k]={});
+ if(f.sp)return f.sp;
+ const cs=catStat(),recent={};
+ for(let j=1;j<=3;j++){const d=new Date(k+'T00:00:00');d.setDate(d.getDate()-j);const o=((S.cfix||{})[dkey(d)]||{}).sp||{};Object.keys(o).forEach(s=>o[s].forEach(c=>recent[s+'|'+c]=1))}
+ const sp={};
+ SUBS.forEach(s=>{if(!tasks.some(t=>t.type==='sub'&&t.sub===s))return;
+  const cnt={};BANK.forEach(q=>{if(q.sub===s&&q.cat)cnt[q.cat]=(cnt[q.cat]||0)+1});
+  let cats=Object.keys(cnt).filter(c=>cnt[c]>=8);if(!cats.length)return;
+  const acc=c=>{const r=cs.find(x=>x.sub===s&&x.cat===c);return r?r.acc:.55};
+  cats.sort((a,b)=>acc(a)-acc(b));
+  const fresh=cats.filter(c=>!recent[s+'|'+c]);const pool=fresh.length>=2?fresh:cats;
+  sp[s]=pool.slice(0,2)});
+ f.sp=sp;save();return sp}
+function spDrill(sub,k,n){
+ const sp=((((S.cfix||{})[k])||{}).sp||{})[sub];
+ if(!sp||!sp.length){startDrill(sub,'',n);return}
+ const a=wshuf(BANK.filter(q=>q.sub===sub&&sp.includes(q.cat))),b=wshuf(BANK.filter(q=>q.sub===sub&&!sp.includes(q.cat)));
+ const m=Math.min(a.length,Math.ceil(n*.7)),pool=shuffle(a.slice(0,m).concat(b.slice(0,Math.max(0,n-m))));
+ if(!pool.length){startDrill(sub,'',n);return}
+ startSession('lat',pool,0,'Latihan '+sub)}
+function briefItems(k,tasks,live){
+ const sp=live?spFix(k,tasks):(((S.cfix||{})[k]||{}).sp||{}),out=[],seen={};
+ const add=(cat,sub,n,dr)=>{if(!cat)return;const o=seen[cat];if(o){if(dr)o.dr=1;return}const x={cat,sub,n:n||0,dr:dr?1:0};seen[cat]=x;out.push(x)};
+ tasks.forEach(t=>{if(t.type==='sub')(sp[t.sub]||[]).forEach(c=>add(c,t.sub,Math.ceil(t.goal*.7/Math.max(1,(sp[t.sub]||[]).length))));else if(t.type==='drill'&&t.cat)add(t.cat,t.sub,t.goal,1)});
+ return out}
+function briefBody(it){
+ const lid=catLesson(it.cat),l=lid?LBY[lid]:null,cs=catStat().find(x=>x.sub===it.sub&&x.cat===it.cat);
+ const ul=a=>a&&a.length?`<ul class="small" style="padding-left:18px;margin:4px 0">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+ let h='';
+ if(l){h+=`<p class="small" style="margin:2px 0 6px">${l.d?esc(l.d)+'.':''}</p>`;
+  (l.blocks||[]).slice(0,2).forEach(b=>{if(b.ul)h+=`<div class="xs muted" style="margin-top:6px"><b>${esc(b.h||'Cara membaca soal')}</b></div>${ul(b.ul.slice(0,4))}`});
+  if(l.trik&&l.trik.length)h+=`<div class="xs" style="margin-top:6px;color:var(--good)"><b>Trik cepat</b></div>${ul(l.trik)}`;
+  if(l.jebakan&&l.jebakan.length)h+=`<div class="xs" style="margin-top:6px;color:var(--bad)"><b>Jebakan yang sering muncul</b></div>${ul(l.jebakan)}`}
+ else if(typeof TRIK!=='undefined'&&TRIK[it.cat])h+=`<div class="xs" style="margin-top:6px;color:var(--good)"><b>Trik cepat</b></div><p class="small" style="margin:4px 0">${TRIK[it.cat]}</p>`;
+ else h+=`<p class="small muted">Baca soal sampai tuntas, tandai kata kunci, lalu eliminasi pilihan yang jelas salah.</p>`;
+ return {h,acc:cs?cs.acc:null}}
+function brief(k,tasks,live){
+ const its=briefItems(k,tasks,live);
+ const hasSim=tasks.some(t=>t.type==='sim'||t.type==='diag');
+ if(!its.length&&!hasSim)return '';
+ const f=((S.cfix||{})[k])||{},rd=!!f.br;
+ const rows=its.map((it,ix)=>{const b=briefBody(it),pc=b.acc==null?0:Math.round(b.acc*100);
+  return `<details class="bt"${ix===0&&!rd?' open':''}><summary><span class="pill ${SUB[it.sub]?SUB[it.sub].cls:''}">${it.sub}</span><span class="mid"><b class="small">${esc(it.cat)}</b><span class="xs muted">${it.dr?'Topik terlemahmu · ':''}${it.n?'±'+it.n+' soal hari ini':'fokus hari ini'}${b.acc!=null?' · akurasimu '+pc+'%':' · belum pernah dilatih'}</span></span><i class="bt-bar"><i style="width:${b.acc==null?6:Math.max(6,pc)}%"></i></i></summary><div class="btb">${b.h}</div></details>`}).join('');
+ const sim=hasSim&&!its.length?`<ul class="small" style="padding-left:18px;margin:6px 0"><li>Kerjakan <b>TKP lebih dulu</b> jika kamu cepat lelah di TIU, lalu TWK, TIU terakhir.</li><li>Lewati soal yang menyita lebih dari 1,5 menit, tandai, dan kembali jika ada sisa waktu.</li><li>TKP: pilih respons paling solutif, sopan, dan sesuai aturan. Jangan menyisakan jawaban kosong.</li></ul>`:'';
+ return `<div class="card brief" id="brief"><div class="row between"><h3>Bahan belajar hari ini</h3>${its.length?`<span class="pill acc">${its.length} topik</span>`:''}</div><p class="small muted" style="margin:6px 0 8px">Ringkasan strategi untuk jenis soal yang akan muncul di latihanmu hari ini. Isinya cara membaca soal, trik, dan jebakan, tanpa jawaban soal.</p>${rows}${sim}${live||its.length?`<div class="row" style="margin-top:10px;gap:8px;align-items:center">${rd?`<span class="pill good">${ic('check',14)} Sudah dibaca</span>`:`<button class="btn sm" data-act="brd" data-day="${k}">Tandai sudah dibaca</button>`}</div>`:''}</div>`}
 /* ===================== KEJAR HARI TERLEWAT (v4.10) =====================
    Hari yang terlewat tetap bisa dikerjakan. Soal yang dikerjakan dari daftar hari itu dicatat di
    S.cmk[tanggal hari itu] dan tidak ikut dihitung untuk tugas hari ini (riwayat dan statistik soal tetap lengkap).
@@ -1610,7 +1679,7 @@ function cuRow(t,k,di){
   else if(t.type==='manual')btn=`<button class="btn sm" data-act="cu" data-k="man" data-v="m${k}" ${at}>Sudah</button>`;
   else if(t.type==='manual2')btn=`<button class="btn sm" data-act="gotab" data-v="guide|harih">Buka</button><button class="btn sm" data-act="cu" data-k="man" data-v="h${k}" ${at}>Selesai</button>`}
  const prog=t.goal>1?`<div class="bar ${dn?'good':''}" style="margin-top:6px;height:6px"><i style="width:${Math.min(100,c/t.goal*100)}%"></i></div>`:'';
- return `<div class="ctask ${dn?'on':''}"><span class="cb">${dn?ic('check',16):''}</span><div class="mid"><b class="small">${esc(t.t)}</b><div class="xs muted">${t.goal>1?Math.min(c,t.goal)+' / '+t.goal:''}${t.acc?`${t.goal>1?' · ':''}target akurasi ≥ ${Math.round(t.acc*100)}%${accNow!=null?` (sejauh ini ${Math.round(accNow*100)}% ${accNow>=t.acc?'✓':''})`:''}`:''}</div>${prog}</div><div class="row" style="gap:6px">${btn}</div></div>`}
+ return `<div class="ctask ${dn?'on':''}"><span class="cb">${dn?ic('check',16):''}</span><div class="mid"><b class="small">${esc(t.t)}</b><div class="xs muted">${t.goal>1?Math.min(c,t.goal)+' / '+t.goal:''}${t.acc?`${t.goal>1?' · ':''}target akurasi ≥ ${Math.round(t.acc*100)}%${accNow!=null?` (sejauh ini ${Math.round(accNow*100)}% ${accNow>=t.acc?'✓':''})`:''}`:''}</div>${prog}</div><div class="row" style="gap:6px">${btn}${revBtn(t,k,dn,c)}</div></div>`}
 function cuCard(ci){
  const ms=cuMissed(ci);if(!ms.length)return '';
  const rows=ms.slice(0,4).map(i=>{const p=cuTasks(ci,i),k=CUK(i),d=p.tasks.filter(t=>cuCur(t,k)>=t.goal).length;
@@ -1619,9 +1688,10 @@ function cuCard(ci){
 function gCatchup(ci,i){
  const k=CUK(i),p=cuTasks(ci,i),T=p.tasks,d=T.filter(t=>cuCur(t,k)>=t.goal).length,all=T.length,fin=!!S.cdone[k],ph=PH[p.pi],mins=Math.round(T.reduce((a,t)=>a+(t.m||0),0));
  const oth=cuMissed(ci).filter(x=>x!==i);
- return `<div class="banner info" style="column-span:all">${ic('info')}<span>Kamu sedang mengerjakan <b>Hari ${i}</b> yang terlewat (${fmtDay(dayDate(i))}). Soal yang dikerjakan dari daftar ini dihitung untuk Hari ${i}, bukan untuk hari ini.</span></div>
+ return `<div class="banner info" style="column-span:all">${ic('info')}<span>${fin?`Kamu sedang meninjau <b>Hari ${i}</b> yang sudah tuntas (${fmtDay(dayDate(i))}). Ketuk Tinjau pada tugas untuk memeriksa kembali jawabanmu. Tidak ada progres yang berubah.`:`Kamu sedang mengerjakan <b>Hari ${i}</b> yang terlewat (${fmtDay(dayDate(i))}). Soal yang dikerjakan dari daftar ini dihitung untuk Hari ${i}, bukan untuk hari ini.`}</span></div>
  <div class="card hero2"><div class="row between" style="align-items:center"><div><div class="xs" style="opacity:.85">HARI ${i} DARI ${ci.D} · FASE ${ph.k.toUpperCase()} · ${fin?'TUNTAS':'TERLEWAT'}</div><h1 style="margin-top:4px">${esc(p.title)}</h1><p class="small" style="opacity:.9;margin-top:6px">Target: ${esc(p.goalTxt)}<br>Estimasi ±${mins} menit</p></div>${ring(all?d/all:0,92,'#fff',`<b class="gnum" style="font-size:22px">${d}/${all}</b><span class="xs">tugas</span>`,9)}</div></div>
  <div class="card"><h3 style="margin-bottom:6px">Tugas Hari ${i}</h3><div class="tlist">${T.map(t=>cuRow(t,k,i)).join('')}</div>${fin?`<div class="banner info" style="margin-top:10px">${ic('check')}<span>Hari ${i} tuntas dan sudah tercatat Tuntas di jadwal.</span></div>`:''}</div>
+ ${T.some(t=>t.type==='lesson')?'':brief(k,T,!fin)}
  <div class="row wrapx"><button class="btn primary" data-act="cuclose">Kembali ke tugas hari ini</button>${oth.length?`<button class="btn ghost" data-act="cuopen" data-v="${oth[0]}">Kerjakan Hari ${oth[0]}</button>`:''}</div>`}
 function cuFcBanner(){const ci=cInfo(),i=ci&&FCT?dayDiff(S.cstart,FCT)+1:0;return `<div class="banner info" style="margin-bottom:12px">${ic('info')}<span>Kartu yang kamu pelajari sekarang dihitung untuk <b>Hari ${i}</b> (terlewat). <button class="btn ghost sm" data-act="cuoff" style="margin-left:6px">Batal</button></span></div>`}
 function cuLi(t,k,miss){const c=miss?cuCur(t,k):0,dn=miss&&c>=t.goal;return `<li>${dn?'✓ ':''}${esc(t.t)}${miss&&t.goal>1&&!dn?` <span class="muted">· ${Math.min(c,t.goal)}/${t.goal}</span>`:''}${t.acc?` <span class="muted">· akurasi ≥ ${Math.round(t.acc*100)}%</span>`:''}</li>`}
@@ -1630,10 +1700,10 @@ function dayDate(i){const d=new Date(S.cstart+'T00:00:00');d.setDate(d.getDate()
 const fmtDay=d=>d.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'});
 function dayStat(ci,i){const k=dkey(dayDate(i));if(i===ci.ix&&!ci.over&&!ci.wait)return 'now';if(i<ci.idx)return S.cdone[k]?'done':'miss';return 'next'}
 function dayStrip(ci){return `<div class="dstrip">${Array.from({length:ci.D},(_,j)=>{const i=j+1,st=dayStat(ci,i);return `<button class="dd ${st}" data-act="jd" data-v="${i}" title="Hari ${i}">${st==='done'?'✓':i}</button>`}).join('')}</div><div class="xs muted lgd"><span><i class="dd done">✓</i> tuntas</span><span><i class="dd miss">·</i> terlewat</span><span><i class="dd now">·</i> hari ini</span><span><i class="dd next">·</i> belum</span></div>`}
-function dayCard(ci,i,open){const st=dayStat(ci,i),miss=st==='miss',pp=miss?cuTasks(ci,i):dayAt(ci,i),k=CUK(i),lab={done:'Tuntas',miss:'Terlewat',now:'Hari ini',next:'Akan datang'}[st],ph=PH[pp.pi];
+function dayCard(ci,i,open){const st=dayStat(ci,i),miss=st==='miss',pp=(miss||st==='done')?cuTasks(ci,i):dayAt(ci,i),k=CUK(i),lab={done:'Tuntas',miss:'Terlewat',now:'Hari ini',next:'Akan datang'}[st],ph=PH[pp.pi];
  const mins=Math.round(pp.tasks.reduce((a,t)=>a+(t.m||0),0)),any=miss&&pp.tasks.some(t=>cuCur(t,k)>0);
  return `<details class="dcard ${st}" id="day${i}" ${open?'open':''}><summary><span class="dn">${i}</span><span class="mid"><b class="small">${esc(pp.title)}</b><span class="xs muted">${fmtDay(dayDate(i))} · ${esc(pp.goalTxt)}</span></span><span class="pill ${st==='done'?'good':st==='now'?'acc':st==='miss'?'bad':ph.c}">${lab}</span></summary>
- <div class="dbody"><div class="xs muted" style="margin-bottom:6px">Fase ${ph.k} · ±${mins} menit</div><ul class="dtasks">${pp.tasks.map(t=>cuLi(t,k,miss)).join('')}</ul>${miss?`<div class="xs muted" style="margin-top:8px">Terlewat, tapi masih bisa dikerjakan kapan saja.</div><button class="btn sm primary" style="margin-top:8px" data-act="cuopen" data-v="${i}">${any?'Lanjutkan':'Kerjakan'} Hari ${i}</button>`:''}${i>ci.ix?'<div class="xs muted" style="margin-top:6px">Perkiraan — topik terlemah & materi menyesuaikan performamu saat harinya tiba.</div>':''}</div></details>`}
+ <div class="dbody"><div class="xs muted" style="margin-bottom:6px">Fase ${ph.k} · ±${mins} menit</div><ul class="dtasks">${pp.tasks.map(t=>cuLi(t,k,miss||st==='done')).join('')}</ul>${miss?`<div class="xs muted" style="margin-top:8px">Terlewat, tapi masih bisa dikerjakan kapan saja.</div><button class="btn sm primary" style="margin-top:8px" data-act="cuopen" data-v="${i}">${any?'Lanjutkan':'Kerjakan'} Hari ${i}</button>`:''}${st==='done'?`<button class="btn sm" style="margin-top:8px" data-act="cuview" data-v="${i}">Tinjau Hari ${i}</button>`:''}${i>ci.ix?'<div class="xs muted" style="margin-top:6px">Perkiraan — topik terlemah & materi menyesuaikan performamu saat harinya tiba.</div>':''}</div></details>`}
 function gJadwal(){const ci=cInfo();if(!ci)return '';
  const done=Object.keys(S.cdone).length;
  return `<div class="card"><div class="row between"><h3>Jadwal ${ci.D} hari</h3><span class="pill acc">Hari ${ci.ix} / ${ci.D}</span></div><p class="small muted" style="margin:6px 0 0">Mulai ${fmtDay(dayDate(1))} · selesai ${fmtDay(dayDate(ci.D))} · ${done} hari tuntas. Ketuk angka untuk membuka hari itu. Hari terlewat (merah) langsung terbuka untuk dikerjakan.</p>${dayStrip(ci)}</div>
@@ -1658,6 +1728,7 @@ function gKurikulum(){
  <div class="card hero2"><div class="row between" style="align-items:center"><div><div class="xs" style="opacity:.85">HARI ${ci.ix} DARI ${ci.D} · FASE ${PH[p.pi].k.toUpperCase()}</div><h1 style="margin-top:4px">${esc(p.title)}</h1><p class="small" style="opacity:.9;margin-top:6px">Target: ${esc(p.goalTxt)}<br>Estimasi ±${mins} menit</p></div>${ring(d/all,92,'#fff',`<b class="gnum" style="font-size:22px">${d}/${all}</b><span class="xs">tugas</span>`,9)}</div></div>
  <div class="card"><div class="row between"><h3>Posisi kamu</h3><b class="small">Hari ${ci.ix} dari ${ci.D} · sisa ${Math.max(0,ci.D-ci.ix)} hari</b></div>${dayStrip(ci)}</div>
  <div class="card"><h3 style="margin-bottom:6px">Tugas hari ini</h3><div class="tlist">${p.tasks.map(taskRow).join('')}</div>${d===all?`<div class="banner info" style="margin-top:10px">${ic('check')}<span>Semua tugas selesai. Istirahat, lalu sampai besok.</span></div>`:''}</div>
+ ${p.tasks.some(t=>t.type==='lesson')?'':brief(dkey(),p.tasks,true)}
  ${cuCard(ci)}
  <div class="card"><h3>Peta program</h3><div class="tline">${tl}<i class="today" style="left:${pos}%"></i></div><p class="small muted" style="margin:10px 0 4px">${esc(PH[p.pi].d)}</p>
  <div class="xs muted" style="margin:10px 0 4px">Target akurasi fase ini · garis hitam = batas lolos</div>${tg}
@@ -1734,13 +1805,17 @@ document.addEventListener('click',e=>{
  else if(a==='cstart'){const sel=S.cDsel||28;S.cD=sel;S.cstart=dkey();S.cdone={};S.cmk={};S.cpin={};S.cfix={};CU=0;S.pid=sel===28?'dasar28':sel===7?'kilat7':null;delete S.cfocus;save();render()}
  else if(a==='creset'){if(confirm('Atur ulang program kurikulum? Riwayat latihan tidak dihapus.')){delete S.cstart;delete S.cD;delete S.cfocus;delete S.pid;S.cdone={};S.cmk={};S.cpin={};S.cfix={};CU=0;save();render()}}
  else if(a==='cman'){S.plan[v]=1;save();render()}
- else if(a==='cgo'){const n=+t.dataset.n||15;if(t.dataset.t==='sub')startDrill(t.dataset.sub,'',n);else startDrill(t.dataset.sub,t.dataset.cat,n)}
+ else if(a==='cgo'){const n=+t.dataset.n||15;if(t.dataset.t==='sub')spDrill(t.dataset.sub,dkey(),n);else startDrill(t.dataset.sub,t.dataset.cat,n)}
+ else if(a==='trev'){dayRev(t.dataset.day,t.dataset.k,t.dataset.sub,t.dataset.cat)}
+ else if(a==='brd'){S.cfix=S.cfix||{};const f=S.cfix[t.dataset.day]||(S.cfix[t.dataset.day]={});f.br=Date.now();save();render()}
+ else if(a==='brsc'){const el=document.getElementById('brief');if(el){el.scrollIntoView({behavior:'smooth',block:'start'});const d=el.querySelector('details');if(d)d.open=true}}
+ else if(a==='cuview'){const ci=cInfo(),i=+v;if(!ci||!cuOk(ci,i))return;CU=i;PG='hari';V={view:'tab',tab:'program'};render();scrollTo(0,0)}
  else if(a==='cuopen'){const ci=cInfo(),i=+v;if(!ci||!cuOk(ci,i))return;cuPin(ci,i);CU=i;PG='hari';V={view:'tab',tab:'program'};render();scrollTo(0,0)}
  else if(a==='cuclose'){CU=0;render();scrollTo(0,0)}
  else if(a==='cuoff'){FCT='';render()}
  else if(a==='cu'){const k=t.dataset.day,kd=t.dataset.k,di=+t.dataset.i||0,n=+t.dataset.n||15,q0=Q;
   const tagS=()=>{if(Q&&Q!==q0){Q.cday=k;Q.title='Hari '+di+' \u00b7 '+Q.title}};
-  if(kd==='sub'){startDrill(t.dataset.sub,'',n);tagS()}
+  if(kd==='sub'){spDrill(t.dataset.sub,k,n);tagS()}
   else if(kd==='drill'){startDrill(t.dataset.sub,t.dataset.cat,n);tagS()}
   else if(kd==='redo'){startReview(BANK.filter(needRedo).map(q=>q.id).concat(Object.keys(S.fav)),'Soal perlu diulang');tagS()}
   else if(kd==='sim'){startSim();tagS()}
@@ -2228,13 +2303,64 @@ function vzGist(q,best){
  if(ask.length>150)ask='… '+ask.slice(-148);
  return `<div class="vz-dg"><div class="vz-gist"><div class="g q"><span class="vz-tag">Yang ditanya</span><div>${vzT(q,ask)}</div></div><span class="vz-dn">↓</span><div class="g a"><span class="vz-tag ok">Kunci</span><div><b>${oh(q,best)}</b></div></div></div></div>`}
 
+/* v4.15: "Jebakan umum" hanya tampil bila nyambung dengan soalnya (pelajaran: kalimat generik per topik sering tidak sesuai). */
+var VZWF=null;
+function vzWF(){if(VZWF)return VZWF;VZWF={};BANK.forEach(q=>{Object.values(q.w||{}).forEach(t=>{const k=String(t).replace(/\s+/g,' ').trim();VZWF[k]=(VZWF[k]||0)+1})});return VZWF}
+const VZGATE={
+ padanan:[/sinonim|antonim|lawan kata|persamaan kata|padanan/i],
+ silogisme:[/kesimpulan/i],
+ 'pilar-sila':[/(mencerminkan|mengamalkan|pengamalan|sesuai dengan|bertentangan dengan)[\s\S]{0,60}\bsila\b|\bsila\b[\s\S]{0,40}(dalam|pada)[\s\S]{0,40}(perilaku|sikap|tindakan)/i],
+ verbal:[/\bhanya\b/i],
+ jadwal:[/$^/],
+ posisi:[/kiri|kanan|depan|belakang/i],
+ kecepatan:[/menit/i,/rata-rata/i],
+ usia:[/tahun (lagi|lalu|yang lalu)|kemudian/i],
+ kerja:[null,/pembuang|keluar|bocor/i],
+ untung:[/untung|rugi|laba/i,/diskon/i],
+ geometri:[/diameter|jari/i],
+ perbandingan:[/skala|peta|cm|km/i],
+ peluang:[/memilih|kelompok|panitia|tim|susun/i],
+ akar:[/√|akar/i],
+ persen:[/\d,\d|desimal/i],
+ cerita:[/terbesar|terkecil|selisih/i],
+ sejarah:[/rengasdengklok|proklamasi/i],
+ 'pilar-uud':[/(?=[\s\S]*(\bMA\b|Mahkamah Agung))(?=[\s\S]*(\bMK\b|Mahkamah Konstitusi))/],
+ nasionalisme:[/$^/],
+ integritas:[/gratifikasi|hadiah|pemberian/i],
+ belanegara:[/\bhanya\b[\s\S]{0,40}(TNI|militer|tentara)|(TNI|militer|tentara)[\s\S]{0,40}\bhanya\b/i],
+ bahasa:[/ejaan|EYD|PUEBI|kata baku|huruf kapital|tanda baca/i]};
+const VZQONLY=['bahasa','belanegara','pilar-sila','silogisme','cerita'];
+const VZOPEN=['deret','analogi','operasi','rata','himpunan'];
+function vzJebak(q,play,dg,best){
+ const ask=String(q.q).replace(/\s+/g,' ').match(/[^.!?]+[.!?…]*/g),last=ask?ask[ask.length-1]:q.q;
+ const tk=isTkp(q),W=q.w||{};
+ if(tk){
+  const ks=Object.keys(q.s||{}).filter(l=>l!==best).sort((a,b)=>q.s[b]-q.s[a]),r=ks[0];
+  if(!r||q.s[r]<3||q.s[r]===q.s[best])return '';
+  const w=W[r]?String(W[r]).trim():'',spec=w&&(vzWF()[w.replace(/\s+/g,' ')]||0)<=2&&w.length>=30;
+  if(spec)return `Opsi ${r} (skor ${q.s[r]}) terlihat baik, tetapi ada celahnya: ${w}`;
+  let mm=null;try{mm=tkpWhy(q,r).match(/Opsi [A-E] lebih tepat karena [^.]+\./)}catch(e){}
+  return `Opsi ${r} (skor ${q.s[r]}) terlihat baik, tetapi `+(mm?mm[0].charAt(0).toLowerCase()+mm[0].slice(1):`kurang menyeluruh dibanding opsi ${best}.`)}
+ const notQ=q.sub==='TWK'||(q.sub==='TIU'&&!/Logika|Numerik|Figural/.test(q.cat||''));
+ if(notQ&&(/\bkecuali\b/i.test(q.q)||/\b(yang|adalah|merupakan)\s+(bukan|tidak termasuk|tidak tergolong)\b/i.test(last)||/\bBUKAN\b/.test(last)))return 'Soal ini meminta yang BUKAN (atau KECUALI). Empat opsi lain justru benar; jawabannya adalah satu-satunya opsi yang menyimpang.';
+ const F=vzWF(),good=Object.keys(W).filter(l=>l!==best&&q.o[l]&&W[l]&&F[String(W[l]).replace(/\s+/g,' ').trim()]<=2&&String(W[l]).length>=35);
+ if(good.length){const pr=good.find(l=>/jika|bila|lupa|salah|tertukar|terbalik|hanya|tidak lagi/i.test(W[l]))||good[0];
+  return `Opsi ${pr} (${String(q.o[pr]).replace(/<[^>]+>/g,'').slice(0,60)}) menggoda, tetapi salah: ${W[pr]}`}
+ if(play&&play.trap&&play.trap[0]){
+  if(play.k==='deret')return (play.trap[1]&&!/class="a2|vz-op/.test(dg))?play.trap[1]:play.trap[0];
+  if(play.k==='tabel')return (/tiap kolom|setiap kolom|atas ke bawah/i.test(q.q)&&play.trap[1])?play.trap[1]:play.trap[0];
+  if(VZOPEN.includes(play.k))return play.trap[0];
+  const txt=VZQONLY.includes(play.k)?q.q:q.q+' '+Object.values(q.o).join(' ');
+  const g=VZGATE[play.k];if(!g)return '';
+  for(let i=0;i<play.trap.length;i++){const re=g[i]===undefined?g[0]:g[i];if(re===null||re.test(txt))return play.trap[i]}}
+ return ''}
 function vzBlock(q,why,best,play){
  const tk=isTkp(q),P=vzParse(why);
  let dg='';
  try{dg=vzTkp(q,best)||vzTabel(q,best,P)||vzDeret(q,best)||vzAnalogi(q,best,P)||vzPadan(q,best)||vzChain(q,best,P)||vzLogic(q,best)||vzCalc(q,P)||vzGist(q,best)}catch(err){dg=''}
  const tips=P.tips.slice();
- if(!tips.some(t=>t.k==='jebak')&&play&&play.trap&&play.trap[0])tips.push({k:'jebak',t:(play.k==='deret'&&play.trap[1]&&!/class="a2|vz-op/.test(dg))?play.trap[1]:play.trap[0]});
- const tipH=tips.slice(0,2).map(t=>`<div class="vz-tip ${t.k}"><span class="tl">${t.k==='trik'?'TRIK CEPAT':t.k==='jebak'?'JEBAKAN UMUM':'CATATAN'}</span><div>${vzT(q,vzCapS(t.t))}</div></div>`).join('');
+ if(!tips.some(t=>t.k==='jebak')){let jt='';try{jt=vzJebak(q,play,dg,best)}catch(err){jt=''}if(jt)tips.push({k:'jebak',t:jt})}
+ const tipH=tips.slice(0,2).map(t=>`<div class="vz-tip ${t.k}"><span class="tl">${t.k==='trik'?'TRIK CEPAT':t.k==='jebak'?'JEBAKAN':'CATATAN'}</span><div>${vzT(q,vzCapS(t.t))}</div></div>`).join('');
  const st=P.steps.map((s,i)=>`<li><span class="sn">${i+1}</span><div><div>${vzT(q,vzCapS(s.t))}</div>${s.b.length?`<ul>${s.b.map(b=>`<li>${vzT(q,b)}</li>`).join('')}</ul>`:''}</div></li>`).join('');
  return `<div class="vz"><div class="vz-ans"><span class="l">${best}</span><b>${tk?'Jawaban terbaik':'Jawaban'}: ${oh(q,best)}</b>${tk?'<span class="pt">5 poin</span>':''}</div>${dg}${tipH}${st?`<div class="vz-h">${tk?'MENGAPA INI PALING TEPAT':'LANGKAH MENGERJAKAN'}</div><ol class="vz-steps">${st}</ol>`:''}</div>`}
 function detail(q,a){
@@ -2301,6 +2427,12 @@ function vStudy(){
    body=`<p class="small muted">Metode Leitner: kartu yang kamu tandai "hafal" naik tingkat dan muncul lebih jarang. 5–10 menit per hari sudah cukup.</p><div class="gridauto">${DECKS.map(d=>{const m=d.cards.filter((_,i)=>(S.fc[d.id+'|'+i]||0)>=3).length;return `<button class="card stile" data-act="deck" data-v="${d.id}"><span class="dot ${d.sub==='ALL'?'':SUB[d.sub]?SUB[d.sub].cls:''}" style="${d.sub==='ALL'?'background:var(--accent-soft);color:var(--accent)':''}">${ic('cards',20)}</span><span class="mid"><b>${esc(d.t)}</b><span class="xs muted">${d.cards.length} kartu · ${m} dikuasai</span><div class="bar good" style="margin-top:8px"><i style="width:${pct(m,d.cards.length)}%"></i></div></span>${ic('right')}</button>`}).join('')}</div>`}
  return `<div class="page"><h1>Belajar</h1>${tabs}${body}</div>`}
 
+function lessonBrief(id){
+ if(V.from!=='tab'||V.tab!=='program')return '';
+ try{const ci=cInfo();if(!ci)return '';let tk,k,live;
+  if(CU&&cuOk(ci,CU)){tk=cuTasks(ci,CU).tasks;k=CUK(CU);live=!S.cdone[k]}else{tk=dayPlan(ci).tasks;k=dkey();live=true}
+  if(!tk.some(t=>t.type==='lesson'&&t.lid===id))return '';
+  return brief(k,tk,live)}catch(e){return ''}}
 function vLesson(){
  const l=LBY[V.id];if(!l)return '<div class="empty">Materi tidak ditemukan.</div>';
  const blocks=l.blocks.map(b=>`<div class="lb"><h3>${b.h}</h3>${b.p?`<p>${b.p}</p>`:''}${b.ul?`<ul>${b.ul.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}${b.tb?`<div class="tw"><table><tr>${b.tb[0].map(h=>`<th>${h}</th>`).join('')}</tr>${b.tb.slice(1).map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`:''}</div>`).join('');
@@ -2585,7 +2717,7 @@ document.addEventListener('click',e=>{
  case 'finishAsk':Q.sheet=false;finishAsk();break;
  case 'review':RV=v;V={view:'review',tab:V.tab};render();scrollTo(0,0);break;
  case 'rv':RV=v;render();break;
- case 'backres':if(Q&&Q.hist){Q=null;PR='riwayat';V={view:'tab',tab:'prog'};render();scrollTo(0,0);break}V={view:'result',tab:V.tab};render();scrollTo(0,0);break;
+ case 'backres':if(Q&&Q.hist){const bp=Q.back;Q=null;if(bp){PG='hari';V={view:'tab',tab:'program'}}else{PR='riwayat';V={view:'tab',tab:'prog'}}render();scrollTo(0,0);break}V={view:'result',tab:V.tab};render();scrollTo(0,0);break;
  case 'hopen':openHist(+v);break;
  case 'hall':openAll(v,25);break;
  case 'hmore':openAll(Q.hf,Q.hn+25);break;
@@ -2762,6 +2894,7 @@ function vLesson(){
  const sec=lessonSections(l),keys=LS_SECS.filter(([k])=>sec[k]),idx=LESSONS.findIndex(x=>x.id===l.id),nx=LESSONS[idx+1];
  return `<div class="page"><div class="row" style="gap:10px"><button class="btn ghost sm" data-act="back">${ic('left',16)} ${V.from==='q'?'Kembali ke soal':'Kembali'}</button><span class="small muted">Belajar › ${SUB[l.sub].s}</span></div>
  <div><h1 style="font-size:28px">${esc(l.t)}</h1></div>
+ ${lessonBrief(l.id)}
  <nav class="tocm" aria-label="Isi materi">${keys.map(([k,t],i)=>`<a data-act="toc" data-v="${k}" class="${i?'':'on'}">${t}</a>`).join('')}</nav>
  <div class="reader"><nav class="toc" aria-label="Isi materi">${keys.map(([k,t],i)=>`<a data-act="toc" data-v="${k}" class="${i?'':'on'}">${t}</a>`).join('')}<div class="stack" style="margin-top:16px;gap:8px">${l.cats.length?`<button class="btn primary sm" data-act="drill" data-sub="${l.sub}" data-cat="${esc(l.cats[0])}">${ic('pen',15)} Latihan topik ini</button>`:`<button class="btn primary sm" data-act="drill" data-sub="${l.sub}" data-cat="">${ic('pen',15)} Latihan ${l.sub}</button>`}<button class="btn sm ${S.read[l.id]?'':'ghost'}" data-act="read" data-v="${l.id}">${ic('check',15)} ${S.read[l.id]?'Sudah dibaca':'Tandai dibaca'}</button></div></nav>
  <div class="stack" style="gap:26px">${keys.map(([k,t])=>`<section class="lsec" id="ls-${k}" data-k="${k}"><h2>${t}</h2>${sec[k]}</section>`).join('')}
@@ -2862,7 +2995,7 @@ document.addEventListener('click',e=>{
  const a=t.dataset.act,v=t.dataset.v;
  if(a==='sf'){ST.f=v;render()}
  else if(a==='pgtab'){PG=v;render()}
- else if(a==='jd'){const i=+v,ci=cInfo();if(ci&&cuOk(ci,i)&&dayStat(ci,i)==='miss'){cuPin(ci,i);CU=i;PG='hari';V={view:'tab',tab:'program'};render();scrollTo(0,0);return}if(PG!=='jadwal'){PG='jadwal';render()}setTimeout(()=>{const el=document.getElementById('day'+i);if(el){el.open=true;el.scrollIntoView({behavior:'smooth',block:'center'})}},30)}
+ else if(a==='jd'){const i=+v,ci=cInfo();if(ci&&cuOk(ci,i)&&dayStat(ci,i)==='miss'){cuPin(ci,i);CU=i;PG='hari';V={view:'tab',tab:'program'};render();scrollTo(0,0);return}if(ci&&cuOk(ci,i)&&dayStat(ci,i)==='done'){CU=i;PG='hari';V={view:'tab',tab:'program'};render();scrollTo(0,0);return}if(PG!=='jadwal'){PG='jadwal';render()}setTimeout(()=>{const el=document.getElementById('day'+i);if(el){el.open=true;el.scrollIntoView({behavior:'smooth',block:'center'})}},30)}
  else if(a==='prtab'){PR=v;render()}
  else if(a==='px'){PX=v;render()}
  else if(a==='toc'){const el=document.getElementById('ls-'+v);if(el){const y=el.getBoundingClientRect().top+scrollY-(innerWidth<=860?110:80);scrollTo({top:y,behavior:'smooth'})}}

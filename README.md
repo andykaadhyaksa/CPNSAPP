@@ -130,6 +130,22 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Simulasi: soal tabel dibatasi **maksimal 6 per simulasi** (seperti soal figural) supaya TIU tidak didominasi satu jenis soal.
 - Soal lama dan ID tidak berubah. Cache offline naik ke cpns-v16.
 
+## Versi 4.16 — Bahan belajar menyatu dengan Baca materi
+
+- Kartu *Bahan belajar hari ini* kini tampil di dalam halaman materi dari tugas "Baca materi", di atas isi materi baru. Tidak ada lagi kartu atau tombol terpisah di daftar tugas. Hari tanpa tugas materi tetap menampilkan kartunya di daftar tugas.
+
+## Versi 4.15 — Jebakan umum diperbaiki
+
+- Sebelumnya kotak "Jebakan umum" memakai satu kalimat generik per topik, sehingga sering tidak sesuai soal. Sekarang jebakan hanya tampil bila nyambung dengan soalnya, berurutan dari: jebakan tulisan tangan di pembahasan → soal bertipe BUKAN/KECUALI (diingatkan membaca perintahnya) → opsi pengecoh nyata beserta alasannya dari soal itu → kalimat topik, hanya bila kata kunci soalnya cocok. Untuk TKP: opsi skor 4 yang hampir benar beserta kekurangannya.
+- Bila tidak ada yang cocok, kotak jebakan tidak ditampilkan (lebih baik kosong daripada keliru). Bank soal, ID, dan save tidak berubah.
+
+## Versi 4.14 — Tinjau tugas & Bahan belajar harian
+
+- **Tugas yang sudah tercoret tetap bisa dibuka.** Tombol *Tinjau* (soal), *Baca ulang* (materi) atau *Buka* (hafalan) muncul di tugas selesai, di hari ini maupun hari kejar.
+- **Hari-hari lalu yang tuntas bisa dibuka kembali** dari garis hari (angka ✓) atau Jadwal lengkap. Tinjauan bersifat baca-saja dan tidak mengubah progres.
+- **Bahan belajar hari ini:** ringkasan strategi (cara membaca soal, trik cepat, jebakan, tanpa jawaban) untuk topik yang akan muncul. Latihan subtes hari itu diarahkan ±70% ke topik fokus. Fokus tiap hari berganti dan dikunci per tanggal. Tombol *Bahan belajar* ada di baris Baca materi. Kartu ini tidak dihitung dalam n/N tugas.
+- Save lama tetap aman: kunci `siap-cpns-v2` dan ID soal tidak berubah; hanya menambah `cfix[tanggal].sp/.br` di dalam data yang sudah ikut sinkron. Daftar soal tinjauan tersedia untuk 80 sesi terakhir.
+
 ## Versi 4.13 — Pembahasan visual untuk semua soal
 - Setiap pembahasan (di latihan, tinjauan, dan buku kesalahan) kini tersusun sama: **kotak jawaban hijau → diagram → kotak Trik Cepat / Jebakan Umum → langkah bernomor**. Analisis tiap opsi tetap ada di bawahnya.
 - Diagram dipilih otomatis menurut jenis soal (2.460 soal, semuanya mendapat kotak jawaban, kotak trik atau jebakan, dan langkah; 5 soal lama tanpa teks pembahasan hanya mendapat diagram):
