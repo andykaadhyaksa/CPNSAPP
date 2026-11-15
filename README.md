@@ -130,6 +130,15 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Simulasi: soal tabel dibatasi **maksimal 6 per simulasi** (seperti soal figural) supaya TIU tidak didominasi satu jenis soal.
 - Soal lama dan ID tidak berubah. Cache offline naik ke cpns-v16.
 
+## Versi 4.18 — Cetak modul belajar jadi PDF
+
+- Tombol **Cetak PDF** di halaman tiap materi dan di daftar Belajar. Dialog: pilih materi (satu atau banyak), ukuran kertas (A4, A5, B5, F4, Letter, Legal, A3, B4), tegak atau mendatar, subbab yang dicetak, berwarna atau hemat tinta, ukuran huruf, dan kotak Catatanku bergaris.
+- Pratinjau langsung di dalam dialog, lengkap dengan perkiraan jumlah halaman.
+- Hasil cetak: sampul berwarna per subtes dengan logo aplikasi, daftar isi modul, judul subbab bernomor, dan footer ber-logo dengan nomor halaman.
+- Cara simpan: klik **Cetak / simpan PDF**, lalu pilih printer **Simpan sebagai PDF** di jendela cetak browser. Pilihan kertas diingat untuk berikutnya.
+- **Untuk binder:** margin tambahan 15/20/25 mm di sisi binder, bisa bolak-balik (sisi binder bergantian kiri dan kanan).
+- Tidak ada perubahan pada save progres, bank soal, atau ID soal.
+
 ## Versi 4.17 — Ringkasan jawaban di Beranda + materi lebih mendalam
 
 - **Beranda:** kartu *Ringkasan semua jawabanmu* berisi diagram lingkaran benar dan salah (jumlah soal dan persentase), plus rincian benar dan salah per subtes (TWK, TIU, TKP). Dihitung dari semua jawaban yang pernah dikirim; TKP dihitung dari skornya.

@@ -246,6 +246,29 @@ input[type=file]{display:none}
 .ctask .mid{flex:1;min-width:0}.ctask.on b{color:var(--ink2);text-decoration:line-through}
 .acc-top{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.acc-donut{flex:none}.acc-mid{flex:1;min-width:200px}.acc-leg{display:flex;flex-direction:column;gap:10px}.acc-li{display:flex;align-items:center;gap:10px}.acc-li>i{width:12px;height:12px;border-radius:4px;flex:none}.acc-li .mid{display:flex;flex-direction:column}.acc-pc{font-size:24px}.acc-per{flex:1.2;min-width:230px;display:flex;flex-direction:column;gap:12px}.acc-bar{height:8px;border-radius:99px;background:var(--bad);opacity:.9;overflow:hidden;margin-top:6px}.acc-bar i{display:block;height:100%;background:var(--good)}
 .tk2{border-left:3px solid var(--accent);padding:2px 0 2px 12px}.tk2h{display:flex;gap:8px;align-items:center}.tk2h .sn{width:22px;height:22px;font-size:12px;flex:none}.tk2 p{margin:6px 0 6px;line-height:1.65}.tk2c{background:var(--accent-soft);border-radius:10px;padding:8px 10px;font-size:14px;line-height:1.55}.tk2c span{font-weight:700;color:var(--accent);margin-right:6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}.sk{display:flex;flex-direction:column;gap:10px;margin-top:6px}.sk-r{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sk-x,.sk-o{border-radius:10px;padding:9px 11px;font-size:14px;line-height:1.55}.sk-x{background:color-mix(in srgb,var(--bad) 10%,transparent);border:1px solid color-mix(in srgb,var(--bad) 30%,transparent)}.sk-o{background:color-mix(in srgb,var(--good) 10%,transparent);border:1px solid color-mix(in srgb,var(--good) 30%,transparent)}.sk-x span,.sk-o span{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}.sk-x span{color:var(--bad)}.sk-o span{color:var(--good)}@media (max-width:620px){.sk-r{grid-template-columns:1fr}}
+
+.prt-lock{overflow:hidden}
+.pdl-bg{position:fixed;inset:0;z-index:90;background:rgba(16,24,40,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.pdl{background:var(--surface);color:var(--ink);border-radius:16px;width:min(1120px,100%);height:min(800px,100%);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.pdl-hd{display:flex;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}.pdl-hd .iconbtn{margin-left:auto}
+.pdl-bd{flex:1;min-height:0;display:grid;grid-template-columns:minmax(330px,410px) minmax(0,1fr)}
+.pdl-l{overflow:auto;padding:16px 18px 20px;display:flex;flex-direction:column;gap:20px;border-right:1px solid var(--line)}
+.pdl-r{min-width:0;background:var(--soft);display:flex;flex-direction:column;min-height:0;padding:12px;gap:8px}
+.pdl-pv{flex:1;min-height:0;overflow:auto;border-radius:10px;background:#e8ebf1}
+.pdl-pv iframe{border:0;display:block;transform-origin:0 0;background:#e8ebf1}
+.pdl-info{text-align:center}
+.pdl-ft{display:flex;gap:10px;align-items:center;padding:12px 18px;border-top:1px solid var(--line)}
+.pdl-lb{font-weight:700;font-size:13.5px;margin-bottom:9px}
+.pdl-list{max-height:210px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.pdl-g{padding:6px 0}.pdl-g+.pdl-g{border-top:1px solid var(--line)}
+.pdl-gh{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.pdl-chk{display:flex;gap:9px;align-items:center;padding:4px 0;font-size:14px;cursor:pointer}.pdl-chk input{width:17px;height:17px;accent-color:var(--accent);flex:none}
+.ptiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ptile{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px 8px;border:1px solid var(--line);border-radius:11px;background:var(--surface);cursor:pointer;text-align:center}
+.ptile b{font-size:13px}.ptile small{font-size:10.5px;color:var(--ink2);line-height:1.2}
+.ptile .pg{display:block;border:1.5px solid var(--ink2);border-radius:2px;background:var(--soft);margin-bottom:4px}
+.ptile[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:var(--accent-soft)}.ptile[aria-pressed="true"] .pg{border-color:var(--accent);background:var(--surface)}
+@media (max-width:860px){.pdl-bg{padding:0}.pdl{border-radius:0;height:100%}.pdl-bd{grid-template-columns:1fr;overflow:auto;display:block}.pdl-l{overflow:visible;border-right:0}.pdl-r{height:420px}.ptiles{grid-template-columns:repeat(4,1fr)}.pdl-ft .ghost{display:none}}
 .btb{padding:4px 2px 8px}.bt{border-bottom:1px solid var(--line)}.bt:last-of-type{border-bottom:0}.bt>summary{display:flex;gap:10px;align-items:center;padding:10px 0;cursor:pointer;list-style:none}.bt>summary::-webkit-details-marker{display:none}.bt>summary .mid{flex:1;min-width:0;display:flex;flex-direction:column}.bt-bar{flex:none;width:54px;height:6px;border-radius:99px;background:var(--line);overflow:hidden;display:block}.bt-bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
 .ctask>.row .btn svg{vertical-align:-3px}
 @media (max-width:520px){.ctask{flex-wrap:wrap}.ctask .mid{flex-basis:calc(100% - 40px)}.ctask>.row{margin-left:36px}}
@@ -2876,7 +2899,7 @@ function vStudy(){
  if(ST.tab==='materi'){
   const f=ST.f||'ALL',cs=catStat();
   const ls=LESSONS.filter(l=>f==='ALL'||l.sub===f);
-  body=`<div class="row between wrapx"><div class="chips">${['ALL',...SUBS].map(s=>`<button class="chip" data-act="sf" data-v="${s}" aria-pressed="${f===s}">${s==='ALL'?'Semua':s}</button>`).join('')}</div><span class="small muted">${lessonsDone()} dari ${LESSONS.length} materi dibaca</span></div>
+  body=`<div class="row between wrapx"><div class="chips">${['ALL',...SUBS].map(s=>`<button class="chip" data-act="sf" data-v="${s}" aria-pressed="${f===s}">${s==='ALL'?'Semua':s}</button>`).join('')}</div><span class="row" style="gap:12px"><span class="small muted">${lessonsDone()} dari ${LESSONS.length} materi dibaca</span><button class="btn sm" data-act="prtList">${ic('print',16)} Cetak PDF</button></span></div>
   <div class="bar good"><i style="width:${pct(lessonsDone(),LESSONS.length)}%"></i></div>
   <div class="gridauto">${ls.map(l=>{const c=cs.find(x=>l.cats.includes(x.cat)&&x.n>0),X=LX[l.id]||{};return `<button class="card lcard" data-act="lesson" data-v="${l.id}"><span class="dot ${S.read[l.id]?'read':SUB[l.sub].cls}">${S.read[l.id]?ic('check',20):l.sub}</span><span class="mid"><b>${esc(l.t)}</b><p>${esc(l.d)}</p><span class="tags"><span class="pill">±${l.min} menit</span>${X.hafal?'<span class="pill warn">Trik menghafal</span>':''}${LDEEP[l.id]?'<span class="pill good">Pendalaman</span>':''}${(l.ex||[]).length?'<span class="pill acc">'+l.ex.length+' contoh</span>':''}${c?`<span class="pill ${c.acc>=.75?'good':c.acc<.5?'bad':'warn'}">akurasi ${Math.round(c.acc*100)}%</span>`:''}</span></span></button>`}).join('')}</div>`}
  else if(ST.tab==='hafalan'){
@@ -3288,13 +3311,180 @@ if(l.sub==='TIU') Object.keys(out).forEach(k=>{if(typeof out[k]==='string')out[k
 function vLesson(){
  const l=LBY[V.id];if(!l)return '<div class="page"><div class="empty">Materi tidak ditemukan.</div></div>';
  const sec=lessonSections(l),keys=LS_SECS.filter(([k])=>sec[k]),idx=LESSONS.findIndex(x=>x.id===l.id),nx=LESSONS[idx+1];
- return `<div class="page"><div class="row" style="gap:10px"><button class="btn ghost sm" data-act="back">${ic('left',16)} ${V.from==='q'?'Kembali ke soal':'Kembali'}</button><span class="small muted">Belajar › ${SUB[l.sub].s}</span></div>
+ return `<div class="page"><div class="row" style="gap:10px"><button class="btn ghost sm" data-act="back">${ic('left',16)} ${V.from==='q'?'Kembali ke soal':'Kembali'}</button><span class="small muted">Belajar › ${SUB[l.sub].s}</span><button class="btn sm" style="margin-left:auto" data-act="prtOne" data-v="${l.id}">${ic('print',16)} Cetak PDF</button></div>
  <div><h1 style="font-size:28px">${esc(l.t)}</h1></div>
  ${lessonBrief(l.id)}
  <nav class="tocm" aria-label="Isi materi">${keys.map(([k,t],i)=>`<a data-act="toc" data-v="${k}" class="${i?'':'on'}">${t}</a>`).join('')}</nav>
  <div class="reader"><nav class="toc" aria-label="Isi materi">${keys.map(([k,t],i)=>`<a data-act="toc" data-v="${k}" class="${i?'':'on'}">${t}</a>`).join('')}<div class="stack" style="margin-top:16px;gap:8px">${l.cats.length?`<button class="btn primary sm" data-act="drill" data-sub="${l.sub}" data-cat="${esc(l.cats[0])}">${ic('pen',15)} Latihan topik ini</button>`:`<button class="btn primary sm" data-act="drill" data-sub="${l.sub}" data-cat="">${ic('pen',15)} Latihan ${l.sub}</button>`}<button class="btn sm ${S.read[l.id]?'':'ghost'}" data-act="read" data-v="${l.id}">${ic('check',15)} ${S.read[l.id]?'Sudah dibaca':'Tandai dibaca'}</button></div></nav>
  <div class="stack" style="gap:26px">${keys.map(([k,t])=>`<section class="lsec" id="ls-${k}" data-k="${k}"><h2>${t}</h2>${sec[k]}</section>`).join('')}
  <div class="card row between wrapx"><div class="mid"><b>Selesai membaca?</b><div class="small muted">Kunci pemahaman dengan latihan soal topik ini.</div></div><div class="row wrapx"><button class="btn primary" data-act="drill" data-sub="${l.sub}" data-cat="${esc(l.cats[0]||'')}">Latihan sekarang</button><button class="btn ${S.read[l.id]?'':'ghost'}" data-act="read" data-v="${l.id}">${S.read[l.id]?'Sudah dibaca':'Tandai dibaca'}</button>${nx?`<button class="btn ghost" data-act="lesson" data-v="${nx.id}">Materi berikutnya ${ic('arrow',16)}</button>`:''}</div></div></div></div></div>`}
+/* ===================== v4.18: CETAK MODUL PDF ===================== */
+IC.print='<path d="M7 9V3h10v6"/><path d="M7 17H5a2 2 0 01-2-2v-4a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2h-2"/><path d="M7 14h10v7H7z"/>';
+var PRT_LOGO='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAXrUlEQVR42u1daXRcxZX+blW997pbLdmysY1jDEZg4THgYDsQBsKShIFAYAgQYRuYsITMwQwQMpDlkAFjliRngEyGJSQzk7BMABsFSJiwZAIEGDAOYGOwMbZl5CUsxou8SC31W6ru/Kh+3a3VsmLZkvLuOX2kI3X3e6++uvd+d6kqQl9lDgssB6GedPyn2pn+FLD+NEtvOhlzBAjjjAn3JaIsWDNAhEQAMIMkMXOLEM4GMD5kIZaQ9heB5Nur5nnvFN9axxKTwZhLpi9Xoj4BCyC+YO2F+UnQ6kxo/WWSchKzHEUEwBiw0WDWAEyCaZciQCRBQgJCgBkg0ptY6xWQ8inI6LerHkit6Grc+wfgE1jhJYoAoPbc1mNZObPB5ivScSvYACZqA9hoBkDMBIBARH2ZR38lmgwwMwBmIiYAICGFSoMEoMMgBxK/oSi8d9WjmVc7YrAbAS7MHpCZeF5bDZF7PUHPhHBSJmgDs9Zkra9IzPBuMN+AYWYQSSncNGDCPEPOYw5ubng43ViOx85tRK9MMhmATO2sYLYQzgIS4iITBSkdtESAYSIhAZIJuLtDiACSdkwN66AlMlGQIiEuEsJZUDsrmB3jUTTbfdbgOawwl6Kasz4erbzR/06OmMlhHsZEmkgIJLZ3z6k1GyOEkuSkwKGZF/kbv9n4xNiNMUa7DnAdS9STnnj2thqRydYTyWmR36wJJEAiAXavwGyYwUZ5lZJZLzatLXUNjw9vjLHqPcCFDxx0fss0KSrmkcFEHTZHRFIlozwQ1FlH0qlULNCgTW7m+w9lF3cHMnVNqMjU1m09kLyq5xioMUFrAVxORndg+Gkw60i4GUVAI/s7TlpVX70mxq57gAtOu+adln2citQzzHKaCVsjIpGAOyBBNpFwMopILw5z+VMbp2Q3d4yV27Ow5SDMJSM9504iNc2EuYiIEnAHaAxNRMpipKZJz7kTc8lgeXulLQJcV7DhtbPaLpeON0P7LQXNTWRgB1VCab8lko43o3ZW2+WoJ11Xx7K9iZ7DAnPBB8zIH+BJ9SYbXQ0TAUQiGcJBwboMhAIJudXX0WfWzU+twxxrjUXRNIPYJdwkpBrJJuAE3MGlxmwCFlKNdAk3AcSxqaa6Opb19aQPPjd3tFDq/4yOBPUmw5XIQMxsGyGVMVF03OpHKxbW1bEU9fZfJKS8UkhXASZhVINWDAvpKiHllQBTfeyDD5yRr1WCFoF1Bdgk1Z/BrMMkGCRzkeHpa+anVgkAcIQ5Wzpulk1kEnAHeWxsIiMdN+sIc7YNk05gBYjTWIMTXjUk+BZYgwFxGk5gJWpGNE1iEpON9gkJuRoKIoz2iUlMrhnRNElIz5tOJEfChCap5w6RerIJDZEcKT1vumByphMJMCX5yCFDtci6WyZnuhCgw9loECfaO2R0mInYaAjQ4cIwDoDRFvdEho4OGw3DOECBw1Fse+USgIeOGyZmA8CMEkQia/uWE3yHUjwMGBCJrAAnTelDuIcriXuH/tqJRBKAE0kATiQBOJEE4EQSgBNJAE4kATgBOJEE4EQSgBPZ67JX1h4JAXS3hJzZdmYz9+57uipyMgOmFzUUQfY7uruU0aX/UeG96O3eKoX76M1zDAmAiQApgEgDuTwQhgzDpSIlF4pcShJSHuApW8TsDigiINcGRLrzCCpFyHg9D64QQD4A/IC7nWiZFEEVdh4JQiAfcO92tSGCIMBR9qWk/T5thijAMbDbmhlVFYQpNQK1+wvsP4YwoooKYDE+2sxo+IDx3jqNDZsZaY+QSdnPdhRtgOmHCIwcRsWJwgWt3LyNsWyNgepGO6UEcq1AzX6Egz8loTu0G2oGMi7w5gqDpmb7DeNHEyaOl+0mZXcSRkBzK2PjNsbGJsaWFobjANmUfdY9CXS/A6wksD3HGJYl/NM5Dk4/RmFqreixf3P9J4zn3ohw31MhGj5gVFdSu0EhAoKAcc15Do6bIjt9/vk3I1xwk4/hWeo0mFIArXnGp0YRHrohhXGjur6R597UeH6RD9cBmrYzPj9dYe7X3V169m0tjMYPGYtWGjyzMMLr7xkQAZXpriftoANYSWBrC3Ds4QK3/qOHQ/YXRXNsTNfaRQTsP4ZwyekOzjlR4Zb7A/zqDxGGVVAnc+0H1vRF2gKnjb1mW9C9zw014EjCnd/yMG4UQWsg7vc3GlAKWLzC4LLbfGgNuKqkleXX2tm+RQRgeJYw7RDCtEMELjxN4cW3NP5tXoi3VmpUD6N2Pn7QsWgprEn+0lESD/5LCofsLxBpCyyVES0qDEbsowXZgQw1MCxLuO0KD7O/4mB7C0PKzoDF5Cd+EXVP4IiAljbGDy9zcdTfSAuWLLyfLbgfbmJc/mMfYQSk3dJSPOriWl2+qHRfMdmLChPl5CMl6m9J4aLTHGxrZuyJhSSiv1hyax6YOF7gjis9ZFJU1C4hSky53YAVQIn/7kj7uzHA9y90ceJUie05hpJ9tyabtzOu/KqLui8oRBrF72IukbYrfuxj/QaDihQQmr6x5phQGbbPFl9HGyCbBn50uYsrzrEgSzkIASYAQcS4+lwHI6o6m7VYyz7YxHhtmcbLb2usWm8Q6YIGl2kos/3sN+tcuNJOlF1tD3SU9aNnHKvwvfMd6ILmlhZd2nv67s98vLpUo7qKEOreX0cbQOsSqLE1kmWTObZqMfjXXejijM8pbGvu+6TdKz6YyIYfE8YSvjBdFQEq7sIIS7rm/jLAsws1cr7djNZzgENrBG7+hovDDxJFZksF3zp9ksChNQLvrDbIpneR5LUwDq0RuP0KF0IWVlkW/h9r8h2PhJj/XIRR1YQw2jm4cVi3tZlx7d0Bmnaw9dcEVKSBCfsKHDVZ4u+OlEVgYzMfu6Wbvu7izfcMtucYjuqfmHm3a7AgwA8Zh+wvUFlRAh0FYkUE/OyJCP/1PxG0AdIekEkDQgKvLNW4/A4fLW1c9MeioA2OAo44WCAI2SYceCfbecb3EgDDKgn3XONhRBUV7wGwWqck8OsXI9z+SIh9hlnS1VuzDNj4+M0VGq8u1ViwTOOVdzSeeU3jnsdCXPKDPM75fh6rPzBFnxzflzbA2H0IF5wii887aDRYa2BklSg+iKT2DHPFeoOqCiDlWm2PsRpTTVj3MePh/9U4+jABP7A+zBhLUsKo4LN2MtMjU8LADxl3/XMKkw6wViEeSG2smf7Tco3v/DRARbpvmScb9hByGWuFTEG140d+bZnGhbf4eOzWFMaMoKImx+7nq5938IvfaQSaIWn3a7Hqr77rIOJOO63Fv591vMTTr0Vo2sFIpwiqwH6Nsdr8o18FXaBos0OVGbIA9mBDowiQgqz5nOXitL+V7UiVKQC99mPG5bf7MJrhedTnBIQ2pZfpcNujhxNWrje494kQcy91SxO+wNz3G02YWivwx8U2FNQ8wE00s9W2tR8b68vKSVPBF515nMKvbkjhyMnWP21tsQy3uY0RaWu2PZfgKIJS8c/S53ujVVubGScdqXD1DMcy+DIeIITNNM2+3ceGJiCTpn7LLoURUFVB+P3rEbbs4JI/jq2IAD4zyYaQ/bF4aLdrsDZAxiO8u4axcr3BYTXC+j1RGnxm4OSjJE4+SmL5WoNljQZL3zd4e7XG+x8wtuxgCBCyFXa27+rgt+aBfYYRfnSZWxxQUMkEt7Qxrr3bx6KVGqOGWVKFftsWxfKHjzcz1nxkMLLKpjsllQCtGSegJPULyeoXEy0l0NzGuGNeiPuu88Bls7Xop431Q5MnCEyeIHDuFwA/BDY2MRYss6m9l5dEyAVAVXYXyA+ArS2Ma893MG4UdYp3hbA55sde1Nh3BMEP+3/ZuyWewJ8/YXxmUmeXtU8Vlfz3YIiDIw0MqyA8uzDCjb8MijGhLmSy4tCJyD6U1vblOcD4MYQZX5S4//se6m9O4cRpElt3MHpz8kOsrSceIfG1Uxx7Hdk+AWMYOOYwiTOPU9iyw4Yne6KSZthOvK7SmhVpm0VjHkSpSm1sqvHnT4S4+Ad5LF9rbFpQlMx0pEtaJcu0LCYs0ydJPDQnhW/NdNDcil6l9oiAww8SGJYtaWbHgfNc4PqLXYwaTvCDPbNxBRXCsm7r2ij55kHT0WEMMLyS8OxCjXOuy+Nbd/p4YZHG1markUqWNLm8XlrU+ALQ3z3fxaVnKGxr6V1qj+PUYVmeu9xcagNM2Jfw3QtcG4PuoZWzmRR1G0vHLosHSzWpPHAfWSAyjz4fof4FjXGjgckTJKZOFJh8oMChEwTG7kPFgY6BKU/1fed8By8v0Vi7gZF2e46F4wkT15lzeWB0dSkGjd3FjC8q/OENjd//KUJ1JfVbCY/ZTuZ9R6DbsmIQMlRq9yOs+uuBmlu5U1pPKULKBTZuBdZ/EuGpV625HD1cYNIEwt8fp3Dm5yRSLrVL7RkDZNOEs45XuPXBANkU7fT6xljTd9VPAmhm3H9dqshe7fFE9vc5lzh4c4VG3rduYnf7QSLriqoqCBPGinbkKr7WR5sZQUTICuwSmdwrABtjM1RTDpadUoqGgZXrDZiBdJaKf9uWY7z0lsGzCzWeelXhnmtcZNMlkOPBOHKygOcUYlbqGWApgVseCPC7BRGUJDy1IMKXj1FF4GNTfeBYge9d4OKau32MrNr9WiyFDcuOOUxi/zGiyDnKU7hL39d2g+9+2GVB7fbZamzu977rUqiqQKmdpvBgZ34vj8WrDLIp+14qFATcDGF4Fnj6tQgvLFI48zhZzPrEfnRklbUApoeKUnydn/8mxJ31IUYNJ+TywK0Phjh2iireU5znNgY472SF378e4bk3DKorsUuVpJ31oBm2mbVLz1BwVCkfzwVy1dIGvL7c2OcaDCw6rt5s3GraUcj43k/7W4kdOQMhAFeWCu5xKKEkOlWLuMw6cA9HXMYVqNeXG9z8QFD0qxkPWP2BwR2PBMUccFGDCte+8RIPI6os4RHUhy7RAjGMowRt7Dg07WB853wXp3xWFevDKGsmXLBUY/UHBhmPetUJulcBjsnE1mbg/Q/Zstm4g6MA4EWnOrj0dAebt9uH39YMbGsBmpptk9rMkxSOP0K2KzPG371hK6PN77nVFQA2NBlb8xWlcGxEJeHBZ0MsfFdbzTIlVm0McNA4wrfPc9HcuouVHbaNAi2tQHOr/d0PgLRLOHaKxIPXp3DNLBuTiw5hmzbAL38XYlD1ZAkCoojx/KIIp3xWlnqUqBSD3nGlhzM+p/DCIo0NW2z77D7DCCdMlTjls7JLDSICFi7TCDXbHZ+45wI/dYh/Y6266b4Qj/9AwnPQnlUb4MJTVaHZTqM623NjXPw8wysJP73Wgx9y0RJVpIFPjRQYM5KKE7v8mSJt7/HRFyK8vMRgWLb/cuH9kouuqiA8+YrGN84wmDheFDsoynugT5wqceJU2atcLpENJZ58JUJFqmDKaOdxcKf7yhDeWKHxH78NcVWd0642HDP2ORc7WLxSI4hKBYqexHWAYw4X3ZaMy1O0XEh2OAp4e7XB3F8EyKT7dwv2fqkmKWXDpOt+HsAPLLhR1GEXJ9O+zKZN5yZ3XWZG//WhEGs+ZqS9vg+INrbT8Z7HQqxYb4q15qLlMbaP7NvnOdiRY/R2JYMxnV9xVqq8TQcFF7akweDrP/SRy9veM+ZB1pOlC7noV94xuPwOHztyDKXsA8ZggkpMNn6B2oMtCym82x4OcP/TIYZn24cxhjtPkq4mSkeO0NzGuOX+0IJR9h0EW9674BQHn58qbXlPto+tu7penDUrf8XfG1sJKex3P/BMiPNuzGPzNjtZ+7sJvt8yWZEGqitt2NP4kcHVM1ycdrTsMblPHToE/vSuwV2PhXjujQjDs51ZZsYrpTXLs2eZVPcuWmurxX94I8L8FyRmnaS6zMD95GoPp1+bR3ObVUXHseTO7YNKNO1gvLjE4KFnQyxYplGRpj0Cbr83vluQCY0fMWbflsfhB0mccITA0YdKjB9NyGYIriple3J5YNM2g8UrDV56y+D19zTafEZ1VedyoSBgyWqG52rkgxJLT7nA0vdtpyLvpGb943khRlQShmXRzh8bA2QzhOOnCTz2xwieA3y00eCN93SxiaEnFxWEtuFg/SeMd9caLF1tsG6DgZAortLYU8tXaOKMHGMPrCYkWADzAcORhMoMUJmxnRui0OLT3AY050rvqUiXGG5X4odd/08JS3560zvWFnSd5Ge2FkKUhVpBiF61WzK4aM6lAFKuTdCU84o9JXsE4I7LRuMB07r9ygFZKBu2IyY7OyubujlAqJetPURlyfIulo+WL0XZlZUIcfaNyxI0GOrrg42xS0JjsGX5GeJlqwN6mw/+S9fftvs893y6MgODct9WtfeO2yuMKSORoQhwX5L3GFDnQSYA7zZgCXtndXxPixo6LsdJAO7rKglju0EyKdY8gHauafVJCgE4kgc0yGpAb0qvAdcx5saLnTVHThbNfgiStLePfwQ8V5j3P9Tp6/9TH9i0g73+Wjg2pAEWgjnnS7rsLPnnC77kfATAGUCUjGrHi5ZcG8S1d/NEAhMnGrzrJIYA7DeGfAAi50M6cmAArDUo7YEnjBV5KQf2gbxqIHtgKYAHntZjTz5Sba+uRDBgjoZRgO9D3PXraFykQc4ABnmPZrL60jzQGgjsN4rzh4wXLZHZ++ejGgBKMq/fYDKrP6RMyjUJyfpLCE3GNdiwhVLrPuHUQDlekWHruGnXDPjz0tXAP7QccBTDcwbWUDKDzCA4DXBQZLKYAZ0cnpnsNptIAnACcCIJwIkkACeSAJxIAnAiCcCJJAAnACcypAGmBOMhKyQgmE2LVeSkf3XoCAMQYDYtAuRsIhIAc4LwkMGXmUgA5GwSgrDOboNOCcBDxzYzhIQgrBMGvJSEBFOiwUNGgYmZhIQBLxXE4SJmA2Ik9daho79kMQ0XCe37i5j1FghHDJ4FGYn02B4hHMGst2jfXyQam0asIDbLhfQYpcV/iQxeMUJ6TGyWNzaNWCHwEkWAeZqkVetEBrv+GpAEAeZpvESRAIDQiMd1GLSQUCKJhwd3/EtCCR0GLaERjwOAQB3LNfO9BgI/KZ00MVgnAzVY4WUtnTQR+Mk1870G1LEUdQXeZbS+y+gg2vWdGhPBAFoqYHQQGa3vAojriktB6liinvTEmW0PSif1D5HfrIn6+9jERHav79VaeZVSh/n/bpiX/lqMqa00TAYDTAHjBqOjLSRcQsK4BhWzIuGS0dGWgHEDwGQxjcuFc8nU1UGsm59eC45ukI4nBueWI3+1CBvpeAIc3bBufnptXR0E5pJBp9V6RVOdnycdb0bkt0REQiUDOKCVN1JeVunQn98wLzUzxrDrgv9kMOaw0H54FXO0WDgVipkjJFlMDMQ9EJg5shhFi7UfXoU5LGLT3MVOUMU5IQAytXVbDySv6jkGakzQGhFJlcTIAwlcHQk3owhoZH/HSavqq9fE2O2kZYcM6liuqq9eE3FbHUg0SCermKMoGdiBYpajSDpZBRINEbfVraqvXoM6lh3BRY8r5mN/fPa2GpHJ1hPJaZHfrAkkQEmsvJe4FDPYKK9SMuvFprWlruHx4Y0d/W7vmu7qSWMOq4bHhzeGuU2nmtDMk16lJKGI2eikx2dP92gYTUKR9CqlCc28MLfp1IbHhzdiDqvuwEWv9ryYw0XKXTsrmE1SzAHJMSbIgcERgeTA24duCOEK1gRSwq0AWH/C2sxd9Yh7b0ds+g5wkXhZ/zzxvLYaIvd6gp4J4aRM0AZmrcliLBKwd8smiYaZQSSlcNOACfMMOY85uLnh4XRjOR692W+s93ICK1teBGrPbT2WlTMbbL4iHbeCDWCiNoCNZgDEbDfpp94cDPtX3P1omx2ZieyGECSkUGmQAHQY5EDiNxSF9656NPNqRwx6u6HcrskcLma/AKD2wvwkaHUmtP4ySTmJWY6iwqkbbDSYddJHgB7a0kmChD131x7zozex1isg5VOQ0W9XPZBa0dW49x/A5UAvB5U7+NqZ/hSw/jRLbzoZcwQI44wJ9yWiLFhzYr7Lt3CRxMwtQjgbwPiQhVhC2l8Ekm+vmue90y6amQzeVWBj+X+wvIzLwc0hwAAAAABJRU5ErkJggg==';
+var PRT_PAPER={A4:{n:'A4',w:210,h:297,m:15},A5:{n:'A5',w:148,h:210,m:11},B5:{n:'B5',w:176,h:250,m:13},F4:{n:'F4',w:215,h:330,m:15},LT:{n:'Letter',w:216,h:279,m:15},LG:{n:'Legal',w:216,h:356,m:15},A3:{n:'A3',w:297,h:420,m:18},B4:{n:'B4',w:250,h:353,m:16}};
+var PRT_PK='siap-cpns-print-v1';
+var PRT={open:false,ids:[],paper:'A4',ori:'p',fs:1,bw:false,notes:true,off:[],bind:false,gut:20,dup:false};
+(function(){try{const p=JSON.parse(localStorage.getItem(PRT_PK)||'{}');['paper','ori','fs','bw','notes','off','bind','gut','dup'].forEach(k=>{if(p[k]!==undefined)PRT[k]=p[k]});if(!PRT_PAPER[PRT.paper])PRT.paper='A4'}catch(e){}})();
+function prtSave(){try{localStorage.setItem(PRT_PK,JSON.stringify({paper:PRT.paper,ori:PRT.ori,fs:PRT.fs,bw:PRT.bw,notes:PRT.notes,off:PRT.off,bind:PRT.bind,gut:PRT.gut,dup:PRT.dup}))}catch(e){}}
+var PRT_ICO={ring:'book',materi:'book',dalam:'compass',cara:'list',kunci:'bulb',trik2:'bulb',hafal:'heart',contoh:'pen',salah:'alert',jbk:'alert',coba:'pen'};
+var PRT_COL={TWK:['#D93636','#9F1D1D','#FCECEC'],TIU:['#1D5FD0','#123F8F','#E9F0FC'],TKP:['#0E9F6E','#0A6E4D','#E3F5EE']};
+function prtCoba(l){
+ const ex=l.ex||[];if(!ex.length)return '';
+ const F=l.sub==='TIU'?fmH:(x=>x);
+ const q=ex.map((x,k)=>`<div class="pd-q"><div class="pd-qh"><span class="sn">${k+1}</span><div class="pd-qt">${F(x.q)}</div></div>${x.svg?`<div class="qfig">${x.svg}</div>`:''}<div class="pd-o${x.oi?' fo':''}">${x.o.map((o,i)=>`<div><span class="l">${'ABCDE'[i]}</span><span>${x.oi?`<span class="ofig">${x.oi[i]}</span>`:F(o)}</span></div>`).join('')}</div></div>`).join('');
+ const key=ex.map((x,k)=>`<li><b>${k+1}.</b> ${x.s?`Skor opsi: ${x.s.map((v,i)=>`${'ABCDE'[i]}=${v}`).join(', ')}`:`<b>${'ABCDE'[x.a]}</b>`}${x.e?` · ${F(x.e)}`:''}</li>`).join('');
+ return `${q}<div class="pd-key"><h3>${ic('check',16)} Kunci dan pembahasan</h3><ul>${key}</ul></div>`}
+function prtSecs(l){const sec=lessonSections(l);if(l.ex&&l.ex.length)sec.coba='1';else delete sec.coba;return LS_SECS.filter(([k])=>sec[k]).map(([k,t])=>({k,t,h:k==='coba'?prtCoba(l):sec[k]}))}
+function prtAvail(){const m=new Map();PRT.ids.map(id=>LBY[id]).filter(Boolean).forEach(l=>prtSecs(l).forEach(s=>m.set(s.k,s.t)));return LS_SECS.filter(([k])=>m.has(k)).map(([k])=>[k,m.get(k)==='Coba sendiri'?'Latihan mandiri':m.get(k)])}
+function prtDoc(){
+ const P=PRT_PAPER[PRT.paper],land=PRT.ori==='l',W=land?P.h:P.w,H=land?P.w:P.h,m=P.m,
+  zoom=+(10.5*Math.pow(Math.min(P.w,P.h)/210,.6)*PRT.fs*96/72/15).toFixed(3),
+  css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n'),
+  tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}),
+  ls=PRT.ids.map(id=>LBY[id]).filter(Boolean);
+ const body=ls.map((l,li)=>{
+  const c=PRT_COL[l.sub]||PRT_COL.TIU,secs=prtSecs(l).filter(s=>!PRT.off.includes(s.k)),nq=BANK.filter(q=>(l.cats||[]).includes(q.cat)).length;
+  const toc=secs.map((s,i)=>`<span><i>${i+1}</i>${s.k==='coba'?'Latihan mandiri':s.t}</span>`).join('');
+  return `<section class="pd-les" style="--ac:${c[0]};--ac2:${c[1]};--accent:${c[0]};--accent-soft:${c[2]}">
+  <header class="pd-cover"><div class="pd-top"><img class="pd-logo" src="${PRT_LOGO}" alt="Siap CPNS"><div class="pd-brand"><b>Siap CPNS</b><small>Catatan belajar SKD</small></div><span class="pd-tag">${l.sub} · ${SUB[l.sub].n}</span></div>
+  <h1>${esc(l.t)}</h1><p>${esc(l.d)}</p><div class="pd-meta"><span>${ic('play',13)} ±${l.min} menit baca</span>${nq?`<span>${ic('pen',13)} ${nq} soal latihan di aplikasi</span>`:''}<span>${ic('list',13)} ${secs.length} subbab</span></div></header>
+  <div class="pd-toc"><b>Isi modul</b>${toc}</div>
+  ${secs.map((s,i)=>`<section class="pd-sec s-${s.k}"><div class="pd-h"><span class="pd-n">${i+1}</span><h2>${s.k==='coba'?'Latihan mandiri':s.t}</h2></div><div class="pd-b">${s.h}</div></section>`).join('')}
+  ${PRT.notes&&(li===ls.length-1||ls.length===1)?`<section class="pd-sec"><div class="pd-h"><span class="pd-n">${ic('pen',15)}</span><h2>Catatanku</h2></div><div class="pd-notes"></div></section>`:''}</section>`}).join('');
+ const g=PRT.bind?PRT.gut:0,bm=m+8,fb=m+4,nw=W<170,ft=ls.length===1&&!nw?' · '+ls[0].t.slice(0,60).replace(/["\\\n]/g,' '):'',LOGOSVG='data:image/svg+xml,'+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='"+((PRT_COL[(ls[0]||{}).sub]||PRT_COL.TIU)[0])+"'/><text x='16' y='19.5' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='10.5' fill='white' text-anchor='middle'>SKD</text><rect x='9' y='23' width='14' height='1.6' fill='white'/></svg>");
+ return `<!doctype html><html lang="id"><head><meta charset="utf-8"><title>${ls.length===1?esc(ls[0].t)+' · ':''}Siap CPNS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>${css}</style><style>
+@page{size:${W}mm ${H}mm;margin:${m}mm ${m}mm ${bm}mm ${m+g}mm;@bottom-left{content:url("${LOGOSVG}") "  Siap CPNS · Catatan belajar SKD${ft}";font:600 7.5pt Inter,system-ui,sans-serif;color:#6B7280;vertical-align:middle;white-space:nowrap}@bottom-right{content:"${nw?'':'Dicetak '+tgl+'  ·  '}Hal. " counter(page);font:600 7.5pt Inter,system-ui,sans-serif;color:#6B7280;vertical-align:middle;white-space:nowrap}}
+${g&&PRT.dup?`@page:left{margin-left:${m}mm;margin-right:${m+g}mm}@page:right{margin-left:${m+g}mm;margin-right:${m}mm}`:''}
+html,body{background:#fff;height:auto}
+body{margin:0;padding:0;color:#111827;font-family:var(--font);font-size:15px;line-height:1.55;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pd-z{zoom:${zoom}}
+.pd-les{display:block}.pd-les+.pd-les{break-before:page;page-break-before:always}
+.pd-cover{position:relative;overflow:hidden;border-radius:18px;padding:20px 24px 18px;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));break-inside:avoid}
+.pd-cover:before{content:"";position:absolute;right:-50px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.12)}
+.pd-cover:after{content:"";position:absolute;right:50px;bottom:-90px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.08)}
+.pd-top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.pd-logo{width:38px;height:38px;border-radius:10px;display:block;box-shadow:0 0 0 2px rgba(255,255,255,.55)}
+.pd-brand b{display:block;font-size:15px;font-weight:800;line-height:1.1}.pd-brand small{display:block;font-size:11px;opacity:.85;margin-top:1px}
+.pd-tag{margin-left:auto;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.45);border-radius:99px;padding:3px 12px;font-size:11.5px;font-weight:700;letter-spacing:.02em}
+.pd-cover h1{position:relative;z-index:1;color:#fff;font-size:27px;line-height:1.2;margin:16px 0 6px;letter-spacing:-.02em}
+.pd-cover p{position:relative;z-index:1;font-size:13.5px;opacity:.92;max-width:92%}
+.pd-meta{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pd-meta span{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 11px;font-size:11.5px;font-weight:600}
+.pd-toc{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:12px 0 4px;padding:10px 14px;border:1px dashed #cbd2dd;border-radius:12px;break-inside:avoid}
+.pd-toc b{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:#6B7280;margin-right:4px}
+.pd-toc span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;background:var(--accent-soft);color:var(--ac);border-radius:99px;padding:2px 10px 2px 3px}
+.pd-toc i{font-style:normal;width:18px;height:18px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-size:10.5px;font-weight:800}
+.pd-sec{margin-top:18px}
+.pd-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;break-after:avoid;page-break-after:avoid}
+.pd-n{min-width:27px;height:27px;border-radius:9px;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;padding:0 4px}.pd-n .ic{stroke:#fff}
+.pd-h h2{font-size:16px;font-weight:800;letter-spacing:-.01em;text-transform:none;color:#111827;white-space:nowrap}
+.pd-h:after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--ac),transparent);opacity:.35}
+.pd-b{display:grid;gap:10px}.pd-b>div[style*="height:12px"]{display:none}
+.pd-b>*{break-inside:avoid;page-break-inside:avoid;min-width:0}
+.pd-b .card{box-shadow:none;padding:12px 15px;border:1px solid #dfe4ec;border-radius:12px;background:#fff}
+.pd-b .card.flat{background:var(--accent-soft);border:0;border-left:4px solid var(--ac);border-radius:4px 12px 12px 4px}
+.pd-b .card.flat .pill{background:#fff}
+.pd-b .lb h3{font-size:14.5px;color:var(--ac);display:flex;align-items:center;gap:7px}
+.pd-b .lb li,.pd-b .keybox li,.pd-b .memo li,.pd-b .jbk li{margin:0}.pd-b .lb ul,.pd-b .keybox ul,.pd-b .memo ul,.pd-b .jbk ul{display:grid;gap:6px;margin:6px 0 0 18px;padding:0}.pd-b .keybox ul,.pd-b .memo ul,.pd-b .jbk ul{margin-left:4px;padding-left:16px}
+.pd-b .tw{overflow:visible}.pd-b table{font-size:13px}
+.pd-b th{background:var(--accent-soft);color:#374151;border-bottom:1.5px solid var(--ac)}
+.pd-b tr:nth-child(even) td{background:#fafbfc}
+.pd-b .keybox,.pd-b .memo,.pd-b .jbk{padding:13px 16px}
+.pd-b .keybox h3,.pd-b .memo h3,.pd-b .jbk h3{display:flex;align-items:center;gap:7px}
+.pd-b .wex{border-left:4px solid var(--good);background:#fff}
+.pd-b .stack{display:grid;gap:10px}
+.pd-b .steps{display:grid;gap:9px}
+.pd-b .tk2,.pd-b .sk-r{break-inside:avoid}
+.pd-q{border:1px solid #dfe4ec;border-radius:12px;padding:12px 15px;background:#fff}
+.pd-qh{display:flex;gap:10px;align-items:flex-start}.pd-qt{font-weight:600;flex:1;min-width:0}
+.pd-o{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin:10px 0 2px 36px}.pd-o>div{display:flex;gap:8px;align-items:baseline}
+.pd-o .l{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--ac);color:var(--ac);font-weight:700;font-size:11.5px;display:grid;place-items:center;flex:none}
+.pd-o.fo{grid-template-columns:repeat(5,1fr)}.pd-o.fo>div{flex-direction:column;align-items:center}
+.pd-key{border:1.5px dashed var(--ac);border-radius:12px;padding:11px 15px;background:var(--accent-soft)}
+.pd-key h3{display:flex;align-items:center;gap:6px;color:var(--ac);font-size:14px;margin-bottom:4px}
+.pd-key ul{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px}
+.pd-notes{height:62mm;border:1px solid #dfe4ec;border-radius:12px;break-inside:avoid;background:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,#d5dbe6 27px,#d5dbe6 28px);background-position:0 8px}
+.pd-foot{display:flex;align-items:center;gap:8px;font-size:10px;color:#6B7280;border-top:1px solid #e2e6ee;padding-top:5px;line-height:1.2}
+.pd-foot img{width:16px;height:16px;border-radius:4px;display:block}.pd-foot b{color:#111827}.pd-foot .r{margin-left:auto}
+.bw .pd-cover{background:#fff;color:#000;border:2px solid #000}.bw .pd-cover:before,.bw .pd-cover:after{display:none}
+.bw .pd-cover h1,.bw .pd-cover p{color:#000}.bw .pd-tag,.bw .pd-meta span{background:#fff;border:1px solid #555;color:#000}.bw .pd-logo{box-shadow:none;border:1px solid #000}
+.bw .pd-toc span{background:#fff;border:1px solid #888;color:#000}.bw .pd-toc i,.bw .pd-n{background:#000;color:#fff}.bw .pd-h:after{background:#000;opacity:.5}
+.bw .pd-b .card,.bw .keybox,.bw .memo,.bw .jbk,.bw .wex,.bw .pd-key,.bw .tk2c,.bw .sk-x,.bw .sk-o,.bw .pd-b .card.flat{background:#fff!important;border:1px solid #777!important;color:#000!important}
+.bw .keybox h3,.bw .memo h3,.bw .jbk h3,.bw .pd-b .lb h3,.bw .pd-key h3{color:#000!important}.bw .pd-b th{background:#eee}.bw .pd-b tr:nth-child(even) td{background:#fff}
+.bw .pill,.bw .sn{background:#fff!important;color:#000!important;border:1px solid #777}.bw .pd-o .l{border-color:#000;color:#000}
+@media screen{
+ body{background:#e8ebf1;padding:18px}
+ .pd-paper{width:${W}mm;min-height:${H}mm;margin:0 auto;background:#fff;padding:${m}mm ${m}mm ${m}mm ${m+g}mm;box-shadow:0 2px 16px rgba(16,24,40,.2)}
+ .pd-foot{margin-top:22px}
+}
+@media print{
+ body{background:#fff;padding:0}.pd-paper{padding:0;width:auto;min-height:0;box-shadow:none}
+ .pd-foot{display:none}
+}
+</style></head><body class="${PRT.bw?'bw':''}"><div class="pd-paper"><div class="pd-z">${body}</div>
+<div class="pd-foot"><img src="${PRT_LOGO}" alt=""><b>Siap CPNS</b><span>Catatan belajar SKD${ls.length===1?' · '+esc(ls[0].t):''}</span><span class="r">Dicetak ${tgl}</span></div></div></body></html>`}
+function prtEnsure(){let r=document.getElementById('prt');if(r)return r;r=document.createElement('div');r.id='prt';r.className='pdl-bg';r.setAttribute('data-act','prtbg');
+ r.innerHTML=`<div class="pdl" role="dialog" aria-modal="true" aria-label="Cetak catatan PDF"><div class="pdl-hd"><span class="logo">SKD</span><div><h3>Cetak catatan PDF</h3><p class="xs muted">Pilih materi, ukuran kertas, dan subbab. Pratinjau ada di sebelah.</p></div><button class="iconbtn" data-act="prtx" aria-label="Tutup">${ic('x')}</button></div>
+ <div class="pdl-bd"><div class="pdl-l" id="prtL"></div><div class="pdl-r"><div class="pdl-pv" id="prtPv"><div id="prtW"><iframe id="prtF" title="Pratinjau cetak"></iframe></div></div><div class="xs muted pdl-info" id="prtInfo"></div></div></div>
+ <div class="pdl-ft"><button class="btn ghost" data-act="prtnew">Buka di tab baru</button><span style="flex:1"></span><button class="btn" data-act="prtx">Batal</button><button class="btn primary" data-act="prtgo" id="prtGo">${ic('print',18)} Cetak / simpan PDF</button></div></div>`;
+ document.body.appendChild(r);return r}
+function prtLeft(){
+ const P=PRT_PAPER,sel=new Set(PRT.ids),av=prtAvail();
+ const grp=['TWK','TIU','TKP'].map(sb=>{const ls=LESSONS.filter(l=>l.sub===sb);return `<div class="pdl-g"><div class="pdl-gh"><b>${sb}</b><button class="chip xs" data-act="prtgrp" data-v="${sb}" aria-pressed="${ls.every(l=>sel.has(l.id))}">Pilih semua ${sb}</button></div>${ls.map(l=>`<label class="pdl-chk"><input type="checkbox" data-act="prtles" data-v="${l.id}" ${sel.has(l.id)?'checked':''}><span>${esc(l.t)}</span></label>`).join('')}</div>`}).join('');
+ const tiles=Object.entries(P).map(([k,p])=>{const hh=34,ww=Math.round(hh*p.w/p.h);return `<button class="ptile" data-act="prtpaper" data-v="${k}" aria-pressed="${PRT.paper===k}"><span class="pg" style="width:${ww}px;height:${hh}px"></span><b>${p.n}</b><small>${p.w}×${p.h}</small></button>`}).join('');
+ const seg=(act,cur,opts)=>`<div class="seg">${opts.map(([v,t])=>`<button data-act="${act}" data-v="${v}" aria-pressed="${String(cur)===String(v)}">${t}</button>`).join('')}</div>`;
+ const _ls=(document.querySelector('#prtL .pdl-list')||{}).scrollTop||0;$('#prtL').innerHTML=`<div><div class="pdl-lb">1 · Materi yang dicetak <span class="muted">(${PRT.ids.length} dipilih)</span></div><div class="pdl-list">${grp}</div><div class="row wrapx" style="gap:8px;margin-top:8px"><button class="chip xs" data-act="prtgrp" data-v="ALL" aria-pressed="false">Semua materi</button><button class="chip xs" data-act="prtgrp" data-v="NONE" aria-pressed="false">Kosongkan</button></div></div>
+ <div><div class="pdl-lb">2 · Ukuran kertas <span class="muted">(mm)</span></div><div class="ptiles">${tiles}</div><div style="margin-top:10px">${seg('prtori',PRT.ori,[['p','Tegak (portrait)'],['l','Mendatar (landscape)']])}</div></div>
+ <div><div><div class="pdl-lb">3 · Untuk binder <span class="muted">(lubang ring)</span></div><div class="stack" style="gap:10px">${seg('prtbind',PRT.bind?1:0,[[0,'Tanpa binder'],[1,'Margin binder']])}${PRT.bind?`${seg('prtgut',PRT.gut,[[15,'15 mm'],[20,'20 mm'],[25,'25 mm']])}<label class="pdl-chk"><input type="checkbox" data-act="prtdup" ${PRT.dup?'checked':''}><span>Cetak <b>bolak-balik</b>: sisi binder bergantian kiri dan kanan</span></label><div class="xs muted">Margin tambahan di sisi binder. Untuk bolak-balik, pilih cetak dua sisi (flip pada sisi panjang) di jendela cetak.</div>`:''}</div></div>
+ <div><div class="pdl-lb">4 · Subbab yang dicetak</div><div class="chips">${av.map(([k,t])=>`<button class="chip" data-act="prtsec" data-v="${k}" aria-pressed="${!PRT.off.includes(k)}">${t}</button>`).join('')||'<span class="small muted">Pilih materi dulu.</span>'}</div></div>
+ <div><div class="pdl-lb">5 · Tampilan</div><div class="stack" style="gap:10px">${seg('prtcolor',PRT.bw?1:0,[[0,'Berwarna'],[1,'Hemat tinta (hitam putih)']])}${seg('prtfs',PRT.fs,[[0.9,'Huruf kecil'],[1,'Normal'],[1.12,'Besar']])}<label class="pdl-chk"><input type="checkbox" data-act="prtnotes" ${PRT.notes?'checked':''}><span>Tambah kotak <b>Catatanku</b> bergaris di akhir</span></label></div></div>`;const _l=document.querySelector('#prtL .pdl-list');if(_l)_l.scrollTop=_ls}
+function prtPrev(){
+ const f=document.getElementById('prtF');if(!f)return;const P=PRT_PAPER[PRT.paper],land=PRT.ori==='l',W=land?P.h:P.w,H=land?P.w:P.h;
+ const go=$('#prtGo');if(go)go.disabled=!PRT.ids.length;
+ if(!PRT.ids.length){f.srcdoc='<body style="font:14px system-ui;color:#6B7280;display:grid;place-items:center;height:90vh">Pilih minimal satu materi.</body>';$('#prtInfo').textContent='';return}
+ f.onload=()=>{prtFit()};f.srcdoc=prtDoc()}
+function prtFit(){
+ const f=document.getElementById('prtF'),pv=$('#prtPv'),w=$('#prtW');if(!f||!f.contentDocument||!pv)return;
+ const d=f.contentDocument,P=PRT_PAPER[PRT.paper],land=PRT.ori==='l',W=land?P.h:P.w,H=land?P.w:P.h,px=mm=>mm*96/25.4,iw=Math.round(px(W)+36);
+ f.style.width=iw+'px';f.style.height='400px';const ih=Math.max(400,d.documentElement.scrollHeight);f.style.height=ih+'px';
+ const sc=Math.min(1,(pv.clientWidth-4)/iw);f.style.transform='scale('+sc+')';w.style.width=Math.round(iw*sc)+'px';w.style.height=Math.round(ih*sc)+'px';
+ const ph=px(H-2*P.m-8)*.94;let pages=0;d.querySelectorAll('.pd-les').forEach(e=>{pages+=Math.max(1,Math.ceil(e.getBoundingClientRect().height/ph))});
+ const sec=prtAvail().filter(([k])=>!PRT.off.includes(k)).length;
+ $('#prtInfo').textContent='Perkiraan ±'+pages+' halaman '+P.n+(land?' mendatar':' tegak')+' · '+PRT.ids.length+' materi · '+sec+' jenis subbab. Di jendela cetak, pilih printer "Simpan sebagai PDF".'}
+var prtT=0;function prtUpd(left){if(left!==false)prtLeft();clearTimeout(prtT);prtT=setTimeout(prtPrev,120)}
+function prtOpen(ids){PRT.ids=ids.slice();prtEnsure();document.body.classList.add('prt-lock');prtLeft();prtPrev();setTimeout(()=>{const b=document.querySelector('#prt .pdl-chk input:checked');if(b)b.scrollIntoView({block:'center'})},60)}
+function prtClose(){const r=document.getElementById('prt');if(r)r.remove();document.body.classList.remove('prt-lock')}
+function prtGo(){const f=document.getElementById('prtF');if(!f||!f.contentWindow||!PRT.ids.length)return;const w=f.contentWindow;(w.document.fonts?w.document.fonts.ready:Promise.resolve()).then(()=>{try{w.focus();w.print()}catch(e){toast('Dialog cetak tidak bisa dibuka. Coba "Buka di tab baru".')}})}
+function prtNew(){if(!PRT.ids.length)return;const u=URL.createObjectURL(new Blob([prtDoc()],{type:'text/html'}));const w=window.open(u,'_blank');if(!w)toast('Pop-up diblokir. Izinkan pop-up lalu coba lagi.')}
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;if(a.slice(0,3)!=='prt')return;const v=t.dataset.v;
+ if(a==='prtbg'){if(e.target.id==='prt')prtClose();return}
+ if(a==='prtList'){prtOpen(LESSONS.filter(l=>ST.f==='ALL'||!ST.f||l.sub===ST.f).map(l=>l.id));return}
+ if(a==='prtOne'){prtOpen([v]);return}
+ if(a==='prtles')return;
+ switch(a){
+ case 'prtx':prtClose();break;
+ case 'prtgo':prtGo();break;
+ case 'prtnew':prtNew();break;
+ case 'prtgrp':{const ids=v==='NONE'?[]:v==='ALL'?LESSONS.map(l=>l.id):LESSONS.filter(l=>l.sub===v).map(l=>l.id);if(v==='NONE'||v==='ALL')PRT.ids=ids;else{const all=ids.every(i=>PRT.ids.includes(i));PRT.ids=all?PRT.ids.filter(i=>!ids.includes(i)):[...new Set(PRT.ids.concat(ids))]}PRT.ids=LESSONS.map(l=>l.id).filter(i=>PRT.ids.includes(i));prtUpd();break}
+ case 'prtpaper':PRT.paper=v;prtSave();prtUpd();break;
+ case 'prtori':PRT.ori=v;prtSave();prtUpd();break;
+ case 'prtsec':PRT.off=PRT.off.includes(v)?PRT.off.filter(x=>x!==v):PRT.off.concat(v);prtSave();prtUpd();break;
+ case 'prtbind':PRT.bind=v==='1';prtSave();prtUpd();break;
+ case 'prtgut':PRT.gut=+v;prtSave();prtUpd();break;
+ case 'prtcolor':PRT.bw=v==='1';prtSave();prtUpd();break;
+ case 'prtfs':PRT.fs=+v;prtSave();prtUpd();break;
+ }
+});
+document.addEventListener('change',e=>{const t=e.target;if(!t.dataset||!t.dataset.act||t.dataset.act.slice(0,3)!=='prt')return;
+ if(t.dataset.act==='prtles'){const id=t.dataset.v;PRT.ids=LESSONS.map(l=>l.id).filter(i=>i===id?t.checked:PRT.ids.includes(i));prtUpd()}
+ else if(t.dataset.act==='prtdup'){PRT.dup=t.checked;prtSave();prtUpd(false)}
+ else if(t.dataset.act==='prtnotes'){PRT.notes=t.checked;prtSave();prtUpd(false)}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('prt'))prtClose()});
+window.addEventListener('resize',()=>{if(document.getElementById('prt'))prtFit()});
+
 function spy(){if(spy.on)return;spy.on=true;window.addEventListener('scroll',()=>{if(V.view!=='lesson')return;const ss=[...document.querySelectorAll('.lsec')];let cur=ss[0];ss.forEach(s=>{if(s.getBoundingClientRect().top<140)cur=s});if(!cur)return;document.querySelectorAll('.toc a,.tocm a').forEach(a=>a.classList.toggle('on',a.dataset.v===cur.dataset.k))},{passive:true})}
 
 function vFlash(){
