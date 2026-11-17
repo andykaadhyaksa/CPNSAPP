@@ -177,3 +177,8 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
   - TWK (596) dan sisa TIU (162): kartu "yang ditanya → kunci". Soal figural (77) memakai kartu gambar yang sudah ada.
 - Diagram dibangun saat tampil dari data soal dan teks pembahasan yang ada; bank soal, ID, dan progres tidak berubah. Kode: blok "VISUAL PEMBAHASAN (v4.13)" (`vzBlock` dipanggil dari `detail()`).
 - Perbaikan tampilan: soal lama yang katanya menempel tidak lagi melebar keluar layar. Cache offline naik ke cpns-v17.
+
+
+## Versi 4.19
+- Bank bertambah 180 soal orisinal 2026 (2.640 soal): TWK 62 (Bahasa Indonesia, Bela Negara, Integritas, Nasionalisme, Pilar Negara), TKP 60 (10 per topik), TIU 60 (kecukupan data 30 dan hitung cepat 30, kunci dihitung dan diverifikasi dengan kode).
+- Pemilihan soal tetap memakai komposisi 60% terbaru : 28% menengah : 12% terlama. Progres dan ID soal lama tidak berubah.
