@@ -182,3 +182,8 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 ## Versi 4.19
 - Bank bertambah 180 soal orisinal 2026 (2.640 soal): TWK 62 (Bahasa Indonesia, Bela Negara, Integritas, Nasionalisme, Pilar Negara), TKP 60 (10 per topik), TIU 60 (kecukupan data 30 dan hitung cepat 30, kunci dihitung dan diverifikasi dengan kode).
 - Pemilihan soal tetap memakai komposisi 60% terbaru : 28% menengah : 12% terlama. Progres dan ID soal lama tidak berubah.
+
+
+## Versi 4.20
+- Riwayat: sesi yang ditinggalkan sebelum selesai (keluar, pindah ke sesi lain, atau tab ditutup) kini ikut tercatat dengan tanda "Belum selesai". Soal yang sudah dijawab bisa dibuka lagi lewat "Lihat soal", masuk "Semua soal yang pernah dikerjakan", dan dihitung di statistik serta program harian. Berlaku untuk latihan program, "Atur latihanmu sendiri", tes diagnostik, dan simulasi.
+- Tidak ada perubahan bentuk save: sesi belum selesai memakai entri riwayat biasa (tambahan penanda `part`). Draf sementara memakai kunci `siap-cpns-v2-draft` dan tidak ikut sinkron.

@@ -1472,7 +1472,7 @@ function render(){
 
 /* ===================== SESI SOAL ===================== */
 let Q=null,tickId=null;
-function startSession(mode,items,limit,title){Q={mode,items,ans:{},mark:{},rev:{},i:0,t0:Date.now(),limit,title,sheet:false,tq:{},qs:Date.now(),lesson:null,fb:{}};V={view:'quiz',tab:V.tab};render();scrollTo(0,0)}
+function startSession(mode,items,limit,title){drAuto();Q={mode,items,ans:{},mark:{},rev:{},i:0,t0:Date.now(),limit,title,sheet:false,tq:{},qs:Date.now(),lesson:null,fb:{}};V={view:'quiz',tab:V.tab};render();scrollTo(0,0)}
 function stamp(){if(Q&&Q.qs){Q.tq[Q.i]=(Q.tq[Q.i]||0)+(Date.now()-Q.qs)/1000}if(Q)Q.qs=Date.now()}
 function startLearn(){const pool=wshuf(poolFor(LP.sub,LP.cats,LP.focus)).slice(0,LP.n);if(!pool.length)return;startSession('lat',pool,0,'Latihan'+(LP.sub==='ALL'?'':' '+LP.sub))}
 /* soal figural dibatasi per sesi campur agar komposisinya mirip ujian (sekitar 5-6 dari 35 soal TIU) */
@@ -1485,7 +1485,7 @@ function startReview(ids,title){const items=shuffle(ids.map(i=>byId[i]).filter(B
 const left=()=>Q.limit?Math.max(0,Q.limit-Math.floor((Date.now()-Q.t0)/1000)):0;
 function startTick(){stopTick();if(!Q)return;tickId=setInterval(()=>{if(Q.limit){const l=left(),e=$('#tm');if(e){e.textContent=fmtT(l);e.classList.toggle('low',l<=300)}if(l<=0){stopTick();toast('Waktu habis');finish();return}}else{const e=$('#tq');if(e)e.textContent=fmtT(Math.floor((Date.now()-Q.qs)/1000+(Q.tq[Q.i]||0)))}},1000)}
 function stopTick(){if(tickId){clearInterval(tickId);tickId=null}}
-function pick(l){const sim=Q.mode==='sim',q=Q.items[Q.i];if(!sim&&Q.rev[Q.i])return;Q.ans[Q.i]=l;vib(12);if(!sim){stamp();Q.rev[Q.i]=true;if(isRight(q,l)&&!isTkp(q))vib([10,30,10])}render()}
+function pick(l){const sim=Q.mode==='sim',q=Q.items[Q.i];if(!sim&&Q.rev[Q.i])return;Q.ans[Q.i]=l;vib(12);if(!sim){stamp();Q.rev[Q.i]=true;if(isRight(q,l)&&!isTkp(q))vib([10,30,10])}drSave();render()}
 function goQ(i){if(i<0||i>=Q.items.length)return;stamp();Q.i=i;Q.sheet=false;render();scrollTo(0,0)}
 function next(){const sim=Q.mode==='sim';if(!sim&&Q.ans[Q.i]&&!Q.rev[Q.i]){Q.rev[Q.i]=true;render();return}if(Q.i<Q.items.length-1)goQ(Q.i+1)}
 function finishAsk(){const un=Q.items.length-Object.keys(Q.ans).length;if(un&&!confirm(`${un} soal belum dijawab. Tetap selesaikan?`))return;finish()}
@@ -1501,7 +1501,7 @@ function finish(){
  rec.prev=(S.hist.filter(h=>h.mode==='sim').slice(-1)[0]||{}).total;
  recordAnswers(Q.items,Q.ans,sim,Q.tq,Q.tag,Q.cday);if(Q.cday){rec.cday=Q.cday;if(sim){const L=cuLedger(Q.cday);L.sim=(L.sim||0)+1}}
  rec.ids=Q.items.map(q=>q.id);rec.ans=Q.items.map((q,i)=>Q.ans[i]||'-').join('');S.hist.push(rec);if(S.hist.length>200)S.hist=S.hist.slice(-200);S.hist.slice(0,-80).forEach(h=>{delete h.ids;delete h.ans});cuSweep();save();
- Q.rec=rec;V={view:'result',tab:V.tab};render();scrollTo(0,0);
+ drDrop();Q.rec=rec;V={view:'result',tab:V.tab};render();scrollTo(0,0);
  if((sim&&pass)||(!sim&&rec.acc>=.8))setTimeout(confetti,250)}
 function confetti(){const c=document.createElement('div');c.className='confetti';const cols=['#2557F5','#17A06B','#E5484D','#F5B94D','#8B5CF6'];c.innerHTML=Array.from({length:46},(_,i)=>`<i style="left:${Math.random()*100}%;background:${cols[i%5]};animation-delay:${Math.random()*.4}s;animation-duration:${1.4+Math.random()*1.2}s;transform:rotate(${Math.random()*360}deg)"></i>`).join('');document.body.appendChild(c);setTimeout(()=>c.remove(),3000)}
 function poolFor(sub,cats,focus){return BANK.filter(q=>(sub==='ALL'||q.sub===sub)&&(!cats.length||cats.includes(q.cat))&&(focus==='all'||(focus==='new'?!S.stat[q.id]:needRedo(q))))}
@@ -1591,7 +1591,7 @@ function revBtn(t,k,dn,c){
  if(t.type==='manual2')return `<button class="btn sm" data-act="gotab" data-v="guide|harih">Buka</button>`;
  if(t.type==='manual')return '';
  return `<button class="btn sm" data-act="trev" data-day="${k}" data-k="${t.type}" data-sub="${t.sub||''}" data-cat="${esc(t.cat||'')}">Tinjau</button>`}
-function dayRev(k,kd,sub,cat){
+function dayRev(k,kd,sub,cat){drAuto();
  const sim=kd==='sim';
  const hs=S.hist.filter(h=>h.ids&&(h.cday?h.cday===k:dkey(new Date(h.t))===k)&&((h.mode==='sim')===sim));
  const seen={},items=[],ans={};
@@ -2600,12 +2600,12 @@ function vReview(){
   <div class="row wrapx"><button class="btn sm ${S.fav[q.id]?'primary':''}" data-act="favq" data-v="${q.id}">${ic('star',16)} ${S.fav[q.id]?'Tersimpan':'Simpan'}</button>${les?`<button class="btn sm" data-act="qlesson" data-v="${les}">${ic('book',16)} Materi</button>`:''}</div></div>`}).join('');
  return `<div class="qtop"><div class="in row"><button class="iconbtn" data-act="backres" aria-label="Kembali">${ic('left')}</button><div class="qmeta"><b>${Q.hist?esc(Q.title):'Tinjau jawaban'}</b><span>${idx.length} soal${Q.hist?' · hanya melihat, tidak mengubah progres':''}</span></div><div class="seg" style="width:auto"><button data-act="rv" data-v="all" aria-pressed="${RV==='all'}" style="padding:0 12px">Semua</button><button data-act="rv" data-v="wrong" aria-pressed="${RV==='wrong'}" style="padding:0 12px">Salah</button></div></div></div>
  <div class="qwrap">${cards||'<div class="empty">Semua jawabanmu tepat. Mantap.</div>'}${Q.more?`<button class="btn block" data-act="hmore">Muat ${Q.more} soal lagi</button>`:''}</div>`}
-function openHist(i){const h=S.hist[i];if(!h)return;
+function openHist(i){const h=S.hist[i];if(!h)return;drAuto();
  if(!h.ids){toast('Sesi lama ini tidak menyimpan daftar soalnya. Pakai "Semua soal yang pernah kamu kerjakan" di bawah.');return}
  const items=[],ans={},f={};h.ids.forEach((id,k)=>{const q=byId[id];if(!q)return;const n=items.length;items.push(q);const l=h.ans[k];if(l&&l!=='-')ans[n]=l});
  if(!items.length){toast('Soal sesi ini sudah tidak tersedia');return}
  Q={mode:'hist',hist:true,items,ans,tq:{},mark:{},rev:{},f,title:(h.mode==='sim'?'Simulasi':'Latihan')+' · '+fmtD(h.t),more:0};RV='all';V={view:'review',tab:V.tab};render();scrollTo(0,0)}
-function openAll(filter,n){const ids=Object.keys(S.stat).filter(id=>byId[id]&&(filter!=='wrong'||S.stat[id].last<.8)).sort((x,y)=>S.stat[y].t-S.stat[x].t);
+function openAll(filter,n){drAuto();const ids=Object.keys(S.stat).filter(id=>byId[id]&&(filter!=='wrong'||S.stat[id].last<.8)).sort((x,y)=>S.stat[y].t-S.stat[x].t);
  if(!ids.length){toast('Belum ada soal yang dikerjakan');return}
  const sl=ids.slice(0,n),items=sl.map(id=>byId[id]),ans={},f={};sl.forEach((id,k)=>{const r=S.stat[id];if(r.l)ans[k]=r.l;f[k]=r.last});
  Q={mode:'hist',hist:true,items,ans,f,tq:{},mark:{},rev:{},title:filter==='wrong'?'Soal yang masih salah':'Semua soal yang pernah dikerjakan',more:Math.max(0,Math.min(25,ids.length-n)),hf:filter,hn:n};if(!(Q.more>0))Q.more=0;RV='all';V={view:'review',tab:V.tab};render()}
@@ -2751,7 +2751,7 @@ document.addEventListener('click',e=>{
  case 'sheet':Q.sheet=true;render();break;
  case 'sheetx':Q.sheet=false;render();break;
  case 'goto':goQ(+v);break;
- case 'quit':if(confirm('Keluar dari sesi ini? Jawaban belum tersimpan.')){stopTick();Q=null;V={view:'tab',tab:V.tab};render()}break;
+ case 'quit':if(confirm(Q&&!Q.hist&&Object.keys(Q.ans||{}).length?'Keluar dari sesi ini? Soal yang sudah kamu jawab tetap tersimpan di Riwayat sebagai sesi belum selesai.':'Keluar dari sesi ini?')){stopTick();drAuto();Q=null;V={view:'tab',tab:V.tab};render()}break;
  case 'finishAsk':Q.sheet=false;finishAsk();break;
  case 'review':RV=v;V={view:'review',tab:V.tab};render();scrollTo(0,0);break;
  case 'rv':RV=v;render();break;
@@ -3566,7 +3566,7 @@ function vProg(){
   ${coverageCard()}<div class="sechead"><h2>Pencapaian · ${bd.filter(x=>x.ok).length}/${bd.length}</h2></div><div class="badges">${bd.map(({b,ok})=>`<div class="badge ${ok?'on':''}"><span>${ic(b[2],22)}</span><b>${b[0]}</b><small>${b[1]}</small></div>`).join('')}</div>`}
  else if(PR==='analisis')body=`<div class="cols">${gAnalisis()}</div>`;
  else if(PR==='riwayat'){const nst=Object.keys(S.stat).filter(id=>byId[id]).length,nw=Object.keys(S.stat).filter(id=>byId[id]&&S.stat[id].last<.8).length;
-  body=`<div class="cols"><div class="card"><h3 style="margin-bottom:4px">Sesi yang sudah dikerjakan</h3><p class="small muted" style="margin:0 0 8px">Ketuk satu sesi untuk melihat lagi soal, jawabanmu, dan pembahasannya. Ini hanya untuk cek ulang, tidak mengubah progres.</p>${S.hist.length?`<div class="tlist">${S.hist.map((h,i)=>[h,i]).reverse().slice(0,40).map(([h,i])=>`<button class="hl hbtn" data-act="hopen" data-v="${i}"><span class="pill ${h.mode==='sim'?(h.pass?'good':'bad'):'acc'}">${h.mode==='sim'?'Simulasi':'Latihan'}</span><div style="text-align:left"><b class="small">${h.mode==='sim'?h.total+' / '+h.max:esc(h.title||'Latihan')+' · '+Math.round(h.acc*100)+'% tepat'}</b><div class="xs muted">${fmtD(h.t)} · ${h.answered}/${h.n} soal · ${fmtT(h.dur)}</div></div><span class="xs muted">${h.ids?'Lihat soal ›':h.mode==='sim'?(h.pass?'Lolos':'Belum'):''}</span></button>`).join('')}</div>`:'<div class="empty">Belum ada riwayat. Mulai latihan atau simulasi dulu.</div>'}</div>
+  body=`<div class="cols"><div class="card"><h3 style="margin-bottom:4px">Sesi yang sudah dikerjakan</h3><p class="small muted" style="margin:0 0 8px">Ketuk satu sesi untuk melihat lagi soal, jawabanmu, dan pembahasannya. Termasuk sesi yang kamu tinggalkan sebelum selesai. Ini hanya untuk cek ulang, tidak mengubah progres.</p>${S.hist.length?`<div class="tlist">${S.hist.map((h,i)=>[h,i]).reverse().slice(0,60).map(([h,i])=>`<button class="hl hbtn" data-act="hopen" data-v="${i}"><span class="pill ${h.part?'warn':h.mode==='sim'?(h.pass?'good':'bad'):'acc'}">${h.part?'Belum selesai':h.mode==='sim'?'Simulasi':'Latihan'}</span><div style="text-align:left"><b class="small">${h.mode==='sim'?h.total+' / '+h.max:esc(h.title||'Latihan')+' · '+Math.round(h.acc*100)+'% tepat'}</b><div class="xs muted">${fmtD(h.t)} · ${h.answered}/${h.n} soal · ${fmtT(h.dur)}</div></div><span class="xs muted">${h.ids?'Lihat soal ›':h.mode==='sim'?(h.pass?'Lolos':'Belum'):''}</span></button>`).join('')}</div>`:'<div class="empty">Belum ada riwayat. Mulai latihan atau simulasi dulu.</div>'}</div>
   <div class="card stack"><h3>Semua soal yang pernah dikerjakan</h3><p class="small muted" style="margin:0">Buka kembali soal mana pun beserta jawaban dan pembahasannya, termasuk dari sesi lama. Urutan dari yang terbaru.</p><div class="g2 keep"><button class="btn" data-act="hall" data-v="all" ${nst?'':'disabled'}>Semua (${nst})</button><button class="btn" data-act="hall" data-v="wrong" ${nw?'':'disabled'}>Masih salah (${nw})</button></div></div></div>`}
  else body=`<div class="cols">${syncCard()}<div class="card stack"><h3>Cadangan data</h3><p class="small muted">Data tersimpan di browser perangkat ini. Ekspor cadangan untuk memindahkan ke perangkat lain atau menjaga dari penghapusan data browser.</p><div class="g2 keep"><button class="btn" data-act="export">Ekspor cadangan</button><label class="btn" style="cursor:pointer">Impor cadangan<input type="file" accept="application/json" id="imp"></label></div><button class="btn danger" data-act="reset">Hapus semua progres</button></div></div>`;
  return `<div class="page">${pageHead('Progres','Pantau kemajuan, temukan kelemahan, dan lihat strategi yang disarankan dari data jawabanmu.')}${tabsBar([['ringkas','Ringkasan'],['analisis','Analisis'],['riwayat','Riwayat'],['data','Data & sinkron']],PR,'prtab')}${body}</div>`}
@@ -3591,6 +3591,47 @@ document.addEventListener('click',e=>{
  else if(a==='px'){PX=v;render()}
  else if(a==='toc'){const el=document.getElementById('ls-'+v);if(el){const y=el.getBoundingClientRect().top+scrollY-(innerWidth<=860?110:80);scrollTo({top:y,behavior:'smooth'})}}
 });
+
+/* ===================== SESI BELUM SELESAI IKUT TERCATAT (v4.20) =====================
+   Soal yang sudah dijawab di sesi yang ditinggalkan (keluar, pindah ke sesi lain, tab ditutup) dicatat
+   seperti sesi biasa: masuk Riwayat (ditandai "Belum selesai"), statistik soal, dan hitungan program.
+   Draf sementara disimpan di kunci terpisah (bukan bagian S, tidak ikut sinkron). */
+const DRK=KEY+'-draft';
+function drDrop(){try{localStorage.removeItem(DRK)}catch(e){}}
+function drSave(){
+  if(!Q||Q.hist||Q.mode==='hist'||!Q.items)return;
+  if(!Object.keys(Q.ans).length){drDrop();return}
+  try{localStorage.setItem(DRK,JSON.stringify({t0:Q.t0,t:Date.now(),mode:Q.mode,title:Q.title||'',tag:Q.tag||'',cday:Q.cday||'',ids:Q.items.map(q=>q.id),ans:Q.items.map((q,i)=>Q.ans[i]||'-').join(''),tq:Q.tq||{}}))}catch(e){}
+}
+function drCommit(d){
+  if(!d||!Array.isArray(d.ids)||typeof d.ans!=='string')return false;
+  const items=[],ans={},tq={};
+  d.ids.forEach((id,k)=>{const q=byId[id];if(!q)return;const n=items.length;items.push(q);const l=d.ans[k];if(l&&l!=='-')ans[n]=l;if(d.tq&&d.tq[k]!=null)tq[n]=d.tq[k]});
+  const answered=Object.keys(ans).length;if(!answered)return false;
+  if(S.hist.some(h=>h.t===d.t))return false;
+  const per={};SUBS.forEach(s=>per[s]={n:0,pts:0,ok:0});
+  items.forEach((q,i)=>{const l=ans[i];if(!l)return;const p=per[q.sub];p.n++;p.pts+=pts(q,l);if(isRight(q,l))p.ok++});
+  const sumT=Object.values(tq).reduce((a,b)=>a+b,0);
+  const acc=Object.keys(ans).reduce((a,i)=>a+frac(items[i],ans[i]),0)/answered;
+  const rec={t:d.t,mode:'lat',part:1,title:d.mode==='sim'?'Simulasi SKD':(d.title||'Latihan'),n:items.length,answered,dur:Math.max(0,Math.floor((d.t-d.t0)/1000)),per,total:0,max:0,pass:null,avg:Math.round(sumT/answered),acc};
+  recordAnswers(items,ans,false,tq,d.tag,d.cday);
+  if(d.cday)rec.cday=d.cday;
+  rec.ids=items.map(q=>q.id);rec.ans=items.map((q,i)=>ans[i]||'-').join('');
+  S.hist.push(rec);if(S.hist.length>200)S.hist=S.hist.slice(-200);S.hist.slice(0,-80).forEach(h=>{delete h.ids;delete h.ans});
+  cuSweep();save();return true;
+}
+/* catat sesi yang sedang berjalan bila punya jawaban dan belum diselesaikan */
+function drAuto(){
+  try{
+    if(Q&&!Q.hist&&Q.mode!=='hist'&&!Q.rec&&!Q.cm&&Q.items&&Object.keys(Q.ans||{}).length){
+      Q.cm=1;stamp();
+      drCommit({t0:Q.t0,t:Date.now(),mode:Q.mode,title:Q.title||'',tag:Q.tag||'',cday:Q.cday||'',ids:Q.items.map(q=>q.id),ans:Q.items.map((q,i)=>Q.ans[i]||'-').join(''),tq:Q.tq||{}});
+    }
+  }catch(e){}
+  drDrop();
+}
+/* draf dari tab yang ditutup atau dimuat ulang di tengah sesi */
+(function(){try{const raw=localStorage.getItem(DRK);if(raw){const d=JSON.parse(raw);drCommit(d)}}catch(e){}drDrop()})();
 
 applyTheme();render();
 
