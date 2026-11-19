@@ -3657,29 +3657,49 @@ const TB={code:'',me:'',cid:'',name:'',room:null,peer:null,mine:null,off:0,began
 const TBK=KEY+'-room',TBN=KEY+'-rmname';
 const TBP='cpns:room:';
 const TBMODES={sim:{t:'Simulasi SKD (110 soal, 100 menit)',kind:'sim'},TWK:{t:'Paket TWK (20 soal)',sub:'TWK',n:20},TIU:{t:'Paket TIU (20 soal)',sub:'TIU',n:20},TKP:{t:'Paket TKP (20 soal)',sub:'TKP',n:20},ALL:{t:'Campuran 30 soal (10 TWK, 10 TIU, 10 TKP)',n:10}};
+const tbSig=()=>(window.AbortSignal&&AbortSignal.timeout)?AbortSignal.timeout(10000):undefined;
 function tbCfg(){const c=Object.assign({},DEFCFG,Sync.cfg||{});if(!c.url||!c.key)return null;const base=c.url.replace(/\/+$/,'')+'/rest/v1/'+SYT;const H=Object.assign({apikey:c.key,'Content-Type':'application/json'},/^sb_/.test(c.key)?{}:{Authorization:'Bearer '+c.key});return{base,H}}
-async function tbGet(id){const c=tbCfg();if(!c)throw new Error('Supabase belum diatur');const r=await fetch(c.base+'?id=eq.'+encodeURIComponent(id)+'&select=upd,json',{headers:c.H});if(!r.ok)throw new Error('HTTP '+r.status);
+async function tbGet(id){const c=tbCfg();if(!c)throw new Error('Supabase belum diatur');const r=await fetch(c.base+'?id=eq.'+encodeURIComponent(id)+'&select=upd,json',{headers:c.H,signal:tbSig()});if(!r.ok)throw new Error('HTTP '+r.status);
   try{const d=r.headers.get('date');if(d){const o=Date.parse(d)-Date.now();if(isFinite(o)&&Math.abs(o)<6e5)TB.off=o}}catch(e){}
   const a=await r.json();return a[0]&&a[0].json?JSON.parse(a[0].json):null}
-async function tbSet(id,obj){const c=tbCfg();if(!c)throw new Error('Supabase belum diatur');const r=await fetch(c.base,{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},c.H),body:JSON.stringify({id,upd:Date.now(),json:JSON.stringify(obj)})});if(!r.ok)throw new Error('HTTP '+r.status)}
+async function tbSet(id,obj){const c=tbCfg();if(!c)throw new Error('Supabase belum diatur');const r=await fetch(c.base,{method:'POST',signal:tbSig(),headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},c.H),body:JSON.stringify({id,upd:Date.now(),json:JSON.stringify(obj)})});if(!r.ok)throw new Error('HTTP '+r.status)}
+
+/* ---- pilihan soal TO Bersama (seperti "Atur latihanmu sendiri") ---- */
+const TBL={mode:'sim',sub:'ALL',cats:[],focus:'all',n:20,sec:50};
+const tbPool=()=>poolFor(TBL.sub,TBL.cats,TBL.focus);
+function tbCustomTitle(n){const t=TBL.sub==='ALL'?'Campuran':TBL.sub;const c=TBL.cats.length?' · '+(TBL.cats.length<=2?TBL.cats.join(', '):TBL.cats.length+' topik'):'';return 'Latihan '+t+c+' · '+n+' soal'}
+function tbBuilder(){
+  const seg=(act,items,cur)=>`<div class="seg">${items.map(([v,l])=>`<button data-act="${act}" data-v="${esc(v)}" aria-pressed="${String(cur)===String(v)}">${l}</button>`).join('')}</div>`;
+  const lab=t=>`<div class="xs muted" style="margin-bottom:6px">${t}</div>`;
+  let h=`<div>${lab('Jenis tes')}${seg('tbmode',[['sim','Simulasi SKD 110 soal'],['custom','Atur sendiri']],TBL.mode)}</div>`;
+  if(TBL.mode==='sim')return h+`<p class="small muted" style="margin:0">30 soal TWK, 35 TIU, 45 TKP dalam 100 menit, seperti ujian CAT.</p><button class="btn primary block" data-act="tbcreate" ${TB.busy?'disabled':''}>${TB.busy?'Membuat…':'Buat ruang dan ajak'}</button>`;
+  const cs=catsOf(TBL.sub),pool=tbPool(),k=Math.min(TBL.n,pool.length);
+  h+=`<div>${lab('Subtes')}${seg('tbsub',[['ALL','Semua'],...SUBS.map(x=>[x,x])],TBL.sub)}</div>`;
+  if(cs.length>1)h+=`<div>${lab('Topik (boleh pilih lebih dari satu)')}<div class="chips">${cs.map(c=>`<button class="chip" data-act="tbcat" data-v="${esc(c)}" aria-pressed="${TBL.cats.includes(c)}">${esc(c)}</button>`).join('')}</div></div>`;
+  h+=`<div>${lab('Fokus soal (menurut progres di perangkatmu)')}${seg('tbfocus',[['all','Semua'],['new','Belum dicoba'],['redo','Perlu diulang']],TBL.focus)}</div>`;
+  h+=`<div>${lab('Jumlah soal')}${seg('tbn',[10,20,30,50].map(x=>[x,x]),TBL.n)}</div>`;
+  h+=`<div>${lab('Waktu per soal')}${seg('tbsec',[[30,'30 dtk'],[45,'45 dtk'],[60,'60 dtk'],[90,'90 dtk']],TBL.sec)}</div>`;
+  h+=`<p class="xs muted" style="margin:0">${pool.length} soal tersedia, total waktu ${Math.round(k*TBL.sec/60)} menit. Soal terbaru diprioritaskan dan dicampur dengan soal lama. Pasanganmu mengerjakan soal yang sama persis, walau progres pribadinya berbeda.</p>`;
+  return h+`<button class="btn primary block" data-act="tbcreate" ${pool.length&&!TB.busy?'':'disabled'}>${pool.length?(TB.busy?'Membuat…':'Buat ruang dan ajak ('+k+' soal)'):'Tidak ada soal yang cocok'}</button>`}
 const tbNow=()=>Date.now()+TB.off;
 const tbRid=(c,p)=>TBP+c+(p?':'+p:'');
 function tbRand(n){const a='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<n;i++)s+=a[Math.floor(Math.random()*a.length)];return s}
 function tbCid(){if(!TB.cid){try{TB.cid=localStorage.getItem(TBK+'-cid')||''}catch(e){}if(!TB.cid){TB.cid=tbRand(10);try{localStorage.setItem(TBK+'-cid',TB.cid)}catch(e){}}}return TB.cid}
 function tbSaveLocal(){try{if(TB.code)localStorage.setItem(TBK,JSON.stringify({code:TB.code,me:TB.me,began:TB.began,name:TB.name}));else localStorage.removeItem(TBK)}catch(e){}}
 function tbItems(key){
+  if(key==='custom')return wshuf(tbPool()).slice(0,TBL.n);
   const m=TBMODES[key];if(!m)return null;
   if(key==='sim'){const it=[];SUBS.forEach(s=>it.push(...pickCap(s,SUB[s].q,6)));return it}
   if(key==='ALL'){const it=[];SUBS.forEach(s=>it.push(...pickCap(s,m.n,s==='TIU'?3:6)));return it}
   return pickCap(m.sub,m.n,key==='TIU'?3:6)}
-function tbMyRow(extra){const q=Q&&Q.room?Q:null;return Object.assign({name:TB.name,cid:tbCid(),ready:true,answered:q?Object.keys(q.ans).length:0,cur:q?q.i+1:0,n:q?q.items.length:(TB.room?TB.room.ids.length:0),fin:false,at:Date.now()},TB.mine&&TB.mine.fin?TB.mine:{},extra||{})}
+function tbMyRow(extra){const q=Q&&Q.room&&Q.room===TB.code?Q:null;return Object.assign({name:TB.name,cid:tbCid(),ready:true,answered:q?Object.keys(q.ans).length:0,cur:q?q.i+1:0,n:q?q.items.length:(TB.room?TB.room.ids.length:0),fin:false,at:Date.now()},TB.mine&&TB.mine.fin?TB.mine:{},extra||{})}
 async function tbCreate(name,key){
   if(TB.busy)return;TB.busy=true;TB.err='';render();
   try{
     const items=tbItems(key);if(!items||!items.length)throw new Error('Soal belum tersedia');
     let code='';for(let k=0;k<6;k++){code=tbRand(5);if(!(await tbGet(tbRid(code))))break;code=''}
     if(!code)throw new Error('Gagal membuat kode, coba lagi');
-    const m=TBMODES[key],limit=key==='sim'?SIM_SEC:Math.round(items.length*50);
+    const m=key==='custom'?{t:tbCustomTitle(items.length)}:TBMODES[key],limit=key==='sim'?SIM_SEC:Math.round(items.length*(key==='custom'?TBL.sec:50));
     const room={v:1,code,key,mode:m.kind==='sim'?'sim':'pack',title:m.t,ids:items.map(q=>q.id),limit,createdAt:Date.now(),startAt:null};
     TB.name=name;TB.me='A';TB.code=code;TB.room=room;TB.peer=null;TB.mine=null;TB.began=0;
     await tbSet(tbRid(code),room);await tbSet(tbRid(code,'A'),tbMyRow());
@@ -3718,7 +3738,7 @@ async function tbPoll(){
     TB.err='';
   }catch(e){TB.err='Koneksi bermasalah, mencoba lagi…'}
   TB.polling=false;tbChip();
-  if(TB.show&&V.view==='tab'&&V.tab==='test'&&!Q)render()}
+  if(TB.show&&V.view==='tab'&&V.tab==='test'&&!(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))render()}
 function tbTick(){
   const r=TB.room;if(!r||!r.startAt)return;
   const left=r.startAt-tbNow(),e=document.getElementById('tbcd');
@@ -3774,8 +3794,7 @@ function vTB(){
     else body=`${TB.err?`<div class="card" style="border-color:var(--bad,#E5484D)"><b class="small">${esc(TB.err)}</b></div>`:''}${duoInviteHtml()}
     <div class="card stack"><h3>Buat ruang TO</h3><p class="small muted">Kamu memilih tesnya. ${DU.peer?esc(duoPeerName())+' menerima ajakan otomatis.':'Ajakan dikirim otomatis begitu pasanganmu terhubung.'}</p>
     <input type="hidden" id="tbname" value="${esc(DU.name)}">
-    <label class="xs muted">Jenis tes</label><select id="tbmode" class="inp">${Object.entries(TBMODES).map(([k,m])=>`<option value="${k}">${esc(m.t)}</option>`).join('')}</select>
-    <button class="btn primary block" data-act="tbcreate" ${TB.busy?'disabled':''}>${TB.busy?'Membuat…':'Buat ruang dan ajak'}</button></div>`;
+    ${tbBuilder()}</div>`;
   }else if(mine&&mine.fin){
     body=(peer&&peer.fin)?tbResult():`<div class="card stack"><h3>Kamu sudah selesai</h3><p class="small muted">Menunggu ${tbLbl(peer)} menyelesaikan tes. Hasil perbandingan muncul otomatis.</p><div class="pill acc">${esc(tbPeerTxt())}</div>${peer&&peer.left?'<p class="small">Lawan keluar dari sesi, jadi perbandingan tidak tersedia.</p>':''}${tbMyLink()}</div>`;
   }else if(r&&r.startAt&&TB.began===r.startAt){
@@ -3818,8 +3837,14 @@ document.addEventListener('click',e=>{
   const a=t.dataset.act;
   if(a==='tbopen'){if(V.view==='quiz')return;TB.show=true;V={view:'tab',tab:'test'};render();scrollTo(0,0)}
   else if(a==='tbback'){TB.show=false;render()}
-  else if(a==='tbcreate'){const n=(document.getElementById('tbname').value||'').trim();if(!n){toast('Isi namamu dulu');return}tbCreate(n,document.getElementById('tbmode').value)}
+  else if(a==='tbcreate'){const n=(document.getElementById('tbname').value||'').trim();if(!n){toast('Isi namamu dulu');return}tbCreate(n,TBL.mode==='sim'?'sim':'custom')}
   else if(a==='tbjoin'){const n=(document.getElementById('tbname2').value||'').trim();if(!n){toast('Isi namamu dulu');return}tbJoin(document.getElementById('tbcode').value,n)}
+  else if(a==='tbmode'){TBL.mode=t.dataset.v;render()}
+  else if(a==='tbsub'){TBL.sub=t.dataset.v;TBL.cats=[];render()}
+  else if(a==='tbcat'){const v=t.dataset.v;TBL.cats=TBL.cats.includes(v)?TBL.cats.filter(c=>c!==v):[...TBL.cats,v];render()}
+  else if(a==='tbfocus'){TBL.focus=t.dataset.v;render()}
+  else if(a==='tbn'){TBL.n=+t.dataset.v;render()}
+  else if(a==='tbsec'){TBL.sec=+t.dataset.v;render()}
   else if(a==='tbstart')tbStart();
   else if(a==='tbleave'){if(confirm('Keluar dari ruang TO Bersama?'))tbLeave()}
   else if(a==='tbtoq'){if(Q&&Q.room){TB.show=false;V={view:'quiz',tab:V.tab};render()}}

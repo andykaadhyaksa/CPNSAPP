@@ -199,3 +199,5 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Setelah terhubung: perbandingan statistik dan progres (akurasi per subtes, aktivitas 7 hari, simulasi, prioritas belajar, sesi terbaru, status online), chat dengan penanda dibaca, dan TO bersama tanpa kode ruang (ajakan otomatis ke pasangan).
 - Keamanan: isi dienkripsi AES-GCM dengan kunci dari kode, id baris berupa hash. Jangan bagikan kode ke orang lain.
 - Memakai tabel Supabase yang sama. Tidak mengubah save pribadi dan tidak memakai kode sinkron. Perlu internet di kedua perangkat.
+- Perbaikan: TO Bersama kedua dan seterusnya tidak lagi tampak menunggu teman. Layar ruang kini ikut diperbarui walau sesi sebelumnya masih tersisa, progres ruang baru tidak lagi tercampur sesi lama, dan permintaan jaringan dibatasi 10 detik.
+- TO Bersama kini punya opsi soal detail seperti Atur latihanmu sendiri: pilih Simulasi SKD 110 soal atau Atur sendiri (subtes, topik lebih dari satu, fokus belum dicoba atau perlu diulang, jumlah soal 10 sampai 50, waktu per soal 30 sampai 90 detik). Pasangan mengerjakan soal yang sama persis.
