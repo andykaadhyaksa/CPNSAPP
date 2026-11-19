@@ -187,3 +187,15 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 ## Versi 4.20
 - Riwayat: sesi yang ditinggalkan sebelum selesai (keluar, pindah ke sesi lain, atau tab ditutup) kini ikut tercatat dengan tanda "Belum selesai". Soal yang sudah dijawab bisa dibuka lagi lewat "Lihat soal", masuk "Semua soal yang pernah dikerjakan", dan dihitung di statistik serta program harian. Berlaku untuk latihan program, "Atur latihanmu sendiri", tes diagnostik, dan simulasi.
 - Tidak ada perubahan bentuk save: sesi belum selesai memakai entri riwayat biasa (tambahan penanda `part`). Draf sementara memakai kunci `siap-cpns-v2-draft` dan tidak ikut sinkron.
+
+
+## Versi 4.21
+- TO Bersama (Tes > TO Bersama): dua orang membuat/gabung ruang dengan kode, mengerjakan soal yang sama dan mulai serentak (hitung mundur), saling melihat progres (jumlah terjawab dan nomor soal sekarang), lalu membandingkan skor, akurasi, waktu, dan soal yang hasilnya berbeda. Jenis tes: simulasi 110 soal, paket TWK/TIU/TKP 20 soal, atau campuran 30 soal.
+- Memakai tabel Supabase yang sama dengan sinkron (baris `cpns:room:KODE`, `:A`, `:B`). Data ruang terpisah dari save pribadi; hasil akhir masuk Riwayat sebagai sesi biasa berjudul "TO Bersama". Jawaban lawan baru terlihat setelah keduanya selesai.
+
+
+## Versi 4.22
+- Tab Koneksi (menu atas, atau Lainnya di HP): isi nama dan sebuah kode, kirim kode ke pasanganmu, dia mengisi nama dan kode yang sama. Dua orang saja per kode.
+- Setelah terhubung: perbandingan statistik dan progres (akurasi per subtes, aktivitas 7 hari, simulasi, prioritas belajar, sesi terbaru, status online), chat dengan penanda dibaca, dan TO bersama tanpa kode ruang (ajakan otomatis ke pasangan).
+- Keamanan: isi dienkripsi AES-GCM dengan kunci dari kode, id baris berupa hash. Jangan bagikan kode ke orang lain.
+- Memakai tabel Supabase yang sama. Tidak mengubah save pribadi dan tidak memakai kode sinkron. Perlu internet di kedua perangkat.
