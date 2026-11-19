@@ -3763,7 +3763,8 @@ function tbFinish(rec){
   TB.mine=TB.pend;tbPoll()}
 function tbQuit(){
   clearTimeout(TB.pushT);
-  if(TB.code&&!(TB.mine&&TB.mine.fin)){const row=tbMyRow({left:true});TB.mine=row;tbSet(tbRid(TB.code,TB.me),row).catch(()=>{})}}
+  if(TB.code&&!(TB.mine&&TB.mine.fin)){const row=tbMyRow({left:true});TB.mine=row;tbSet(tbRid(TB.code,TB.me),row).catch(()=>{})}
+  setTimeout(()=>{if(!(Q&&Q.room&&!Q.rec)&&TB.code&&!(TB.mine&&TB.mine.fin))tbLeave()},50)}
 function tbLeave(){
   if(Q&&Q.room&&!Q.rec){toast('Selesaikan atau keluar dari sesi dulu');return}
   tbStopLoops();TB.code='';TB.room=TB.peer=TB.mine=null;TB.began=0;TB.sub='menu';tbSaveLocal();if(DU.code&&DU.to){DU.to=null;duoWrite()}tbChip();render()}
@@ -3798,7 +3799,7 @@ function vTB(){
   }else if(mine&&mine.fin){
     body=(peer&&peer.fin)?tbResult():`<div class="card stack"><h3>Kamu sudah selesai</h3><p class="small muted">Menunggu ${tbLbl(peer)} menyelesaikan tes. Hasil perbandingan muncul otomatis.</p><div class="pill acc">${esc(tbPeerTxt())}</div>${peer&&peer.left?'<p class="small">Lawan keluar dari sesi, jadi perbandingan tidak tersedia.</p>':''}${tbMyLink()}</div>`;
   }else if(r&&r.startAt&&TB.began===r.startAt){
-    body=`<div class="card stack"><h3>TO sedang berjalan</h3><p class="small muted">${esc(r.title)}</p><div class="pill acc">${esc(tbPeerTxt())}</div>${Q&&Q.room?`<button class="btn primary" data-act="tbtoq">Kembali ke soal</button>`:'<p class="small muted">Sesi di perangkat ini sudah tidak aktif. Soal yang sudah kamu jawab tersimpan di Riwayat sebagai sesi belum selesai.</p>'}</div>`;
+    body=`<div class="card stack"><h3>TO sedang berjalan</h3><p class="small muted">${esc(r.title)}</p><div class="pill acc">${esc(tbPeerTxt())}</div>${Q&&Q.room?`<button class="btn primary" data-act="tbtoq">Kembali ke soal</button>`:'<p class="small muted">Sesi di perangkat ini sudah tidak aktif. Soal yang sudah kamu jawab tersimpan di Riwayat sebagai sesi belum selesai.</p><button class="btn" data-act="tbleave">Keluar dari ruang</button>'}</div>`;
   }else{
     const host=TB.me==='A',ready=!!peer;
     body=`<div class="card stack"><div class="row between"><h3>Ruang ${esc(TB.code)}</h3><span class="pill acc">${esc(r?r.title:'')}</span></div>
