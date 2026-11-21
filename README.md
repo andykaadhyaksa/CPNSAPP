@@ -210,3 +210,10 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Tombol "Soal serupa, beda angka" di pembahasan soal TIU yang salah (657 dari 825 soal Numerik punya pola serupa). Soal tanpa pola dicatat di antrian.
 - v4.23b: "Soal serupa" juga ada di Riwayat/Tinjau dan Buku kesalahan. TWK dan TKP memakai "Soal sejenis" (topik sama, kata kunci paling mirip, belum pernah dikerjakan lebih dulu).
 - v4.23c: tombol Soal serupa/sejenis menanyakan jumlah soal (1, 3, 5, 10) lalu menyusun satu sesi.
+- v4.24: 11 bab materi baru (total 35): TWK Bela Negara, Nilai Dasar ASN BerAKHLAK, Hierarki Peraturan, Otonomi Daerah, Politik Luar Negeri; TIU Sinonim-Antonim, Bilangan, Aljabar, Soal Tabel, Perbandingan Kuantitatif; TKP Anti Radikalisme. Tiap bab punya ringkasan, pendalaman, cara menjawab, trik, hafalan, contoh, salah kaprah, jebakan, dan latihan.
+
+## v4.25
+- Bank bertambah 146 soal orisinal (total 2.786), tiap soal lengkap dengan pembahasan langkah demi langkah: TIU Numerik 72 (hubungan P dan Q, bilangan, aljabar, kecukupan data, berhitung cepat; seluruh jawaban diverifikasi dengan kode), TIU Verbal sinonim/antonim 15, TWK Bela Negara 10, Integritas (BerAKHLAK, ASN) 10, Pilar Negara (hierarki peraturan, otonomi daerah) 19, Nasionalisme (politik luar negeri, ASEAN, KAA) 10, TKP Anti Radikalisme 10.
+
+## v4.26
+- Bank bertambah 99 soal dari tiga paket latihan mandiri yang diunggah (TWK Paket A, TIU Paket B, TKP Paket C): total 2.885 soal. Semua kunci dan skor diperiksa ulang, rumus diubah ke teks biasa, soal tabel memakai tabel bawaan app, dan setiap soal diberi pembahasan langkah demi langkah. Satu soal analogi (Termometer : Suhu) sudah ada di bank sehingga dilewati.
