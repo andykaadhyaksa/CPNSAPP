@@ -1382,8 +1382,14 @@ function simNear(q){const t=simTok(q),seen=new Set(lsj(VSK));const sc=BANK.filte
 function simPick(q){const f=famOf(q);if(f!==undefined){const seen=new Set(lsj(VSK));let c=(FAMX[f]||[]).filter(i=>i!==q.id&&byId[i]);if(c.length){const fresh=c.filter(i=>!seen.has(i)&&!S.stat[i]);const use=fresh.length?fresh:c;return byId[use[Math.floor(Math.random()*use.length)]]}}return simNear(q)}
 const simIsFam=q=>q.sub==='TIU'&&famOf(q)!==undefined;
 const simBtn=(q,cls)=>`<button class="btn sm ${cls||''}" data-act="similar" data-v="${q.id}">${ic('bulb',16)} ${simIsFam(q)?'Soal serupa, beda angka':'Soal sejenis'}</button>`;
-function startSimilar(id){const q=byId[id];if(!q)return;const n=simPick(q);if(!n){const r=lsj(VRQ);if(!r.includes(id)){r.push(id);lss(VRQ,r)}toast('Belum ada pola serupa. Soal ini dicatat untuk dibuatkan.');render();return}
- const sn=lsj(VSK);sn.push(n.id);lss(VSK,sn.slice(-400));startSession('lat',[n],0,famOf(q)!==undefined&&FAMX[famOf(q)]&&FAMX[famOf(q)].includes(n.id)?'Soal serupa':'Soal sejenis');Q.tag='similar'}
+function simNearN(q,n,skip){const t=simTok(q),seen=new Set(lsj(VSK));const sc=BANK.filter(x=>x.id!==q.id&&!skip.has(x.id)&&x.sub===q.sub&&(!q.cat||x.cat===q.cat)).map(x=>{const u=simTok(x);let k=0;t.forEach(w=>{if(u.has(w))k++});return{x,s:k/(t.size+u.size-k||1)+(S.stat[x.id]||seen.has(x.id)?-1:0)+Math.random()*.05}}).sort((a,b)=>b.s-a.s);return sc.slice(0,n).map(e=>e.x)}
+function simPickN(q,n){const out=[],skip=new Set();const f=famOf(q);if(f!==undefined){const seen=new Set(lsj(VSK));const c=(FAMX[f]||[]).filter(i=>i!==q.id&&byId[i]);const fresh=shuffle(c.filter(i=>!seen.has(i)&&!S.stat[i])),old=shuffle(c.filter(i=>seen.has(i)||S.stat[i]));fresh.concat(old).slice(0,n).forEach(i=>{out.push(byId[i]);skip.add(i)})}
+ if(out.length<n)simNearN(q,n-out.length,skip).forEach(x=>out.push(x));return out}
+function simAsk(id){const q=byId[id];if(!q)return;const d=document.createElement('div');d.className='sheet';d.id='simask';d.dataset.act='simx';
+ d.innerHTML=`<div><div class="row between" style="margin-bottom:6px"><h3>${simIsFam(q)?'Soal serupa, beda angka':'Soal sejenis'}</h3><button class="iconbtn" data-act="simx" aria-label="Tutup">${ic('x')}</button></div><p class="small muted" style="margin:0 0 12px">Mau berapa soal? Semuanya ditampilkan satu sesi, lengkap dengan pembahasan.</p><div class="grid-nav">${[1,3,5,10].map(n=>`<button data-act="simgo" data-v="${id}|${n}">${n}</button>`).join('')}</div></div>`;document.body.appendChild(d)}
+function startSimilar(id,n){const q=byId[id];if(!q)return;n=n||1;const L=simPickN(q,n);if(!L.length){const r=lsj(VRQ);if(!r.includes(id)){r.push(id);lss(VRQ,r)}toast('Belum ada soal serupa untuk soal ini.');return}
+ const sn=lsj(VSK);L.forEach(x=>sn.push(x.id));lss(VSK,sn.slice(-400));if(L.length<n)toast('Tersedia '+L.length+' soal serupa');
+ startSession('lat',L,0,(simIsFam(q)?'Soal serupa':'Soal sejenis')+' · '+L.length+' soal');Q.tag='similar'}
 
 const isTkp=q=>q.sub==='TKP';
 const pts=(q,l)=>!l?0:isTkp(q)?(q.s&&q.s[l]||0):(l===q.a?5:0);
@@ -2758,7 +2764,9 @@ document.addEventListener('click',e=>{
  case 'gtab':GT=v;render();break;
  case 'ptab':LP.mode=v;render();break;
  case 'lesson':if(V.view==='result'||V.view==='review'||V.view==='quiz')V={view:'lesson',tab:V.tab,id:v,from:V.view};else V={view:'lesson',tab:V.tab,id:v,from:'tab'};render();scrollTo(0,0);break;
- case 'similar':stamp();startSimilar(v);break;
+ case 'similar':stamp();simAsk(v);break;
+ case 'simx':{const e=$('#simask');if(e)e.remove();break}
+ case 'simgo':{const e=$('#simask');if(e)e.remove();const[i,n]=v.split('|');startSimilar(i,+n);break}
  case 'qlesson':stamp();if(Q)Q.back=V.view;V={view:'lesson',tab:V.tab,id:v,from:'q'};render();scrollTo(0,0);break;
  case 'back':if(V.from==='q'&&Q){V={view:Q.back||'quiz',tab:V.tab};render()}else if(V.from==='result'||V.from==='review'){V={view:V.from,tab:V.tab};render()}else backFrom();break;
  case 'read':S.read[v]=S.read[v]?0:Date.now();cuSweep();save();render();break;
