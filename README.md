@@ -217,3 +217,9 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 
 ## v4.26
 - Bank bertambah 99 soal dari tiga paket latihan mandiri yang diunggah (TWK Paket A, TIU Paket B, TKP Paket C): total 2.885 soal. Semua kunci dan skor diperiksa ulang, rumus diubah ke teks biasa, soal tabel memakai tabel bawaan app, dan setiap soal diberi pembahasan langkah demi langkah. Satu soal analogi (Termometer : Suhu) sudah ada di bank sehingga dilewati.
+
+## v4.27
+- Animasi interaktif per materi: kartu materi bertanda "▶ Animasi", halaman materi punya tombol "Animasi + suara" yang membuka animasi layar penuh (suara, jeda, kecepatan, loncat bab; tutup dengan tombol atau Esc). Animasi tersimpan di objek `ANIM` (id materi → HTML mandiri); menambah animasi baru cukup menambah satu entri. Saat ini: Penalaran Analitis (tiu-analitis).
+
+## v4.28
+- 7 animasi interaktif (Hitungan Cepat, Deret, Himpunan/Peluang, Penalaran Analitis, Aljabar, Soal Tabel, Perbandingan Kuantitatif) dengan tema teal seragam; tombol "▶ Animasi" di tiap materi.
