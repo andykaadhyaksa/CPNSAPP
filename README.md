@@ -208,3 +208,4 @@ Memakai metode yang sama dengan PAPs Siap 500 (Supabase, tabel `paps_sync`, kode
 - Refresh saat latihan, simulasi, TO atau TO bersama tidak lagi keluar dari sesi (draft otomatis, pulih saat dibuka).
 - Rotasi layar: manifest `orientation: any`. Jika masih terkunci, hapus lalu pasang ulang PWA.
 - Tombol "Soal serupa, beda angka" di pembahasan soal TIU yang salah (657 dari 825 soal Numerik punya pola serupa). Soal tanpa pola dicatat di antrian.
+- v4.23b: "Soal serupa" juga ada di Riwayat/Tinjau dan Buku kesalahan. TWK dan TKP memakai "Soal sejenis" (topik sama, kata kunci paling mirip, belum pernah dikerjakan lebih dulu).

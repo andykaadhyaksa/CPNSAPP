@@ -1377,9 +1377,13 @@ const VSK='siap-cpns-v2-varseen',VRQ='siap-cpns-v2-reqvar';
 function lsj(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
 function lss(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function famOf(q){return q.fam!==undefined?q.fam:FAMS[q.id]}
-function simPick(q){const f=famOf(q);if(f===undefined)return null;const seen=new Set(lsj(VSK));let c=(FAMX[f]||[]).filter(i=>i!==q.id&&byId[i]);if(!c.length)return null;const fresh=c.filter(i=>!seen.has(i)&&!S.stat[i]);const use=fresh.length?fresh:c;return byId[use[Math.floor(Math.random()*use.length)]]}
+function simTok(q){return new Set(((q.p||'')+' '+q.q+' '+Object.values(q.o).join(' ')).toLowerCase().replace(/<[^>]*>/g,' ').split(/[^a-zÀ-ɏ]+/).filter(w=>w.length>3))}
+function simNear(q){const t=simTok(q),seen=new Set(lsj(VSK));const sc=BANK.filter(x=>x.id!==q.id&&x.sub===q.sub&&(!q.cat||x.cat===q.cat)).map(x=>{const u=simTok(x);let k=0;t.forEach(w=>{if(u.has(w))k++});return{x,s:k/(t.size+u.size-k||1)+(S.stat[x.id]||seen.has(x.id)?-1:0)}}).sort((a,b)=>b.s-a.s).slice(0,6);return sc.length?sc[Math.floor(Math.random()*Math.min(4,sc.length))].x:null}
+function simPick(q){const f=famOf(q);if(f!==undefined){const seen=new Set(lsj(VSK));let c=(FAMX[f]||[]).filter(i=>i!==q.id&&byId[i]);if(c.length){const fresh=c.filter(i=>!seen.has(i)&&!S.stat[i]);const use=fresh.length?fresh:c;return byId[use[Math.floor(Math.random()*use.length)]]}}return simNear(q)}
+const simIsFam=q=>q.sub==='TIU'&&famOf(q)!==undefined;
+const simBtn=(q,cls)=>`<button class="btn sm ${cls||''}" data-act="similar" data-v="${q.id}">${ic('bulb',16)} ${simIsFam(q)?'Soal serupa, beda angka':'Soal sejenis'}</button>`;
 function startSimilar(id){const q=byId[id];if(!q)return;const n=simPick(q);if(!n){const r=lsj(VRQ);if(!r.includes(id)){r.push(id);lss(VRQ,r)}toast('Belum ada pola serupa. Soal ini dicatat untuk dibuatkan.');render();return}
- const sn=lsj(VSK);sn.push(n.id);lss(VSK,sn.slice(-400));startSession('lat',[n],0,'Soal serupa');Q.tag='similar'}
+ const sn=lsj(VSK);sn.push(n.id);lss(VSK,sn.slice(-400));startSession('lat',[n],0,famOf(q)!==undefined&&FAMX[famOf(q)]&&FAMX[famOf(q)].includes(n.id)?'Soal serupa':'Soal sejenis');Q.tag='similar'}
 
 const isTkp=q=>q.sub==='TKP';
 const pts=(q,l)=>!l?0:isTkp(q)?(q.s&&q.s[l]||0):(l===q.a?5:0);
@@ -2564,7 +2568,7 @@ function vQuiz(){
   ${isTkp(q)&&!ok?`<div class="small" style="margin-top:4px">Skor tertinggi ada di opsi <b>${best}</b> (5 poin).</div>`:''}
   ${detail(q,a)}
   ${tk?`<div class="trikq"><span class="lab">${ic('bulb',14)} Trik cepat</span>${eb(tk)}</div>`:''}
-  <div class="row wrapx" style="margin-top:10px">${les?`<button class="btn sm" data-act="qlesson" data-v="${les}">${ic('book',16)} Pelajari materi</button>`:''}${!ok&&!isTkp(q)&&q.sub==='TIU'?(famOf(q)!==undefined?`<button class="btn sm primary" data-act="similar" data-v="${q.id}">${ic('bulb',16)} Soal serupa, beda angka</button>`:(lsj(VRQ).includes(q.id)?`<span class="pill">Sudah dicatat untuk dibuatkan</span>`:`<button class="btn sm" data-act="similar" data-v="${q.id}">${ic('bulb',16)} Minta soal serupa</button>`)):''}</div></div>`}
+  <div class="row wrapx" style="margin-top:10px">${les?`<button class="btn sm" data-act="qlesson" data-v="${les}">${ic('book',16)} Pelajari materi</button>`:''}${(isTkp(q)?pts(q,a)<5:!ok)?simBtn(q,simIsFam(q)?'primary':''):''}</div></div>`}
  return `<div class="qtop"><div class="in row"><button class="iconbtn" data-act="quit" aria-label="Keluar">${ic('x')}</button><div class="qmeta"><b>${esc(Q.title)}</b><span>Soal ${Q.i+1} dari ${n} · ${Object.keys(Q.ans).length} terjawab</span></div>${sim?`<span class="timer ${left()<=300?'low':''}" id="tm">${fmtT(left())}</span>`:`<span class="timer sw" id="tq" title="Waktu soal ini">${fmtT(Math.floor(tqv))}</span>`}<button class="iconbtn ${S.fav[q.id]?'starred':''}" data-act="fav" aria-label="Simpan soal">${ic('star')}</button></div>
  <div class="in" style="margin-top:10px"><div class="bar"><i style="width:${(Q.i+1)/n*100}%"></i></div></div></div>
  <div class="qwrap">
@@ -2627,7 +2631,7 @@ function vReview(){
   <div class="opts${q.oi?' figo':''}">${Object.keys(q.o).map(l=>{let cl='opt lock';if(l===best)cl+=' ok';else if(l===a)cl+=' no';const sc=isTkp(q)?`<span class="pill">${q.s[l]} poin</span>`:'<span></span>';return `<button class="${cl}" tabindex="-1"><span class="l">${l}</span><span style="font-size:15px">${oh(q,l)}</span>${sc}</button>`}).join('')}</div>
   <div class="small muted">Jawabanmu: <b>${a||(Q.hist?'tidak tercatat (data lama)':'kosong')}</b> · ${isTkp(q)?'Skor tertinggi':'Kunci'}: <b>${best}</b></div>
   <div class="explain">${detail(q,a||'')}${tk?`<div class="trikq"><span class="lab">${ic('bulb',14)} Trik cepat</span>${eb(tk)}</div>`:''}</div>
-  <div class="row wrapx"><button class="btn sm ${S.fav[q.id]?'primary':''}" data-act="favq" data-v="${q.id}">${ic('star',16)} ${S.fav[q.id]?'Tersimpan':'Simpan'}</button>${les?`<button class="btn sm" data-act="qlesson" data-v="${les}">${ic('book',16)} Materi</button>`:''}</div></div>`}).join('');
+  <div class="row wrapx"><button class="btn sm ${S.fav[q.id]?'primary':''}" data-act="favq" data-v="${q.id}">${ic('star',16)} ${S.fav[q.id]?'Tersimpan':'Simpan'}</button>${les?`<button class="btn sm" data-act="qlesson" data-v="${les}">${ic('book',16)} Materi</button>`:''}${simBtn(q,simIsFam(q)?'primary':'')}</div></div>`}).join('');
  return `<div class="qtop"><div class="in row"><button class="iconbtn" data-act="backres" aria-label="Kembali">${ic('left')}</button><div class="qmeta"><b>${Q.hist?esc(Q.title):'Tinjau jawaban'}</b><span>${idx.length} soal${Q.hist?' · hanya melihat, tidak mengubah progres':''}</span></div><div class="seg" style="width:auto"><button data-act="rv" data-v="all" aria-pressed="${RV==='all'}" style="padding:0 12px">Semua</button><button data-act="rv" data-v="wrong" aria-pressed="${RV==='wrong'}" style="padding:0 12px">Salah</button></div></div></div>
  <div class="qwrap">${cards||'<div class="empty">Semua jawabanmu tepat. Mantap.</div>'}${Q.more?`<button class="btn block" data-act="hmore">Muat ${Q.more} soal lagi</button>`:''}</div>`}
 function openHist(i){const h=S.hist[i];if(!h)return;drAuto();
@@ -2645,7 +2649,7 @@ function vWrong(){
   return `<details class="card"><summary><span class="row" style="gap:8px;min-width:0"><span class="pill ${SUB[q.sub].cls}">${q.sub}</span><span class="small" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:46vw">${qf(q.q,q)}</span></span></summary>
   <div class="stack">${q.p?`<div class="passage">${esc(q.p)}</div>`:''}${q.svg?`<div class="qfig">${q.svg}</div>`:''}<div class="qtext" style="font-size:16px">${qf(q.q,q)}</div>
   <div class="small"><b>${best}.</b> ${q.oi?oh(q,best):esc(q.o[best])}</div><div class="explain">${detail(q,null)}${tk?`<div class="trikq"><span class="lab">Trik cepat</span>${eb(tk)}</div>`:''}</div>
-  <button class="btn sm ${S.fav[id]?'primary':''}" data-act="favq" data-v="${id}">${ic('star',16)} ${S.fav[id]?'Tersimpan':'Simpan'}</button></div></details>`}).join('');
+  <button class="btn sm ${S.fav[id]?'primary':''}" data-act="favq" data-v="${id}">${ic('star',16)} ${S.fav[id]?'Tersimpan':'Simpan'}</button> ${simBtn(q)}</div></details>`}).join('');
  return `<div class="qtop"><div class="in row"><button class="iconbtn" data-act="back">${ic('left')}</button><div class="qmeta"><b>Buku kesalahan</b><span>${ids.length} soal (salah terakhir + disimpan)</span></div><button class="btn sm primary" data-act="redoAll">Latih</button></div></div>
  <div class="qwrap">${cards||'<div class="empty">Belum ada soal. Soal yang salah atau yang kamu simpan (bintang) muncul di sini.</div>'}</div>`}
 
